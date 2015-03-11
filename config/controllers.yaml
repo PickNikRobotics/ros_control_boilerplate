@@ -1,3 +1,10 @@
+# Settings for ros_control hardware interface
+hardware_interface:
+   loop_hz: 10 # hz
+   joints:
+      - joint1
+      - joint2
+
 # Publish all joint states ----------------------------------
 joint_state_controller:
    type:         joint_state_controller/JointStateController
@@ -7,40 +14,20 @@ joint_state_controller:
 position_trajectory_controller:
    type: position_controllers/JointTrajectoryController
    joints:
-       - myrobot_joint_1
-       - myrobot_joint_2
-       - myrobot_joint_3
-       - myrobot_joint_4
-       - myrobot_joint_5
-       - myrobot_joint_6
+       - joint1
+       - joint2
    constraints:
        goal_time: 5.0
        #stopped_position_tolerance: 0.4 # Defaults to 0.01
-       myrobot_joint_1:
+       joint1:
            trajectory: 0.60
            goal:       0.15
-       myrobot_joint_2:
-           trajectory: 0.60
-           goal:       0.15
-       myrobot_joint_3:
-           trajectory: 0.60
-           goal:       0.15
-       myrobot_joint_4:
-           trajectory: 0.60
-           goal:       0.15
-       myrobot_joint_5:
-           trajectory: 0.60
-           goal:       0.15
-       myrobot_joint_6:
+       joint2:
            trajectory: 0.60
            goal:       0.15
    # gains:
-   #     myrobot_joint_1: {p: 2.0,  i: 0.0, d: 0.01, i_clamp: 1}
-   #     myrobot_joint_2: {p: 2.0,  i: 0.0, d: 0.01, i_clamp: 1}
-   #     myrobot_joint_3: {p: 2.0,  i: 0.0, d: 0.01, i_clamp: 1}
-   #     myrobot_joint_4: {p: 2.0,  i: 0.0, d: 0.01, i_clamp: 1}
-   #     myrobot_joint_5: {p: 2.0,  i: 0.0, d: 0.01, i_clamp: 1}
-   #     myrobot_joint_6: {p: 2.0,  i: 0.0, d: 0.01, i_clamp: 1}
+   #     joint1: {p: 2.0,  i: 0.0, d: 0.01, i_clamp: 1}
+   #     joint2: {p: 2.0,  i: 0.0, d: 0.01, i_clamp: 1}
 
     # state_publish_rate:  50 # Defaults to 50
     # action_monitor_rate: 20 # Defaults to 20

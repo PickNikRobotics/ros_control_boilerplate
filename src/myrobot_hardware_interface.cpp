@@ -45,14 +45,15 @@ MyRobotHardwareInterface::MyRobotHardwareInterface(ros::NodeHandle& nh)
   : nh_(nh)
   , joint_mode_(1) // POSITION
 {
-  // Initialize hardware communication connection
-  // DO THIS HERE
+  // Initialize shared memory and interfaces
+  init();
 
   // Create the controller manager
   controller_manager_.reset(new controller_manager::ControllerManager(this, nh_));
 
   // Get period and create timer
-  nh_.param("loop_hz", loop_hz_, 0.1);
+  nh_.param("hardware_interface/loop_hz", loop_hz_, 0.1);
+  ROS_DEBUG_STREAM_NAMED("constructor","Using loop freqency of " << loop_hz_ << " hz");
   ros::Duration update_freq = ros::Duration(1.0/loop_hz_);
   non_realtime_loop_ = nh_.createTimer(update_freq, &MyRobotHardwareInterface::update, this);
 
@@ -65,18 +66,12 @@ MyRobotHardwareInterface::~MyRobotHardwareInterface()
 
 void MyRobotHardwareInterface::init()
 {
-  // Get joints to control
-  XmlRpc::XmlRpcValue joint_list;
-  nh_.getParam("joints", joint_list);
-  if (joint_list.getType() == XmlRpc::XmlRpcValue::TypeArray)
-    for (int32_t i = 0; i < joint_list.size(); ++i)
-    {
-      ROS_ASSERT(joint_list[i].getType() == XmlRpc::XmlRpcValue::TypeString);
-      joint_names_.push_back(static_cast<std::string>(joint_list[i]));
-    }
-  else
-    ROS_ERROR_STREAM_NAMED("temp","joint list type is not type array???");
-
+  // Get joint names
+  nh_.getParam("hardware_interface/joints", joint_names_);
+  if (joint_names_.size() == 0)
+  {
+    ROS_FATAL_STREAM_NAMED("init","Not joints found on parameter server for controller, did you load the proper yaml file?");
+  }
   num_joints_ = joint_names_.size();
 
   // Resize vectors
@@ -90,26 +85,18 @@ void MyRobotHardwareInterface::init()
   // Initialize controller
   for (int i = 0; i < num_joints_; ++i)
   {
-    // Create joint name
-    //joint_names_.push_back("TODO");
-
     ROS_DEBUG_STREAM_NAMED("constructor","Loading joint name: " << joint_names_[i]);
 
     // Create joint state interface
     joint_state_interface_.registerHandle(hardware_interface::JointStateHandle(joint_names_[i], &joint_position_[i], &joint_velocity_[i], &joint_effort_[i]));
 
-    if (i < 6 )
-    {
-      // Create velocity joint interface
-      velocity_joint_interface_.registerHandle(hardware_interface::JointHandle(
-                                                                               joint_state_interface_.getHandle(joint_names_[i]),&joint_velocity_command_[i]));
-    }
-    else // this is the gripper
-    {
-      // Create position joint interface
-      position_joint_interface_.registerHandle(hardware_interface::JointHandle(
-                                                                               joint_state_interface_.getHandle(joint_names_[i]),&joint_position_command_[i]));
-    }
+    // Create position joint interface
+    position_joint_interface_.registerHandle(hardware_interface::JointHandle(
+                                                                             joint_state_interface_.getHandle(joint_names_[i]),&joint_position_command_[i]));
+
+    // Create velocity joint interface
+    //velocity_joint_interface_.registerHandle(hardware_interface::JointHandle(
+    //    joint_state_interface_.getHandle(joint_names_[i]),&joint_velocity_command_[i]));
 
     // Create effort joint interface
     //effort_joint_interface_.registerHandle(hardware_interface::JointHandle(
@@ -151,14 +138,12 @@ void MyRobotHardwareInterface::write(ros::Duration elapsed_time)
     {
       case 1: //hardware_interface::MODE_POSITION:
         // Position
-        std::cout << "position mode " << std::endl;
         p_error_ = joint_position_command_[i] - joint_position_[i];
         // scale the rate it takes to achieve position by a factor that is invariant to the feedback loop
         joint_position_[i] += p_error_ * POSITION_STEP_FACTOR / loop_hz_;
         break;
 
       case 2: //hardware_interface::MODE_VELOCITY:
-        std::cout << "velocity mode " << std::endl;
         // Position
         joint_position_[i] += joint_velocity_[i] * elapsed_time.toSec();
 
@@ -166,8 +151,8 @@ void MyRobotHardwareInterface::write(ros::Duration elapsed_time)
         v_error_ = joint_velocity_command_[i] - joint_velocity_[i];
         // scale the rate it takes to achieve velocity by a factor that is invariant to the feedback loop
         joint_velocity_[i] += v_error_ * VELOCITY_STEP_FACTOR / loop_hz_;
-
         break;
+
       case 3: //hardware_interface::MODE_EFFORT:
         ROS_ERROR_STREAM_NAMED("write","Effort not implemented yet");
         break;

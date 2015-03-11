@@ -1,0 +1,20 @@
+<launch>
+
+  <!-- GDB functionality -->
+  <arg name="debug" default="false" />
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+  <arg     if="$(arg debug)" name="launch_prefix" value="gdb --ex run --args" />
+
+  <group ns="myrobot">
+
+    <!-- Load controller settings -->
+    <rosparam file="$(find ros_control_boilerplate)/config/controllers.yaml" command="load"/>
+
+    <!-- Load hardware interface -->
+    <node name="myrobot_test_trajectory" pkg="ros_control_boilerplate" type="myrobot_test_trajectory"
+          output="screen" launch-prefix="$(arg launch_prefix)"/>
+
+  </group>
+
+</launch>
+

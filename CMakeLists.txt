@@ -8,6 +8,9 @@ find_package(catkin REQUIRED COMPONENTS
   hardware_interface
   controller_manager
   roscpp
+  control_msgs
+  trajectory_msgs
+  actionlib
 )
 
 ## System dependencies are found with CMake's conventions
@@ -37,10 +40,16 @@ target_link_libraries(myrobot_ros_control
     ${catkin_LIBRARIES}
 )
 
-## Declare a cpp executable
+# ROS Node
 add_executable(myrobot_node src/myrobot_node.cpp)
 target_link_libraries(myrobot_node
     myrobot_ros_control
+    ${catkin_LIBRARIES}
+)
+
+# Test trajectory generator node
+add_executable(myrobot_test_trajectory src/myrobot_test_trajectory.cpp)
+target_link_libraries(myrobot_test_trajectory
     ${catkin_LIBRARIES}
 )
 

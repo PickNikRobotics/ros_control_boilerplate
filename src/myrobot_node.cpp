@@ -43,7 +43,7 @@
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "myrobot_hardware_interface");
-  ros::NodeHandle nh("~");
+  ros::NodeHandle nh;
   
   // NOTE: We run the ROS loop in a separate thread as external calls such
   // as service callbacks to load controllers can block the (main) control
