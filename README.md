@@ -43,7 +43,7 @@ To test this as a simulation interface for your robot:
 
  - Rename all files in ``/launch`` to use your robot name
  - Find-replace all strings in ``/launch`` from "rrbot" to your robot name
- - Customize ``/config/controllers.yaml`` to have joints corresponding to your robot's URDF
+ - Customize ``/config/rrbot_controllers.yaml`` to have joints corresponding to your robot's URDF
 
 To test this as a hardware interface for your robot, you'll also want to rename the files in ``/src`` and find-replace the string "generic" to your robot's name. Then add the necessary code to communicate with your robot via USB/serial/ethernet/etc. Feel free to PR this package with better step by step instructions for this.
 
