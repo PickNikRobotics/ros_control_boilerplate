@@ -23,7 +23,7 @@ See [YouTube](https://www.youtube.com/watch?v=Tpj2tx9uZ-o) for a very modest vid
 
 This package depends on [gazebo_ros_demos](https://github.com/ros-simulation/gazebo_ros_demos) for its ``rrbot_description`` package, so be sure to ``git clone`` that along with this package and build in your catkin workspace.
 
-## Run
+## Run Demo
 
 This package is setup to run the "RRBot" two joint revolute-revolute robot demo. To run its ros_control hardware interface, run:
 
@@ -36,6 +36,16 @@ To visualize its published ``/tf`` coordinate transforms in Rviz run:
 To send a random, dummy trajectory to execute, run:
 
     roslaunch ros_control_boilerplate rrbot_test_trajectory.launch
+
+## Customize
+
+To test this as a simulation interface for your robot:
+
+ - Rename all files in ``/launch`` to use your robot name
+ - Find-replace all strings in ``/launch`` from "rrbot" to your robot name
+ - Customize ``/config/controllers.yaml`` to have joints corresponding to your robot's URDF
+
+To test this as a hardware interface for your robot, you'll also want to rename the files in ``/src`` and find-replace the string "generic" to your robot's name. Then add the necessary code to communicate with your robot via USB/serial/ethernet/etc. Feel free to PR this package with better step by step instructions for this.
 
 ## Limitations
 
