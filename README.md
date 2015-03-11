@@ -47,6 +47,10 @@ To test this as a simulation interface for your robot:
 
 To test this as a hardware interface for your robot, you'll also want to rename the files in ``/src`` and find-replace the string "generic" to your robot's name. Then add the necessary code to communicate with your robot via USB/serial/ethernet/etc. Feel free to PR this package with better step by step instructions for this.
 
+## Setting an Initial Position, Using with MoveIt!
+
+If you need your robot to startup at a particular position in simulation, or you would like to use this funcitonality to simulate your robot with MoveIt!, see the downstream package (it depends on this package) [moveit_sim_controller](https://github.com/davetcoleman/moveit_sim_controller)
+
 ## Limitations
 
  - Does not implement joint limits, estops, transmissions, or other fancy new features of ros_contorl
