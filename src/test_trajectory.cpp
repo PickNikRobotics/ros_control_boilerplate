@@ -62,13 +62,22 @@ public:
   TestTrajectory(bool verbose)
     : verbose_(verbose)
   {
+    ros::NodeHandle nh_private("~");
+    std::string action_topic;
+    nh_private.getParam("action_topic", action_topic);
+    if (action_topic.empty())
+    {
+      ROS_FATAL_STREAM_NAMED("constructor","Not follow joint trajectory action topic found on the parameter server");
+    }
+    ROS_INFO_STREAM_NAMED("constructor","Connecting to action " << action_topic);
+
     // create the action client
     // true causes the client to spin its own thread
-    actionlib::SimpleActionClient<control_msgs::FollowJointTrajectoryAction> ac("/myrobot/position_trajectory_controller/follow_joint_trajectory/", true);
+    actionlib::SimpleActionClient<control_msgs::FollowJointTrajectoryAction> action_client(action_topic, true);
 
     ROS_INFO("Waiting for action server to start.");
     // wait for the action server to start
-    ac.waitForServer(); //will wait for infinite time
+    action_client.waitForServer(); //will wait for infinite time
 
     ROS_INFO("Action server started, sending goal.");
 
@@ -76,15 +85,15 @@ public:
     control_msgs::FollowJointTrajectoryGoal goal;    
     goal.trajectory = createTrajectory();
     std::cout << "Trajectry:\n" << goal.trajectory << std::endl;
-    ac.sendGoal(goal);
+    action_client.sendGoal(goal);
 
     // Wait for the action to return
     double wait_extra_padding = 2; // time to wait longer than trajectory itself
-    bool finished_before_timeout = ac.waitForResult(ros::Duration(goal.trajectory.points.back().time_from_start.toSec() + wait_extra_padding));
+    bool finished_before_timeout = action_client.waitForResult(ros::Duration(goal.trajectory.points.back().time_from_start.toSec() + wait_extra_padding));
 
     if (finished_before_timeout)
     {
-      actionlib::SimpleClientGoalState state = ac.getState();
+      actionlib::SimpleClientGoalState state = action_client.getState();
       ROS_INFO("Action finished: %s",state.toString().c_str());
     }
     else

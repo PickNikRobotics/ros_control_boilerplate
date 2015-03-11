@@ -36,12 +36,12 @@
    Desc:   Example ros_control hardware interface that performs a perfect control loop for simulation
 */
 
-#include <myrobot_ros_control/myrobot_hardware_interface.h>
+#include <ros_control_boilerplate/generic_hardware_interface.h>
 
 namespace ros_control_boilerplate
 {
 
-MyRobotHardwareInterface::MyRobotHardwareInterface(ros::NodeHandle& nh)
+GenericHardwareInterface::GenericHardwareInterface(ros::NodeHandle& nh)
   : nh_(nh)
   , joint_mode_(1) // POSITION
 {
@@ -55,16 +55,16 @@ MyRobotHardwareInterface::MyRobotHardwareInterface(ros::NodeHandle& nh)
   nh_.param("hardware_interface/loop_hz", loop_hz_, 0.1);
   ROS_DEBUG_STREAM_NAMED("constructor","Using loop freqency of " << loop_hz_ << " hz");
   ros::Duration update_freq = ros::Duration(1.0/loop_hz_);
-  non_realtime_loop_ = nh_.createTimer(update_freq, &MyRobotHardwareInterface::update, this);
+  non_realtime_loop_ = nh_.createTimer(update_freq, &GenericHardwareInterface::update, this);
 
-  ROS_INFO_NAMED("hardware_interface", "Loaded myrobot_hardware_interface.");
+  ROS_INFO_NAMED("hardware_interface", "Loaded generic_hardware_interface.");
 }
 
-MyRobotHardwareInterface::~MyRobotHardwareInterface()
+GenericHardwareInterface::~GenericHardwareInterface()
 {
 }
 
-void MyRobotHardwareInterface::init()
+void GenericHardwareInterface::init()
 {
   // Get joint names
   nh_.getParam("hardware_interface/joints", joint_names_);
@@ -109,7 +109,7 @@ void MyRobotHardwareInterface::init()
   registerInterface(&effort_joint_interface_); // From RobotHW base class.
 }
 
-void MyRobotHardwareInterface::update(const ros::TimerEvent& e)
+void GenericHardwareInterface::update(const ros::TimerEvent& e)
 {
   elapsed_time_ = ros::Duration(e.current_real - e.last_real);
 
@@ -123,11 +123,11 @@ void MyRobotHardwareInterface::update(const ros::TimerEvent& e)
   write(elapsed_time_);
 }
 
-void MyRobotHardwareInterface::read()
+void GenericHardwareInterface::read()
 {
 }
 
-void MyRobotHardwareInterface::write(ros::Duration elapsed_time)
+void GenericHardwareInterface::write(ros::Duration elapsed_time)
 {
   // Send commands in different modes
 
@@ -162,3 +162,20 @@ void MyRobotHardwareInterface::write(ros::Duration elapsed_time)
 
 
 } // namespace
+
+int main(int argc, char** argv)
+{
+  ros::init(argc, argv, "generic_hardware_interface");
+  ros::NodeHandle nh;
+  
+  // NOTE: We run the ROS loop in a separate thread as external calls such
+  // as service callbacks to load controllers can block the (main) control loop
+  ros::AsyncSpinner spinner(1);
+  spinner.start();
+
+  ros_control_boilerplate::GenericHardwareInterface hardware_interface(nh);
+
+  ros::spin();
+
+  return 0;
+}

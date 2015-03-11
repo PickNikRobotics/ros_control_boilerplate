@@ -5,14 +5,16 @@
   <arg unless="$(arg debug)" name="launch_prefix" value="" />
   <arg     if="$(arg debug)" name="launch_prefix" value="gdb --ex run --args" />
 
-  <group ns="myrobot">
+  <group ns="rrbot">
 
     <!-- Load controller settings -->
     <rosparam file="$(find ros_control_boilerplate)/config/controllers.yaml" command="load"/>
 
     <!-- Load hardware interface -->
-    <node name="myrobot_test_trajectory" pkg="ros_control_boilerplate" type="myrobot_test_trajectory"
-          output="screen" launch-prefix="$(arg launch_prefix)"/>
+    <node name="test_trajectory" pkg="ros_control_boilerplate" type="test_trajectory"
+          output="screen" launch-prefix="$(arg launch_prefix)">
+      <param name="action_topic" value="/rrbot/position_trajectory_controller/follow_joint_trajectory/"/>
+    </node>
 
   </group>
 

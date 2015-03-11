@@ -8,10 +8,10 @@
   <!-- Load example URDF -->
   <param name="robot_description" command="$(find xacro)/xacro.py '$(find rrbot_description)/urdf/rrbot.xacro'" />
 
-  <group ns="myrobot">
+  <group ns="rrbot">
 
     <!-- Load hardware interface -->
-    <node name="myrobot_hardware_interface" pkg="ros_control_boilerplate" type="myrobot_node"
+    <node name="rrbot_hardware_interface" pkg="ros_control_boilerplate" type="generic_hardware_interface"
           output="screen" launch-prefix="$(arg launch_prefix)"/>
 
     <!-- Load controller settings -->

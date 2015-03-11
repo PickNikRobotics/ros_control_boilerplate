@@ -16,11 +16,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
-#add_subdirectory(myrobot_robot)
-
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES myrobot_ros_control
 #  CATKIN_DEPENDS hardware_interface roscpp
 #  DEPENDS system_lib
 )
@@ -34,22 +31,15 @@ include_directories(
     ${catkin_INCLUDE_DIRS}
 )
 
-## Declare a cpp library
-add_library(myrobot_ros_control src/myrobot_hardware_interface.cpp)
-target_link_libraries(myrobot_ros_control
-    ${catkin_LIBRARIES}
-)
-
 # ROS Node
-add_executable(myrobot_node src/myrobot_node.cpp)
-target_link_libraries(myrobot_node
-    myrobot_ros_control
+add_executable(generic_hardware_interface src/generic_hardware_interface.cpp)
+target_link_libraries(generic_hardware_interface
     ${catkin_LIBRARIES}
 )
 
 # Test trajectory generator node
-add_executable(myrobot_test_trajectory src/myrobot_test_trajectory.cpp)
-target_link_libraries(myrobot_test_trajectory
+add_executable(test_trajectory src/test_trajectory.cpp)
+target_link_libraries(test_trajectory
     ${catkin_LIBRARIES}
 )
 

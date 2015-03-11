@@ -36,8 +36,8 @@
    Desc:   Example ros_control hardware interface that performs a perfect control loop for simulation
 */
 
-#ifndef MYROBOT_ROS_CONTROL__MYROBOT_HARDWARE_INTERFACE_H
-#define MYROBOT_ROS_CONTROL__MYROBOT_HARDWARE_INTERFACE_H
+#ifndef GENERIC_ROS_CONTROL__GENERIC_HARDWARE_INTERFACE_H
+#define GENERIC_ROS_CONTROL__GENERIC_HARDWARE_INTERFACE_H
 
 #include <hardware_interface/joint_state_interface.h>
 #include <hardware_interface/joint_command_interface.h>
@@ -54,7 +54,7 @@ static const double POSITION_STEP_FACTOR = 10;
 static const double VELOCITY_STEP_FACTOR = 10;
 
 /// \brief Hardware interface for a robot
-class MyRobotHardwareInterface: public hardware_interface::RobotHW
+class GenericHardwareInterface: public hardware_interface::RobotHW
 {
 private:
 
@@ -92,10 +92,10 @@ public:
   /// \brief Constructor.
   ///
   /// \param nh  Node handle for topics.
-  MyRobotHardwareInterface(ros::NodeHandle& nh);
+  GenericHardwareInterface(ros::NodeHandle& nh);
 
   /// \brief Destructor.
-  ~MyRobotHardwareInterface();
+  ~GenericHardwareInterface();
 
   /// \brief Initialize the hardware interface
   void init();

@@ -27,15 +27,15 @@ This package depends on [gazebo_ros_demos](https://github.com/ros-simulation/gaz
 
 This package is setup to run the "RRBot" two joint revolute-revolute robot demo. To run its ros_control hardware interface, run:
 
-    roslaunch ros_control_boilerplate myrobot_hardware.launch
+    roslaunch ros_control_boilerplate rrbot_hardware.launch
 
 To visualize its published ``/tf`` coordinate transforms in Rviz run:
 
-    roslaunch ros_control_boilerplate myrobot_visualize.launch
+    roslaunch ros_control_boilerplate rrbot_visualize.launch
 
 To send a random, dummy trajectory to execute, run:
 
-    roslaunch ros_control_boilerplate myrobot_test_trajectory.launch
+    roslaunch ros_control_boilerplate rrbot_test_trajectory.launch
 
 ## Limitations
 
