@@ -12,7 +12,8 @@ Provides a simple simulation interface and template for setting up a hardware in
 
 Developed by [Dave Coleman](dav.ee) at the University of Colorado Boulder
 
-<img align="right" src="https://raw.github.com/davetcoleman/ros_control_boilerplate/indigo-devel/resources/screenshot.png" />
+<img align="right" src="https://raw.githubusercontent.com/davetcoleman/ros_control_boilerplate/indgo-devel/resources/screenshot.png" />
+                        
 
 ## Video Demo
 
