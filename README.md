@@ -1,6 +1,6 @@
 # ros_control Boilerplate
 
-Provides a simple simulation interface and template for setting up a hardware interface for ros_control. This boilerplate demonstrates:
+Provides a simple simulation interface and template for setting up a hardware interface for ros_control. The idea is you take this as a starting point for creating your hardware interfaces, and it is needed because [ros_control documentation](http://wiki.ros.org/ros_control) is sparse. This boilerplate demonstrates:
 
  - Creating a hardware_interface for multiple joints for use with ros_control
  - Position Trajectory Controller
@@ -42,3 +42,7 @@ To send a random, dummy trajectory to execute, run:
  - Does not implement joint limits, estops, transmissions, or other fancy new features of ros_contorl
  - Does not have any hard realtime code, this depends largely on your platform, kernel, OS, etc
  - Only position control is fully implemented, though some code is in place for velocity and effort control
+
+## Contribute
+
+Please add features, make corrections, and address the limitations above, thanks!
