@@ -56,7 +56,29 @@ static const double VELOCITY_STEP_FACTOR = 10;
 /// \brief Hardware interface for a robot
 class GenericHardwareInterface: public hardware_interface::RobotHW
 {
-private:
+public:
+
+  /// \brief Constructor.
+  ///
+  /// \param nh  Node handle for topics.
+  GenericHardwareInterface(ros::NodeHandle& nh);
+
+  /// \brief Destructor.
+  ~GenericHardwareInterface();
+
+  /// \brief Initialize the hardware interface
+  void init();
+
+  /// \brief Timer event
+  void update(const ros::TimerEvent& e);
+
+  /// \brief Read the state from the robot hardware.
+  void read();
+
+  /// \brief write the command to the robot hardware.
+  void write(ros::Duration elapsed_time);
+
+protected:
 
   ros::NodeHandle                              nh_;
 
@@ -87,27 +109,6 @@ private:
 
   // Simulated controller
   double                                       p_error_, v_error_, e_error_;
-
-public:
-  /// \brief Constructor.
-  ///
-  /// \param nh  Node handle for topics.
-  GenericHardwareInterface(ros::NodeHandle& nh);
-
-  /// \brief Destructor.
-  ~GenericHardwareInterface();
-
-  /// \brief Initialize the hardware interface
-  void init();
-
-  /// \brief Timer event
-  void update(const ros::TimerEvent& e);
-
-  /// \brief Read the state from the robot hardware.
-  void read();
-
-  /// \brief write the command to the robot hardware.
-  void write(ros::Duration elapsed_time);
 
 }; // class
 

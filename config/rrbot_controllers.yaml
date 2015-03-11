@@ -14,17 +14,17 @@ joint_state_controller:
 position_trajectory_controller:
    type: position_controllers/JointTrajectoryController
    joints:
-       - joint1
-       - joint2
+      - joint1
+      - joint2
    constraints:
-       goal_time: 5.0
-       #stopped_position_tolerance: 0.4 # Defaults to 0.01
-       joint1:
-           trajectory: 0.60
-           goal:       0.15
-       joint2:
-           trajectory: 0.60
-           goal:       0.15
+      goal_time: 5.0
+      #stopped_position_tolerance: 0.4 # Defaults to 0.01
+      joint1:
+          trajectory: 0.60
+          goal:       0.15
+      joint2:
+          trajectory: 0.60
+          goal:       0.15
    # gains:
    #     joint1: {p: 2.0,  i: 0.0, d: 0.01, i_clamp: 1}
    #     joint2: {p: 2.0,  i: 0.0, d: 0.01, i_clamp: 1}

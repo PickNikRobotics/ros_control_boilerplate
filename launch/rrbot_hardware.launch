@@ -11,7 +11,7 @@
   <group ns="rrbot">
 
     <!-- Load hardware interface -->
-    <node name="rrbot_hardware_interface" pkg="ros_control_boilerplate" type="generic_hardware_interface"
+    <node name="rrbot_hardware_interface" pkg="ros_control_boilerplate" type="generic_hardware_main"
           output="screen" launch-prefix="$(arg launch_prefix)"/>
 
     <!-- Load controller settings -->

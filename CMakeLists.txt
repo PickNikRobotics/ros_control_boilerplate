@@ -17,9 +17,16 @@ find_package(catkin REQUIRED COMPONENTS
 # find_package(Boost REQUIRED COMPONENTS system)
 
 catkin_package(
-#  INCLUDE_DIRS include
-#  CATKIN_DEPENDS hardware_interface roscpp
-#  DEPENDS system_lib
+  INCLUDE_DIRS 
+    include
+  CATKIN_DEPENDS 
+    hardware_interface
+    controller_manager
+    roscpp
+    control_msgs
+    trajectory_msgs 
+  LIBRARIES 
+    generic_hardware_interface
 )
 
 ###########
@@ -27,19 +34,25 @@ catkin_package(
 ###########
 
 include_directories(
-    include/
-    ${catkin_INCLUDE_DIRS}
+  include/
+  ${catkin_INCLUDE_DIRS}
+)
+
+# Hardware Interface
+add_library(generic_hardware_interface src/generic_hardware_interface.cpp)
+target_link_libraries(generic_hardware_interface
+  ${catkin_LIBRARIES}
 )
 
 # ROS Node
-add_executable(generic_hardware_interface src/generic_hardware_interface.cpp)
-target_link_libraries(generic_hardware_interface
-    ${catkin_LIBRARIES}
+add_executable(generic_hardware_main src/generic_hardware_main.cpp)
+target_link_libraries(generic_hardware_main
+  generic_hardware_interface
+  ${catkin_LIBRARIES}
 )
 
 # Test trajectory generator node
 add_executable(test_trajectory src/test_trajectory.cpp)
 target_link_libraries(test_trajectory
-    ${catkin_LIBRARIES}
+  ${catkin_LIBRARIES}
 )
-

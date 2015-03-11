@@ -125,6 +125,7 @@ void GenericHardwareInterface::update(const ros::TimerEvent& e)
 
 void GenericHardwareInterface::read()
 {
+  // Read the joint states from your hardware here
 }
 
 void GenericHardwareInterface::write(ros::Duration elapsed_time)
@@ -162,20 +163,3 @@ void GenericHardwareInterface::write(ros::Duration elapsed_time)
 
 
 } // namespace
-
-int main(int argc, char** argv)
-{
-  ros::init(argc, argv, "generic_hardware_interface");
-  ros::NodeHandle nh;
-  
-  // NOTE: We run the ROS loop in a separate thread as external calls such
-  // as service callbacks to load controllers can block the (main) control loop
-  ros::AsyncSpinner spinner(1);
-  spinner.start();
-
-  ros_control_boilerplate::GenericHardwareInterface hardware_interface(nh);
-
-  ros::spin();
-
-  return 0;
-}
