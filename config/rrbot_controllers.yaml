@@ -11,6 +11,7 @@ joint_state_controller:
    publish_rate: 50
 
 # Joint Trajectory Controller -------------------------------
+# For detailed explanations of parameter see http://wiki.ros.org/joint_trajectory_controller
 position_trajectory_controller:
    type: position_controllers/JointTrajectoryController
    joints:
