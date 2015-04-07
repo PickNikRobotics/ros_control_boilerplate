@@ -1,6 +1,9 @@
+# Settings for ros_control control loop
+hardware_control_loop:
+   loop_hz: 500
+
 # Settings for ros_control hardware interface
 hardware_interface:
-   loop_hz: 10 # hz
    joints:
       - joint1
       - joint2

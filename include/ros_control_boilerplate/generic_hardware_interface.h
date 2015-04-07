@@ -50,8 +50,8 @@ namespace ros_control_boilerplate
 {
 
 // For simulation only - determines how fast a trajectory is followed
-static const double POSITION_STEP_FACTOR = 10;
-static const double VELOCITY_STEP_FACTOR = 10;
+static const double POSITION_STEP_FACTOR = 1;
+static const double VELOCITY_STEP_FACTOR = 1;
 
 /// \brief Hardware interface for a robot
 class GenericHardwareInterface: public hardware_interface::RobotHW
@@ -69,9 +69,6 @@ public:
   /// \brief Initialize the hardware interface
   void init();
 
-  /// \brief Timer event
-  void update(const ros::TimerEvent& e);
-
   /// \brief Read the state from the robot hardware.
   void read();
 
@@ -80,6 +77,7 @@ public:
 
 protected:
 
+  // Startup and shutdown of the internal node inside a roscpp program
   ros::NodeHandle                              nh_;
 
   // Interfaces
@@ -87,12 +85,6 @@ protected:
   hardware_interface::PositionJointInterface   position_joint_interface_;
   hardware_interface::VelocityJointInterface   velocity_joint_interface_;
   hardware_interface::EffortJointInterface     effort_joint_interface_;
-
-  // Timing
-  ros::Timer                                   non_realtime_loop_;
-  ros::Duration                                control_period_;
-  ros::Duration                                elapsed_time_;
-  double                                       loop_hz_;
 
   // Shared memory
   std::vector<std::string>                     joint_names_;
@@ -104,8 +96,6 @@ protected:
   std::vector<double>                          joint_effort_command_;
   int                                          num_joints_;
   int                                          joint_mode_; // position, velocity, or effort
-
-  boost::shared_ptr<controller_manager::ControllerManager> controller_manager_;
 
   // Simulated controller
   double                                       p_error_, v_error_, e_error_;

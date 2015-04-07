@@ -33,30 +33,49 @@
  *********************************************************************/
 
 /* Author: Dave Coleman
-   Desc:   Example ros_control main() entry point for controlling robots in ROS
+   Desc:   Example control loop for reading, updating, and writing commands to a hardware interface using MONOTOIC system time
 */
 
 #include <ros_control_boilerplate/generic_hardware_control_loop.h>
 
-int main(int argc, char** argv)
+namespace ros_control_boilerplate
 {
-  ros::init(argc, argv, "generic_hardware_interface");
-  ros::NodeHandle nh;
 
-  // NOTE: We run the ROS loop in a separate thread as external calls such
-  // as service callbacks to load controllers can block the (main) control loop
-  ros::AsyncSpinner spinner(3);
-  spinner.start();
+GenericHardwareControlLoop::GenericHardwareControlLoop(ros::NodeHandle& nh, boost::shared_ptr<ros_control_boilerplate::GenericHardwareInterface> hardware_interface)
+    : nh_(nh)
+    , hardware_interface_(hardware_interface)
+  {
+    // Create the controller manager
+    controller_manager_.reset(new controller_manager::ControllerManager(hardware_interface_.get(), nh_));
 
-  // Create the hardware interface specific to your robot
-  boost::shared_ptr<ros_control_boilerplate::GenericHardwareInterface> hardware_interface;
-  hardware_interface.reset(new ros_control_boilerplate::GenericHardwareInterface(nh));
+    // Get period and create timer
+    nh_.param("hardware_control_loop/loop_hz", loop_hz_, 0.1);
+    ROS_DEBUG_STREAM_NAMED("constructor","Using loop freqency of " << loop_hz_ << " hz");
 
-  // Start the control loop
-  ros_control_boilerplate::GenericHardwareControlLoop control_loop(nh, hardware_interface);
+    // Get current time for use with first update
+    clock_gettime(CLOCK_MONOTONIC, &last_time_);
 
-  // Wait until shutdown signal recieved
-  ros::waitForShutdown();
+    // Start timer
+    ros::Duration update_freq = ros::Duration(1/loop_hz_);
+    non_realtime_loop_ = nh_.createTimer(update_freq, &GenericHardwareControlLoop::update, this);
+  }
 
-  return 0;
-}
+  void GenericHardwareControlLoop::update(const ros::TimerEvent& e)
+  {
+    // Get change in time
+    clock_gettime(CLOCK_MONOTONIC, &current_time_);
+    elapsed_time_ = ros::Duration(current_time_.tv_sec - last_time_.tv_sec + (current_time_.tv_nsec - last_time_.tv_nsec) / BILLION);
+    last_time_ = current_time_;
+    ROS_DEBUG_STREAM_THROTTLE_NAMED(1, "generic_hardware_main","Sampled update loop with elapsed time " << elapsed_time_.toSec());
+
+    // Input
+    hardware_interface_->read();
+
+    // Control
+    controller_manager_->update(ros::Time::now(), elapsed_time_);
+
+    // Output
+    hardware_interface_->write(elapsed_time_);
+  }
+
+} // namespace

@@ -48,15 +48,6 @@ GenericHardwareInterface::GenericHardwareInterface(ros::NodeHandle& nh)
   // Initialize shared memory and interfaces
   init();
 
-  // Create the controller manager
-  controller_manager_.reset(new controller_manager::ControllerManager(this, nh_));
-
-  // Get period and create timer
-  nh_.param("hardware_interface/loop_hz", loop_hz_, 0.1);
-  ROS_DEBUG_STREAM_NAMED("constructor","Using loop freqency of " << loop_hz_ << " hz");
-  ros::Duration update_freq = ros::Duration(1.0/loop_hz_);
-  non_realtime_loop_ = nh_.createTimer(update_freq, &GenericHardwareInterface::update, this);
-
   ROS_INFO_NAMED("hardware_interface", "Loaded generic_hardware_interface.");
 }
 
@@ -109,49 +100,44 @@ void GenericHardwareInterface::init()
   registerInterface(&effort_joint_interface_); // From RobotHW base class.
 }
 
-void GenericHardwareInterface::update(const ros::TimerEvent& e)
-{
-  elapsed_time_ = ros::Duration(e.current_real - e.last_real);
-
-  // Input
-  read();
-
-  // Control
-  controller_manager_->update(ros::Time::now(), elapsed_time_);
-
-  // Output
-  write(elapsed_time_);
-}
-
 void GenericHardwareInterface::read()
 {
   // Read the joint states from your hardware here
+  // e.g.
+  // for (std::size_t i = 0; i < num_joints_; ++i)
+  // {
+  //   joint_position_[i] = robot_api_.getJointPosition(i);
+  //   joint_velocity_[i] = robot_api_.getJointVelocity(i);
+  //   joint_effort_[i] = robot_api_.getJointEffort(i);
+  // }
 }
 
 void GenericHardwareInterface::write(ros::Duration elapsed_time)
 {
   // Send commands in different modes
 
-  // Move all the states to the commanded set points slowly
+  // NOTE: the following is a "simuation" example so that this boilerplate can be run without being connected to hardware
+  // When converting to your robot, remove the built-in PID loop and instead let the higher leverl ros_control controllers take 
+  // care of PID loops for you. This P-controller is only intended to mimic the delay in real hardware, somewhat like a simualator
   for (std::size_t i = 0; i < num_joints_; ++i)
   {
     switch (joint_mode_)
     {
       case 1: //hardware_interface::MODE_POSITION:
-        // Position
+        // Position - Move all the states to the commanded set points slowly
         p_error_ = joint_position_command_[i] - joint_position_[i];
         // scale the rate it takes to achieve position by a factor that is invariant to the feedback loop
-        joint_position_[i] += p_error_ * POSITION_STEP_FACTOR / loop_hz_;
+        joint_position_[i] += p_error_ * POSITION_STEP_FACTOR; 
         break;
 
       case 2: //hardware_interface::MODE_VELOCITY:
-        // Position
+        // Position - Move all the states to the commanded set points slowly
         joint_position_[i] += joint_velocity_[i] * elapsed_time.toSec();
 
-        // Velocity
+        // Velocity - Move all the states to the commanded set points slowly
         v_error_ = joint_velocity_command_[i] - joint_velocity_[i];
         // scale the rate it takes to achieve velocity by a factor that is invariant to the feedback loop
-        joint_velocity_[i] += v_error_ * VELOCITY_STEP_FACTOR / loop_hz_;
+        joint_velocity_[i] += v_error_ * VELOCITY_STEP_FACTOR;
         break;
 
       case 3: //hardware_interface::MODE_EFFORT:

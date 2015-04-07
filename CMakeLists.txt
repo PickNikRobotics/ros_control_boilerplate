@@ -26,6 +26,7 @@ catkin_package(
     control_msgs
     trajectory_msgs 
   LIBRARIES 
+    generic_hardware_control_loop
     generic_hardware_interface
 )
 
@@ -38,6 +39,12 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+# Control loop
+add_library(generic_hardware_control_loop src/generic_hardware_control_loop.cpp)
+target_link_libraries(generic_hardware_control_loop
+  ${catkin_LIBRARIES}
+)
+
 # Hardware Interface
 add_library(generic_hardware_interface src/generic_hardware_interface.cpp)
 target_link_libraries(generic_hardware_interface
@@ -48,6 +55,7 @@ target_link_libraries(generic_hardware_interface
 add_executable(generic_hardware_main src/generic_hardware_main.cpp)
 target_link_libraries(generic_hardware_main
   generic_hardware_interface
+  generic_hardware_control_loop
   ${catkin_LIBRARIES}
 )
 
