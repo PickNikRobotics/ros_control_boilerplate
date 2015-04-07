@@ -70,10 +70,10 @@ public:
   void init();
 
   /// \brief Read the state from the robot hardware.
-  void read();
+  virtual void read();
 
   /// \brief write the command to the robot hardware.
-  void write(ros::Duration elapsed_time);
+  virtual void write(ros::Duration elapsed_time);
 
 protected:
 
