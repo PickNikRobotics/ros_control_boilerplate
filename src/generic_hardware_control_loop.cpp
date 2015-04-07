@@ -48,8 +48,8 @@ GenericHardwareControlLoop::GenericHardwareControlLoop(ros::NodeHandle& nh, boos
     // Create the controller manager
     controller_manager_.reset(new controller_manager::ControllerManager(hardware_interface_.get(), nh_));
 
-    // Get period and create timer
-    nh_.param("hardware_control_loop/loop_hz", loop_hz_, 0.1);
+    // Get period - default to 100 hz
+    nh_.param("hardware_control_loop/loop_hz", loop_hz_, 100.0); 
     ROS_DEBUG_STREAM_NAMED("constructor","Using loop freqency of " << loop_hz_ << " hz");
 
     // Get current time for use with first update
