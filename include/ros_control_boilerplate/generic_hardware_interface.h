@@ -58,16 +58,15 @@ class GenericHardwareInterface: public hardware_interface::RobotHW
 {
 public:
 
-  /// \brief Constructor.
-  ///
-  /// \param nh  Node handle for topics.
-  GenericHardwareInterface(ros::NodeHandle& nh);
-
-  /// \brief Destructor.
-  ~GenericHardwareInterface();
+  /**
+   * \brief Constructor
+   * \param nh - Node handle for topics.
+   * \param joint_mode - method to control joints by: 0 - position, 1 - velocity, or 2 - effort
+   */ 
+  GenericHardwareInterface(ros::NodeHandle& nh, int joint_mode);
 
   /// \brief Initialize the hardware interface
-  void init();
+  virtual void init();
 
   /// \brief Read the state from the robot hardware.
   virtual void read();
@@ -95,7 +94,7 @@ protected:
   std::vector<double>                          joint_velocity_command_;
   std::vector<double>                          joint_effort_command_;
   int                                          num_joints_;
-  int                                          joint_mode_; // position, velocity, or effort
+  int                                          joint_mode_; // 0 - position, 1 - velocity, or 2 - effort
 
   // Simulated controller
   double                                       p_error_, v_error_, e_error_;

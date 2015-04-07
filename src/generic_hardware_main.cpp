@@ -49,8 +49,9 @@ int main(int argc, char** argv)
   spinner.start();
 
   // Create the hardware interface specific to your robot
+  int joint_mode = 0; // position
   boost::shared_ptr<ros_control_boilerplate::GenericHardwareInterface> hardware_interface;
-  hardware_interface.reset(new ros_control_boilerplate::GenericHardwareInterface(nh));
+  hardware_interface.reset(new ros_control_boilerplate::GenericHardwareInterface(nh, joint_mode));
 
   // Start the control loop
   ros_control_boilerplate::GenericHardwareControlLoop control_loop(nh, hardware_interface);

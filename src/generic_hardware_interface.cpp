@@ -41,22 +41,20 @@
 namespace ros_control_boilerplate
 {
 
-GenericHardwareInterface::GenericHardwareInterface(ros::NodeHandle& nh)
+GenericHardwareInterface::GenericHardwareInterface(ros::NodeHandle& nh, int joint_mode)
   : nh_(nh)
-  , joint_mode_(1) // POSITION
+  , joint_mode_(joint_mode)
 {
-  // Initialize shared memory and interfaces
-  init();
+  // Initialize shared memory and interfaces here
+  init(); // this implementation loads from rosparam
 
   ROS_INFO_NAMED("hardware_interface", "Loaded generic_hardware_interface.");
 }
 
-GenericHardwareInterface::~GenericHardwareInterface()
-{
-}
-
 void GenericHardwareInterface::init()
 {
+  ROS_WARN_STREAM_NAMED("init","Using default init function");
+
   // Get joint names
   nh_.getParam("hardware_interface/joints", joint_names_);
   if (joint_names_.size() == 0)
@@ -81,17 +79,23 @@ void GenericHardwareInterface::init()
     // Create joint state interface
     joint_state_interface_.registerHandle(hardware_interface::JointStateHandle(joint_names_[i], &joint_position_[i], &joint_velocity_[i], &joint_effort_[i]));
 
-    // Create position joint interface
-    position_joint_interface_.registerHandle(hardware_interface::JointHandle(
-                                                                             joint_state_interface_.getHandle(joint_names_[i]),&joint_position_command_[i]));
+    switch (joint_mode_)
+    {
+      case 0:
+        // Create position joint interface
+        position_joint_interface_.registerHandle(hardware_interface::JointHandle(joint_state_interface_.getHandle(joint_names_[i]),&joint_position_command_[i]));                                                                                 
+        break;
 
-    // Create velocity joint interface
-    //velocity_joint_interface_.registerHandle(hardware_interface::JointHandle(
-    //    joint_state_interface_.getHandle(joint_names_[i]),&joint_velocity_command_[i]));
+      case 1:
+        // Create velocity joint interface
+        velocity_joint_interface_.registerHandle(hardware_interface::JointHandle(joint_state_interface_.getHandle(joint_names_[i]),&joint_velocity_command_[i]));                                                                                 
+        break;
 
-    // Create effort joint interface
-    //effort_joint_interface_.registerHandle(hardware_interface::JointHandle(
-    //    joint_state_interface_.getHandle(joint_names_[i]),&joint_effort_command_[i]));
+      case 2:
+        // Create effort joint interface
+        effort_joint_interface_.registerHandle(hardware_interface::JointHandle(joint_state_interface_.getHandle(joint_names_[i]),&joint_effort_command_[i]));                                                                               
+        break;
+    }
 
   }
   registerInterface(&joint_state_interface_); // From RobotHW base class.
@@ -117,20 +121,20 @@ void GenericHardwareInterface::write(ros::Duration elapsed_time)
   // Send commands in different modes
 
   // NOTE: the following is a "simuation" example so that this boilerplate can be run without being connected to hardware
-  // When converting to your robot, remove the built-in PID loop and instead let the higher leverl ros_control controllers take 
+  // When converting to your robot, remove the built-in PID loop and instead let the higher leverl ros_control controllers take
   // care of PID loops for you. This P-controller is only intended to mimic the delay in real hardware, somewhat like a simualator
   for (std::size_t i = 0; i < num_joints_; ++i)
   {
     switch (joint_mode_)
     {
-      case 1: //hardware_interface::MODE_POSITION:
+      case 0: //hardware_interface::MODE_POSITION:
         // Position - Move all the states to the commanded set points slowly
         p_error_ = joint_position_command_[i] - joint_position_[i];
         // scale the rate it takes to achieve position by a factor that is invariant to the feedback loop
-        joint_position_[i] += p_error_ * POSITION_STEP_FACTOR; 
+        joint_position_[i] += p_error_ * POSITION_STEP_FACTOR;
         break;
 
-      case 2: //hardware_interface::MODE_VELOCITY:
+      case 1: //hardware_interface::MODE_VELOCITY:
         // Position - Move all the states to the commanded set points slowly
         joint_position_[i] += joint_velocity_[i] * elapsed_time.toSec();
 
@@ -140,7 +144,7 @@ void GenericHardwareInterface::write(ros::Duration elapsed_time)
         joint_velocity_[i] += v_error_ * VELOCITY_STEP_FACTOR;
         break;
 
-      case 3: //hardware_interface::MODE_EFFORT:
+      case 2: //hardware_interface::MODE_EFFORT:
         ROS_ERROR_STREAM_NAMED("write","Effort not implemented yet");
         break;
     }
