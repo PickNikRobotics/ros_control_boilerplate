@@ -106,7 +106,7 @@ void GenericHardwareInterface::init()
   registerInterface(&effort_joint_interface_); // From RobotHW base class.
 }
 
-void GenericHardwareInterface::read()
+void GenericHardwareInterface::read(ros::Duration elapsed_time)
 {
   // Read the joint states from your hardware here
   // e.g.
