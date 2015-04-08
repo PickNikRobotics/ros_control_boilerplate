@@ -48,18 +48,20 @@ GenericHardwareInterface::GenericHardwareInterface(ros::NodeHandle& nh, int join
   // Initialize shared memory and interfaces here
   init(); // this implementation loads from rosparam
 
-  ROS_INFO_NAMED("hardware_interface", "Loaded generic_hardware_interface.");
+  ROS_INFO_NAMED("generic_hardware_interface", "Loaded generic_hardware_interface.");
 }
 
 void GenericHardwareInterface::init()
 {
-  ROS_WARN_STREAM_NAMED("init","Using default init function");
+  ROS_INFO_STREAM_NAMED("generic_hardware_interface","Reading rosparams from namespace: " << nh_.getNamespace());
 
   // Get joint names
   nh_.getParam("hardware_interface/joints", joint_names_);
   if (joint_names_.size() == 0)
   {
-    ROS_FATAL_STREAM_NAMED("init","Not joints found on parameter server for controller, did you load the proper yaml file?");
+    ROS_FATAL_STREAM_NAMED("generic_hardware_interface","No joints found on parameter server for controller, did you load the proper yaml file?"
+                           << " Namespace: " << nh_.getNamespace());
+    exit(-1);
   }
   num_joints_ = joint_names_.size();
 
@@ -74,7 +76,7 @@ void GenericHardwareInterface::init()
   // Initialize controller
   for (int i = 0; i < num_joints_; ++i)
   {
-    ROS_DEBUG_STREAM_NAMED("constructor","Loading joint name: " << joint_names_[i]);
+    ROS_DEBUG_STREAM_NAMED("generic_hardware_interface","Loading joint name: " << joint_names_[i]);
 
     // Create joint state interface
     joint_state_interface_.registerHandle(hardware_interface::JointStateHandle(joint_names_[i], &joint_position_[i], &joint_velocity_[i], &joint_effort_[i]));
@@ -83,17 +85,17 @@ void GenericHardwareInterface::init()
     {
       case 0:
         // Create position joint interface
-        position_joint_interface_.registerHandle(hardware_interface::JointHandle(joint_state_interface_.getHandle(joint_names_[i]),&joint_position_command_[i]));                                                                                 
+        position_joint_interface_.registerHandle(hardware_interface::JointHandle(joint_state_interface_.getHandle(joint_names_[i]),&joint_position_command_[i]));
         break;
 
       case 1:
         // Create velocity joint interface
-        velocity_joint_interface_.registerHandle(hardware_interface::JointHandle(joint_state_interface_.getHandle(joint_names_[i]),&joint_velocity_command_[i]));                                                                                 
+        velocity_joint_interface_.registerHandle(hardware_interface::JointHandle(joint_state_interface_.getHandle(joint_names_[i]),&joint_velocity_command_[i]));
         break;
 
       case 2:
         // Create effort joint interface
-        effort_joint_interface_.registerHandle(hardware_interface::JointHandle(joint_state_interface_.getHandle(joint_names_[i]),&joint_effort_command_[i]));                                                                               
+        effort_joint_interface_.registerHandle(hardware_interface::JointHandle(joint_state_interface_.getHandle(joint_names_[i]),&joint_effort_command_[i]));
         break;
     }
 
@@ -145,7 +147,7 @@ void GenericHardwareInterface::write(ros::Duration elapsed_time)
         break;
 
       case 2: //hardware_interface::MODE_EFFORT:
-        ROS_ERROR_STREAM_NAMED("write","Effort not implemented yet");
+        ROS_ERROR_STREAM_NAMED("generic_hardware_interface","Effort not implemented yet");
         break;
     }
   }

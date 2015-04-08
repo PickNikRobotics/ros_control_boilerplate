@@ -66,7 +66,7 @@ void GenericHardwareControlLoop::update(const ros::TimerEvent& e)
   clock_gettime(CLOCK_MONOTONIC, &current_time_);
   elapsed_time_ = ros::Duration(current_time_.tv_sec - last_time_.tv_sec + (current_time_.tv_nsec - last_time_.tv_nsec) / BILLION);
   last_time_ = current_time_;
-  ROS_DEBUG_STREAM_THROTTLE_NAMED(1, "generic_hardware_main","Sampled update loop with elapsed time " << elapsed_time_.toSec());
+  //ROS_DEBUG_STREAM_THROTTLE_NAMED(1, "generic_hardware_main","Sampled update loop with elapsed time " << elapsed_time_.toSec());
 
   // Input
   hardware_interface_->read();
