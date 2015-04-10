@@ -51,7 +51,13 @@ target_link_libraries(generic_hardware_interface
   ${catkin_LIBRARIES}
 )
 
-# ROS Node
+# Tool for analyzing controller performance
+add_library(controller_state_to_csv src/controller_state_to_csv.cpp)
+target_link_libraries(controller_state_to_csv
+  ${catkin_LIBRARIES}
+)
+
+# Main control executable
 add_executable(generic_hardware_main src/generic_hardware_main.cpp)
 target_link_libraries(generic_hardware_main
   generic_hardware_interface
@@ -64,3 +70,4 @@ add_executable(test_trajectory src/test_trajectory.cpp)
 target_link_libraries(test_trajectory
   ${catkin_LIBRARIES}
 )
+

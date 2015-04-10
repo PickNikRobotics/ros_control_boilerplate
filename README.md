@@ -51,6 +51,16 @@ To test this as a hardware interface for your robot, you'll also want to rename 
 
 If you need your robot to startup at a particular position in simulation, or you would like to use this funcitonality to simulate your robot with MoveIt!, see the downstream package (it depends on this package) [moveit_sim_controller](https://github.com/davetcoleman/moveit_sim_controller)
 
+# Other Helper Tools - Recording to CSV
+
+Write to file
+
+    rosrun ros_control_boilerplate controller_state_to_csv SAVE_TO_FILE_PATH CONTROLLER_STATE_TOPIC TIME_TO_RECORD
+
+Read from file
+
+    rosrun ros_control_boilerplate csv_to_controller READ_FROM_FILE_PATH CONTROLLER_STATE_TOPIC TIME_TO_RECORD
+
 ## Limitations
 
  - Does not implement joint limits, estops, transmissions, or other fancy new features of ros_contorl
