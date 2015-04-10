@@ -64,24 +64,16 @@ public:
      : parent_name_(parent_name)
      , using_trajectory_controller_(true)
   {
-    std::cout << "parent class" << std::endl;
+    switch_service_ = service_namespace + "/controller_manager/switch_controller";
+    load_service_ = service_namespace + "/controller_manager/load_controller";
+
+    // Switch modes of controllers
+    switch_controlers_client_ = nh_.serviceClient<controller_manager_msgs::SwitchController>(switch_service_);
+    load_controlers_client_ = nh_.serviceClient<controller_manager_msgs::LoadController>(load_service_);
+
     // Subscribe to joystick control
     std::size_t queue_size = 1;
     remote_joy_ = nh_.subscribe("/joy", queue_size, &JoystickManualControl::joyCallback, this);
-
-    const std::string SWITCH_SERVICE = service_namespace + "/controller_manager/switch_controller";
-    const std::string LOAD_SERVICE = service_namespace + "/controller_manager/load_controller";
-
-    // Ensure services are up
-    ROS_INFO_STREAM_NAMED(parent_name_,"Waiting for serivces...");
-    if (!ros::service::waitForService(SWITCH_SERVICE, ros::Duration(10)))
-      ROS_ERROR_STREAM_NAMED(parent_name_,"Unable to find service " << SWITCH_SERVICE);
-    if (!ros::service::waitForService(LOAD_SERVICE, ros::Duration(10)))
-      ROS_ERROR_STREAM_NAMED(parent_name_,"Unable to find service " << LOAD_SERVICE);
-
-    // Switch modes of controllers
-    switch_controlers_client_ = nh_.serviceClient<controller_manager_msgs::SwitchController>(SWITCH_SERVICE);
-    load_controlers_client_ = nh_.serviceClient<controller_manager_msgs::LoadController>(LOAD_SERVICE);
 
     ROS_INFO_STREAM_NAMED(parent_name_,"JoystickManualControl Ready.");
   }
@@ -97,6 +89,13 @@ public:
    */
   bool loadManualControllers()
   {
+    // Ensure services are up
+    ROS_INFO_STREAM_NAMED(parent_name_,"Waiting for serivces...");
+    if (!ros::service::waitForService(switch_service_, ros::Duration(10)))
+      ROS_ERROR_STREAM_NAMED(parent_name_,"Unable to find service " << switch_service_);
+    if (!ros::service::waitForService(load_service_, ros::Duration(10)))
+      ROS_ERROR_STREAM_NAMED(parent_name_,"Unable to find service " << load_service_);
+
     for (std::size_t i = 0; i < manual_controllers_.size(); ++i)
     {
       ROS_INFO_STREAM_NAMED(parent_name_,"Loading controller " << manual_controllers_[i]);
@@ -172,6 +171,8 @@ protected:
 
   // Name of parent class, used for logging messages
   const std::string parent_name_;
+  std::string switch_service_;
+  std::string load_service_;
 
   // Subscribe to joystick commands
   ros::Subscriber remote_joy_;
