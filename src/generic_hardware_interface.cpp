@@ -74,7 +74,7 @@ void GenericHardwareInterface::init()
   joint_effort_command_.resize(num_joints_);
 
   // Initialize controller
-  for (int i = 0; i < num_joints_; ++i)
+  for (std::size_t i = 0; i < num_joints_; ++i)
   {
     ROS_DEBUG_STREAM_NAMED("generic_hardware_interface","Loading joint name: " << joint_names_[i]);
 

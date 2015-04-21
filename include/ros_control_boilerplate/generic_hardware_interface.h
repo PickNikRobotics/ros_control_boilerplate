@@ -93,8 +93,8 @@ protected:
   std::vector<double>                          joint_position_command_;
   std::vector<double>                          joint_velocity_command_;
   std::vector<double>                          joint_effort_command_;
-  int                                          num_joints_;
-  int                                          joint_mode_; // 0 - position, 1 - velocity, or 2 - effort
+  std::size_t                                  num_joints_;
+  std::size_t                                  joint_mode_; // 0 - position, 1 - velocity, or 2 - effort
 
   // Simulated controller
   double                                       p_error_, v_error_, e_error_;
