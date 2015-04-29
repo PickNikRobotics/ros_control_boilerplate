@@ -34,8 +34,6 @@ catkin_package(
 ## Build ##
 ###########
 
-set(CMAKE_CXX_FLAGS "-W -Wall -Wno-unused-parameter -fno-strict-aliasing")
-
 include_directories(
   include/
   ${catkin_INCLUDE_DIRS}
