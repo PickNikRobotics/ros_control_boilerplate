@@ -111,7 +111,7 @@ public:
     double max_joint_value = 3.14;
 
     // Get joint names
-    nh_private_.getParam("hardware_interface/joints", joint_names);
+    nh_.getParam("hardware_interface/joints", joint_names);
     if (joint_names.size() == 0)
     {
       ROS_FATAL_STREAM_NAMED("init","Not joints found on parameter server for controller, did you load the proper yaml file?"
@@ -154,6 +154,7 @@ public:
 private:
 
   // A shared node handle
+  ros::NodeHandle nh_;
   ros::NodeHandle nh_private_;
 
   // Show more visual and console output, with general slower run time.
