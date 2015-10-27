@@ -23,11 +23,11 @@ See [YouTube](https://www.youtube.com/watch?v=Tpj2tx9uZ-o) for a very modest vid
 
 This package depends on [gazebo_ros_demos](https://github.com/ros-simulation/gazebo_ros_demos) for its ``rrbot_description`` package, so be sure to ``git clone`` that along with this package and build in your catkin workspace.
 
-## Run Demo
+## Run Simulation Demo
 
-This package is setup to run the "RRBot" two joint revolute-revolute robot demo. To run its ros_control hardware interface, run:
+This package is setup to run the "RRBot" two joint revolute-revolute robot demo. To run its ros_control non-physics-based simulated hardware interface, run:
 
-    roslaunch ros_control_boilerplate rrbot_hardware.launch
+    roslaunch ros_control_boilerplate rrbot_simulaton.launch
 
 To visualize its published ``/tf`` coordinate transforms in Rviz run:
 
@@ -53,14 +53,18 @@ If you need your robot to startup at a particular position in simulation, or you
 
 # Other Helper Tools - Recording to CSV
 
-Write to file
+Write the commands from a trajectory controller to csv file
 
     rosrun ros_control_boilerplate controller_state_to_csv SAVE_TO_FILE_PATH CONTROLLER_STATE_TOPIC TIME_TO_RECORD
 
-Read from file
+Read from csv file and execute on robot
 
     rosrun ros_control_boilerplate csv_to_controller READ_FROM_FILE_PATH CONTROLLER_STATE_TOPIC TIME_TO_RECORD
 
+Joint-level teleop from a keyboard (TODO: remove had coded topic names)
+
+    rosrun ros_control_boilerplate keyboard_teleop
+	
 ## Limitations
 
  - Does not implement joint limits, estops, transmissions, or other fancy new features of ros_contorl
