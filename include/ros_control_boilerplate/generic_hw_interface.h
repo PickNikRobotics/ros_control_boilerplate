@@ -196,4 +196,4 @@ protected:
 
 }  // namespace
 
-#endif
+#endif // GENERIC_ROS_CONTROL__GENERIC_HW_INTERFACE_H
