@@ -65,7 +65,7 @@ void SimHWInterface::write(ros::Duration elapsed_time)
   enforceLimits(elapsed_time);
 
   // Send commands in different modes
-  int joint_mode = 0;  // TODo
+  int joint_mode = 0;  // TODO
 
   // NOTE: the following is a "simuation" example so that this boilerplate can be run without being
   // connected to hardware
@@ -83,6 +83,9 @@ void SimHWInterface::write(ros::Duration elapsed_time)
         // scale the rate it takes to achieve position by a factor that is invariant to the feedback
         // loop
         joint_position_[i] += p_error_ * POSITION_STEP_FACTOR;
+
+        // DTC Hack
+        joint_position_[i] = joint_position_command_[i];
         break;
 
       case 1:  // hardware_interface::MODE_VELOCITY:

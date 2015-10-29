@@ -37,12 +37,11 @@
 */
 
 #include <ros_control_boilerplate/generic_hw_interface.h>
+#include <control_toolbox/filters.h>
 
 namespace ros_control_boilerplate
 {
-
-GenericHWInterface::GenericHWInterface(ros::NodeHandle &nh,
-                                       urdf::Model *urdf_model)
+GenericHWInterface::GenericHWInterface(ros::NodeHandle &nh, urdf::Model *urdf_model)
   : nh_(nh)
   , debug_(false)
 {
@@ -90,6 +89,7 @@ void GenericHWInterface::init()
   // Limits
   joint_position_lower_limits_.resize(num_joints_, 0.0);
   joint_position_upper_limits_.resize(num_joints_, 0.0);
+  joint_velocity_limits_.resize(num_joints_, 0.0);
   joint_effort_limits_.resize(num_joints_, 0.0);
   joint_stiffness_lower_limits_.resize(num_joints_, 0.0);
   joint_stiffness_upper_limits_.resize(num_joints_, 0.0);
@@ -148,21 +148,16 @@ void GenericHWInterface::registerJointLimits(
     const hardware_interface::JointHandle &joint_handle_velocity,
     const hardware_interface::JointHandle &joint_handle_effort, std::size_t joint_id)
 {
-  // Create references
-  double *const pos_lower_limit = &joint_position_lower_limits_[joint_id];
-  double *const pos_upper_limit = &joint_position_upper_limits_[joint_id];
-  // TODO velocity
-  double *const effort_limit = &joint_effort_limits_[joint_id];
-
   // Default values
-  *pos_lower_limit = -std::numeric_limits<double>::max();
-  *pos_upper_limit = std::numeric_limits<double>::max();
-  *effort_limit = std::numeric_limits<double>::max();
+  joint_position_lower_limits_[joint_id] = -std::numeric_limits<double>::max();
+  joint_position_upper_limits_[joint_id] = std::numeric_limits<double>::max();
+  joint_velocity_limits_[joint_id] = std::numeric_limits<double>::max();
+  joint_effort_limits_[joint_id] = std::numeric_limits<double>::max();
 
   // Limits datastructures
-  joint_limits_interface::JointLimits pos_limits;       // Position
+  joint_limits_interface::JointLimits joint_limits;     // Position
   joint_limits_interface::SoftJointLimits soft_limits;  // Soft Position
-  bool has_pos_limits = false;
+  bool has_joint_limits = false;
   bool has_soft_limits = false;
 
   // Get limits from URDF
@@ -186,18 +181,40 @@ void GenericHWInterface::registerJointLimits(
   }
 
   // Get limits from URDF
-  if (joint_limits_interface::getJointLimits(urdf_joint, pos_limits))
+  if (joint_limits_interface::getJointLimits(urdf_joint, joint_limits))
   {
-    has_pos_limits = true;
-    //pos_limits.print();
+    has_joint_limits = true;
+    ROS_DEBUG_STREAM_NAMED("generic_hw_interface", "Joint " << joint_names_[joint_id]
+                                                            << " has URDF position limits ["
+                                                            << joint_limits.min_position << ", "
+                                                            << joint_limits.max_position << "]");
+    if (joint_limits.has_velocity_limits)
+      ROS_DEBUG_STREAM_NAMED("generic_hw_interface", "Joint " << joint_names_[joint_id]
+                                                              << " has URDF velocity limit ["
+                                                              << joint_limits.max_velocity << "]");
   }
   else
   {
-    ROS_WARN_STREAM_NAMED("generic_hw_interface", "No position limits exist, skipping "
-                                                      << joint_names_[joint_id]);
-    return;
+    ROS_WARN_STREAM_NAMED("generic_hw_interface", "Joint "
+                                                      << joint_names_[joint_id]
+                                                      << " does not have a URDF position limit");
   }
 
+  // Get limits from ROS param
+  if (joint_limits_interface::getJointLimits(joint_names_[joint_id], nh_, joint_limits))
+  {
+    has_joint_limits = true;
+    ROS_DEBUG_STREAM_NAMED("generic_hw_interface", "Joint " << joint_names_[joint_id]
+                                                            << " has rosparam position limits ["
+                                                            << joint_limits.min_position << ", "
+                                                            << joint_limits.max_position << "]");
+    if (joint_limits.has_velocity_limits)
+      ROS_DEBUG_STREAM_NAMED("generic_hw_interface", "Joint " << joint_names_[joint_id]
+                                                              << " has rosparam velocity limit ["
+                                                              << joint_limits.max_velocity << "]");
+  }  // the else debug message provided internally by joint_limits_interface
+
+  /* TODO: future work
   // Get soft limits from URDF
   if (joint_limits_interface::getSoftJointLimits(urdf_joint, soft_limits))
   {
@@ -208,45 +225,64 @@ void GenericHWInterface::registerJointLimits(
     // ROS_DEBUG_STREAM_NAMED("generic_hw_interface",
     //                        "No soft joint limits exist: " << joint_names_[joint_id]);
   }
+  */
 
-  // Copy position limits
-  if (pos_limits.has_position_limits)
+  // Quit we we haven't found any limits in URDF or rosparam server
+  if (!has_joint_limits)
   {
-    *pos_lower_limit = pos_limits.min_position;
-    *pos_upper_limit = pos_limits.max_position;
+    return;
   }
-  // TODO: velocity limits?
 
-  // Copy effort limits
-  if (pos_limits.has_effort_limits)
-    *effort_limit = pos_limits.max_effort;
+  // Copy position limits if available
+  if (joint_limits.has_position_limits)
+  {
+    joint_position_lower_limits_[joint_id] = joint_limits.min_position;
+    joint_position_upper_limits_[joint_id] = joint_limits.max_position;
+  }
 
+  // Copy velocity limits if available
+  if (joint_limits.has_velocity_limits)
+  {
+    joint_velocity_limits_[joint_id] = joint_limits.max_velocity;
+  }
+
+  // Copy effort limits if available
+  if (joint_limits.has_effort_limits)
+  {
+    joint_effort_limits_[joint_id] = joint_limits.max_effort;
+  }
+
+  /* TODO: future work
   if (has_soft_limits)  // Use soft limits
   {
     ROS_DEBUG_STREAM_NAMED("generic_hw_interface", "Using soft saturation limits");
     const joint_limits_interface::PositionJointSoftLimitsHandle limits_handle_position(
-        joint_handle_position, pos_limits, soft_limits);
+        joint_handle_position, joint_limits, soft_limits);
     pos_jnt_soft_limits_.registerHandle(limits_handle_position);
     const joint_limits_interface::VelocityJointSoftLimitsHandle limits_handle_velocity(
-        joint_handle_velocity, pos_limits, soft_limits);
+        joint_handle_velocity, joint_limits, soft_limits);
     vel_jnt_soft_limits_.registerHandle(limits_handle_velocity);
     const joint_limits_interface::EffortJointSoftLimitsHandle limits_handle_effort(
-        joint_handle_effort, pos_limits, soft_limits);
+        joint_handle_effort, joint_limits, soft_limits);
     eff_jnt_soft_limits_.registerHandle(limits_handle_effort);
   }
   else  // Use saturation limits
   {
-    ROS_DEBUG_STREAM_NAMED("generic_hw_interface", "Using saturation limits (not soft limits)");
-    const joint_limits_interface::PositionJointSaturationHandle sat_handle_position(
-        joint_handle_position, pos_limits);
-    pos_jnt_sat_limits_.registerHandle(sat_handle_position);
-    const joint_limits_interface::VelocityJointSaturationHandle sat_handle_velocity(
-        joint_handle_velocity, pos_limits);
-    vel_jnt_sat_limits_.registerHandle(sat_handle_velocity);
-    const joint_limits_interface::EffortJointSaturationHandle sat_handle_effort(joint_handle_effort,
-                                                                                pos_limits);
-    eff_jnt_sat_limits_.registerHandle(sat_handle_effort);
-  }
+  */
+
+  ROS_DEBUG_STREAM_NAMED("generic_hw_interface", "Using saturation limits (not soft limits)");
+
+  const joint_limits_interface::PositionJointSaturationHandle sat_handle_position(
+      joint_handle_position, joint_limits);
+  pos_jnt_sat_insterface_.registerHandle(sat_handle_position);
+
+  const joint_limits_interface::VelocityJointSaturationHandle sat_handle_velocity(
+      joint_handle_velocity, joint_limits);
+  vel_jnt_sat_insterface_.registerHandle(sat_handle_velocity);
+
+  const joint_limits_interface::EffortJointSaturationHandle sat_handle_effort(joint_handle_effort,
+                                                                              joint_limits);
+  eff_jnt_sat_insterface_.registerHandle(sat_handle_effort);
 }
 
 void GenericHWInterface::registerJointStiffnessLimits(
@@ -284,18 +320,24 @@ void GenericHWInterface::registerJointStiffnessLimits(
   // Assign to interface
   const joint_limits_interface::PositionJointSaturationHandle sat_handle_stiffness(
       joint_handle_stiffness, stiff_limits);
-  stiff_jnt_sat_limits_.registerHandle(sat_handle_stiffness);
+  stiff_jnt_sat_insterface_.registerHandle(sat_handle_stiffness);
 }
 
 void GenericHWInterface::enforceLimits(ros::Duration period)
 {
-  // TODO - choose which limit to run based on mode
+  // Note - you should only need to use one saturation interface,
+  // depending on your control method
 
   // Saturation Limits
-  pos_jnt_sat_limits_.enforceLimits(period);
-  //vel_jnt_sat_limits_.enforceLimits(period);
-  //eff_jnt_sat_limits_.enforceLimits(period);
-  // stiff_jnt_sat_limits_.enforceLimits(period);
+
+  // Enforces position and velocity
+  pos_jnt_sat_insterface_.enforceLimits(period);
+  // Enforces velocity and acceleration limits
+  // vel_jnt_sat_insterface_.enforceLimits(period);
+  // Enforces position, velocity, and effort
+  // eff_jnt_sat_insterface_.enforceLimits(period);
+  // ?
+  // stiff_jnt_sat_insterface_.enforceLimits(period);
 
   // // Soft limits
   // pos_jnt_soft_limits_.enforceLimits(period);
@@ -308,7 +350,8 @@ void GenericHWInterface::printState()
 {
   // WARNING: THIS IS NOT REALTIME SAFE
   // FOR DEBUGGING ONLY, USE AT YOUR OWN ROBOT's RISK!
-  ROS_INFO_STREAM_THROTTLE(1, std::endl << printStateHelper());
+  ROS_INFO_STREAM_THROTTLE(1, std::endl
+                                  << printStateHelper());
 }
 
 std::string GenericHWInterface::printStateHelper()
@@ -325,7 +368,7 @@ std::string GenericHWInterface::printStateHelper()
   return ss.str();
 }
 
-void GenericHWInterface::loadURDF(ros::NodeHandle& nh, std::string param_name)
+void GenericHWInterface::loadURDF(ros::NodeHandle &nh, std::string param_name)
 {
   std::string urdf_string;
   std::string robot_description = "/robot_description";
@@ -337,13 +380,15 @@ void GenericHWInterface::loadURDF(ros::NodeHandle& nh, std::string param_name)
     std::string search_param_name;
     if (nh.searchParam(param_name, search_param_name))
     {
-      ROS_INFO_ONCE_NAMED("generic_hw_main", "Waiting for model URDF in parameter [%s] on the ROS param server.",
+      ROS_INFO_ONCE_NAMED("generic_hw_main",
+                          "Waiting for model URDF in parameter [%s] on the ROS param server.",
                           search_param_name.c_str());
       nh.getParam(search_param_name, urdf_string);
     }
     else
     {
-      ROS_INFO_ONCE_NAMED("generic_hw_main", "Waiting for model URDF in parameter [%s] on the ROS param server.",
+      ROS_INFO_ONCE_NAMED("generic_hw_main",
+                          "Waiting for model URDF in parameter [%s] on the ROS param server.",
                           robot_description.c_str());
       nh.getParam(param_name, urdf_string);
     }

@@ -52,13 +52,10 @@
 #include <hardware_interface/joint_state_interface.h>
 #include <hardware_interface/joint_command_interface.h>
 #include <controller_manager/controller_manager.h>
-#include <transmission_interface/transmission_info.h>
-#include <transmission_interface/transmission_parser.h>
 #include <joint_limits_interface/joint_limits.h>
 #include <joint_limits_interface/joint_limits_interface.h>
 #include <joint_limits_interface/joint_limits_rosparam.h>
 #include <joint_limits_interface/joint_limits_urdf.h>
-#include <control_toolbox/filters.h>
 
 namespace ros_control_boilerplate
 {
@@ -153,17 +150,19 @@ protected:
   hardware_interface::VelocityJointInterface velocity_joint_interface_;
   hardware_interface::EffortJointInterface effort_joint_interface_;
 
-  // Joint limits interfaces
-  joint_limits_interface::PositionJointSaturationInterface pos_jnt_sat_limits_;
-  joint_limits_interface::PositionJointSoftLimitsInterface pos_jnt_soft_limits_;
-  joint_limits_interface::VelocityJointSaturationInterface vel_jnt_sat_limits_;
-  joint_limits_interface::VelocityJointSoftLimitsInterface vel_jnt_soft_limits_;
-  joint_limits_interface::EffortJointSaturationInterface eff_jnt_sat_limits_;
-  joint_limits_interface::EffortJointSoftLimitsInterface eff_jnt_soft_limits_;
+  // Joint limits interfaces - Saturation
+  joint_limits_interface::PositionJointSaturationInterface pos_jnt_sat_insterface_;
+  joint_limits_interface::VelocityJointSaturationInterface vel_jnt_sat_insterface_;
+  joint_limits_interface::EffortJointSaturationInterface eff_jnt_sat_insterface_;
+
+  // Joint limits interfaces - Soft limits
+  // joint_limits_interface::PositionJointSoftLimitsInterface pos_jnt_soft_limits_;
+  // joint_limits_interface::VelocityJointSoftLimitsInterface vel_jnt_soft_limits_;
+  // joint_limits_interface::EffortJointSoftLimitsInterface eff_jnt_soft_limits_;
 
   // Joint behavior interfaces
-  joint_limits_interface::PositionJointSaturationInterface stiff_jnt_sat_limits_;
-  joint_limits_interface::PositionJointSoftLimitsInterface stiff_jnt_soft_limits_;
+  joint_limits_interface::PositionJointSaturationInterface stiff_jnt_sat_insterface_;
+  //joint_limits_interface::PositionJointSoftLimitsInterface stiff_jnt_soft_limits_;
 
   // Configuration
   std::vector<std::string> joint_names_;
@@ -185,6 +184,7 @@ protected:
   // Limits
   std::vector<double> joint_position_lower_limits_;
   std::vector<double> joint_position_upper_limits_;
+  std::vector<double> joint_velocity_limits_;
   std::vector<double> joint_effort_limits_;
   std::vector<double> joint_stiffness_lower_limits_;
   std::vector<double> joint_stiffness_upper_limits_;
