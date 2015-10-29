@@ -53,7 +53,7 @@ GenericHWControlLoop::GenericHWControlLoop(
 
   // Get period - default to 100 hz
   nh_.param("hardware_control_loop/loop_hz", loop_hz_, 100.0);
-  ROS_DEBUG_STREAM_NAMED("constructor", "Using loop freqency of " << loop_hz_ << " hz");
+  ROS_DEBUG_STREAM_NAMED("generic_hw_control_loop", "Using loop freqency of " << loop_hz_ << " hz");
 
   // Get current time for use with first update
   clock_gettime(CLOCK_MONOTONIC, &last_time_);

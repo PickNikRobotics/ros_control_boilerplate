@@ -75,22 +75,24 @@ void GenericHWInterface::init()
   }
   num_joints_ = joint_names_.size();
 
-  // Resize vectors
+  // Status
   joint_position_.resize(num_joints_, 0.0);
   joint_velocity_.resize(num_joints_, 0.0);
   joint_effort_.resize(num_joints_, 0.0);
   joint_stiffness_.resize(num_joints_, 0.0);
 
+  // Command
   joint_position_command_.resize(num_joints_, 0.0);
   joint_velocity_command_.resize(num_joints_, 0.0);
   joint_effort_command_.resize(num_joints_, 0.0);
   joint_stiffness_command_.resize(num_joints_, 0.0);
 
-  joint_lower_limits_.resize(num_joints_, 0.0);
-  joint_upper_limits_.resize(num_joints_, 0.0);
-  joint_lower_limits_stiffness_.resize(num_joints_, 0.0);
-  joint_upper_limits_stiffness_.resize(num_joints_, 0.0);
+  // Limits
+  joint_position_lower_limits_.resize(num_joints_, 0.0);
+  joint_position_upper_limits_.resize(num_joints_, 0.0);
   joint_effort_limits_.resize(num_joints_, 0.0);
+  joint_stiffness_lower_limits_.resize(num_joints_, 0.0);
+  joint_stiffness_upper_limits_.resize(num_joints_, 0.0);
 
   // Initialize interfaces for each joint
   for (std::size_t joint_id = 0; joint_id < num_joints_; ++joint_id)
@@ -147,8 +149,8 @@ void GenericHWInterface::registerJointLimits(
     const hardware_interface::JointHandle &joint_handle_effort, std::size_t joint_id)
 {
   // Create references
-  double *const pos_lower_limit = &joint_lower_limits_[joint_id];
-  double *const pos_upper_limit = &joint_upper_limits_[joint_id];
+  double *const pos_lower_limit = &joint_position_lower_limits_[joint_id];
+  double *const pos_upper_limit = &joint_position_upper_limits_[joint_id];
   // TODO velocity
   double *const effort_limit = &joint_effort_limits_[joint_id];
 
@@ -203,8 +205,8 @@ void GenericHWInterface::registerJointLimits(
   }
   else
   {
-    ROS_DEBUG_STREAM_NAMED("generic_hw_interface",
-                           "No soft joint limits exist: " << joint_names_[joint_id]);
+    // ROS_DEBUG_STREAM_NAMED("generic_hw_interface",
+    //                        "No soft joint limits exist: " << joint_names_[joint_id]);
   }
 
   // Copy position limits
@@ -251,8 +253,8 @@ void GenericHWInterface::registerJointStiffnessLimits(
     const hardware_interface::JointHandle &joint_handle_stiffness, std::size_t joint_id)
 {
   // Create references
-  double *const stiff_lower_limit = &joint_lower_limits_stiffness_[joint_id];
-  double *const stiff_upper_limit = &joint_upper_limits_stiffness_[joint_id];
+  double *const stiff_lower_limit = &joint_stiffness_lower_limits_[joint_id];
+  double *const stiff_upper_limit = &joint_stiffness_upper_limits_[joint_id];
 
   // Default values
   *stiff_lower_limit = -std::numeric_limits<double>::max();
@@ -291,8 +293,8 @@ void GenericHWInterface::enforceLimits(ros::Duration period)
 
   // Saturation Limits
   pos_jnt_sat_limits_.enforceLimits(period);
-  // vel_jnt_sat_limits_.enforceLimits(period);
-  // eff_jnt_sat_limits_.enforceLimits(period);
+  //vel_jnt_sat_limits_.enforceLimits(period);
+  //eff_jnt_sat_limits_.enforceLimits(period);
   // stiff_jnt_sat_limits_.enforceLimits(period);
 
   // // Soft limits

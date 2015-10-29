@@ -183,11 +183,11 @@ protected:
   std::vector<double> joint_stiffness_command_;
 
   // Limits
-  std::vector<double> joint_lower_limits_;
-  std::vector<double> joint_upper_limits_;
+  std::vector<double> joint_position_lower_limits_;
+  std::vector<double> joint_position_upper_limits_;
   std::vector<double> joint_effort_limits_;
-  std::vector<double> joint_lower_limits_stiffness_;
-  std::vector<double> joint_upper_limits_stiffness_;
+  std::vector<double> joint_stiffness_lower_limits_;
+  std::vector<double> joint_stiffness_upper_limits_;
 
   // Debug mode - WARNING - NOT REALTIME SAFE
   bool debug_;
