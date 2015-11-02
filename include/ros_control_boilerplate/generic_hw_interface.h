@@ -173,7 +173,7 @@ protected:
   std::vector<double> joint_position_;
   std::vector<double> joint_velocity_;
   std::vector<double> joint_effort_;
-  std::vector<double> joint_stiffness_;
+  std::vector<double> joint_stiffness_; // for impedance control
 
   // Commands
   std::vector<double> joint_position_command_;
@@ -181,7 +181,9 @@ protected:
   std::vector<double> joint_effort_command_;
   std::vector<double> joint_stiffness_command_;
 
-  // Limits
+  // Copy of limits, in case we need them later in our control stack
+  // TODO: perhaps we do not even need to copy them, currently they have
+  // no application
   std::vector<double> joint_position_lower_limits_;
   std::vector<double> joint_position_upper_limits_;
   std::vector<double> joint_velocity_limits_;

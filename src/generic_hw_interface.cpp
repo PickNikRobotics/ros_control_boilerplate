@@ -37,7 +37,8 @@
 */
 
 #include <ros_control_boilerplate/generic_hw_interface.h>
-#include <control_toolbox/filters.h>
+//#include <control_toolbox/filters.h>
+#include <limits>
 
 namespace ros_control_boilerplate
 {
@@ -236,6 +237,10 @@ void GenericHWInterface::registerJointLimits(
   // Copy position limits if available
   if (joint_limits.has_position_limits)
   {
+    // Slighly reduce the joint limits to prevent floating point errors    
+    joint_limits.min_position = joint_limits.min_position - std::numeric_limits<double>::epsilon();
+    joint_limits.max_position = joint_limits.max_position + std::numeric_limits<double>::epsilon();
+
     joint_position_lower_limits_[joint_id] = joint_limits.min_position;
     joint_position_upper_limits_[joint_id] = joint_limits.max_position;
   }

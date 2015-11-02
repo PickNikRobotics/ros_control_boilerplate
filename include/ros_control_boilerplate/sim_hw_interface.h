@@ -70,6 +70,9 @@ protected:
   double v_error_;
   double e_error_;
 
+  // For position controller to estimate velocity
+  std::vector<double> joint_position_prev_;
+
 };  // class
 
 }  // namespace

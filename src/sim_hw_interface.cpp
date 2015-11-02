@@ -38,6 +38,7 @@
 */
 
 #include <ros_control_boilerplate/sim_hw_interface.h>
+#include <control_toolbox/filters.h>
 
 namespace ros_control_boilerplate
 {
@@ -45,6 +46,9 @@ SimHWInterface::SimHWInterface(ros::NodeHandle& nh, urdf::Model* urdf_model)
   : GenericHWInterface(nh, urdf_model)
 {
   ROS_INFO_NAMED("generic_hw_interface", "Loaded sim_hw_interface.");
+
+  // Resize vectors
+  joint_position_prev_.resize(num_joints_, 0.0);
 }
 
 void SimHWInterface::read(ros::Duration elapsed_time)
@@ -78,14 +82,28 @@ void SimHWInterface::write(ros::Duration elapsed_time)
     switch (joint_mode)
     {
       case 0:  // hardware_interface::MODE_POSITION:
+        /*
         // Position - Move all the states to the commanded set points slowly
         p_error_ = joint_position_command_[i] - joint_position_[i];
         // scale the rate it takes to achieve position by a factor that is invariant to the feedback
         // loop
         joint_position_[i] += p_error_ * POSITION_STEP_FACTOR;
+        */
 
-        // DTC Hack
+        // Direct move
         joint_position_[i] = joint_position_command_[i];
+
+        // Calculate velocity based on change in radians, using an exponential smoothing filter.
+        // Alpha is between 0 and 1. Values closer to 0 weight the last smoothed value more heavily
+        static const double ALPHA = 0.5;
+        if (elapsed_time.toSec() > 0)
+          joint_velocity_[i] = filters::exponentialSmoothing(
+                                                             (joint_position_[i] - joint_position_prev_[i]) / elapsed_time.toSec(), joint_velocity_[i],
+                                                             ALPHA);
+        else
+          joint_velocity_[i] = 0;
+
+        joint_position_prev_[i] = joint_position_[i];
         break;
 
       case 1:  // hardware_interface::MODE_VELOCITY:
