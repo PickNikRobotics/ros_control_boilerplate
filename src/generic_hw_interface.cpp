@@ -328,7 +328,7 @@ void GenericHWInterface::registerJointStiffnessLimits(
   stiff_jnt_sat_insterface_.registerHandle(sat_handle_stiffness);
 }
 
-void GenericHWInterface::enforceLimits(ros::Duration period)
+void GenericHWInterface::enforceLimits(ros::Duration &period)
 {
   // Note - you should only need to use one saturation interface,
   // depending on your control method

@@ -71,19 +71,19 @@ public:
    */
   GenericHWInterface(ros::NodeHandle &nh, urdf::Model *urdf_model = NULL);
 
-  /// \brief Destructor
+  /** \brief Destructor */
   virtual ~GenericHWInterface() {}
 
-  /// \brief Initialize the hardware interface
+  /** \brief Initialize the hardware interface */
   virtual void init();
 
-  /// \brief Read the state from the robot hardware.
-  virtual void read(ros::Duration elapsed_time) = 0;
+  /** \brief Read the state from the robot hardware. */
+  virtual void read(ros::Duration &elapsed_time) = 0;
 
-  /// \brief write the command to the robot hardware.
-  virtual void write(ros::Duration elapsed_time) = 0;
+  /** \brief Write the command to the robot hardware. */
+  virtual void write(ros::Duration &elapsed_time) = 0;
 
-  /// \brief Set all members to default values
+  /** \brief Set all members to default values */
   void reset();
 
   /**
@@ -130,7 +130,7 @@ public:
                                     std::size_t joint_id);
 
   /// \breif Enforce limits for all values before writing
-  void enforceLimits(ros::Duration period);
+  void enforceLimits(ros::Duration &period);
 
   /** \brief Helper for debugging a joint's state */  
   void printState();

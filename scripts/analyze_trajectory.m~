@@ -9,27 +9,34 @@ while 1
     %header names and find-replace command
     i=1;
     timestamp=sampled_data(:,i);i=i+1;
-    joint1_pos=sampled_data(:,i);i=i+1;joint1_vel=sampled_data(:,i);i=i+1;
-    if (use_acceleration) joint1_eff=sampled_data(:,i);i=i+1; end
-    joint2_pos=sampled_data(:,i);i=i+1;joint2_vel=sampled_data(:,i);i=i+1;
-    if (use_acceleration) i=i+1;joint2_eff=sampled_data(:,i);i=i+1; end
-    joint3_pos=sampled_data(:,i);i=i+1;joint3_vel=sampled_data(:,i);i=i+1;
-    if (use_acceleration) joint3_eff=sampled_data(:,i);i=i+1; end
-    joint4_pos=sampled_data(:,i);i=i+1;joint4_vel=sampled_data(:,i);i=i+1;
-    if (use_acceleration) joint4_eff=sampled_data(:,i);i=i+1; end
-    joint5_pos=sampled_data(:,i);i=i+1;joint5_vel=sampled_data(:,i);i=i+1;
-    if (use_acceleration) joint5_eff=sampled_data(:,i);i=i+1; end
-    joint6_pos=sampled_data(:,i);i=i+1;joint6_vel=sampled_data(:,i);i=i+1;
-    if (use_acceleration) joint6_eff=sampled_data(:,i);i=i+1; end
-    joint7_pos=sampled_data(:,i);i=i+1;joint7_vel=sampled_data(:,i);i=i+1;
-    if (use_acceleration) joint7_eff=sampled_data(:,i);i=i+1; end
+    joint1_pos=sampled_data(:,i);i=i+1;
+    joint1_vel=sampled_data(:,i);i=i+3;
+    
+    joint2_pos=sampled_data(:,i);i=i+1;
+    joint2_vel=sampled_data(:,i);i=i+3;
+    
+    joint3_pos=sampled_data(:,i);i=i+1;
+    joint3_vel=sampled_data(:,i);i=i+3;
+    
+    joint4_pos=sampled_data(:,i);i=i+1;
+    joint4_vel=sampled_data(:,i);i=i+3;
+    
+    joint5_pos=sampled_data(:,i);i=i+1;
+    joint5_vel=sampled_data(:,i);i=i+3;
+    
+    joint6_pos=sampled_data(:,i);i=i+1;
+    joint6_vel=sampled_data(:,i);i=i+3;
+    
+    joint7_pos=sampled_data(:,i);i=i+1;
+    joint7_vel=sampled_data(:,i);i=i+3;
+    
 
     time_start_end = [timestamp(1,1) timestamp(end,1)];
     joint2_upper = 0;
     joint3_lower = -3.92699081699;
     joint3_upper = 0.785398163397;
     
-    plot_position = 1;
+    plot_position = 0;
     
     if (plot_position)
         plot(...
@@ -54,9 +61,9 @@ while 1
         title('Position Trajectory')
     else
         plot(...
-             timestamp, joint1_vel,'r', ...%time_start_end, [-pi, -pi], 'r--', time_start_end, [pi, pi], 'r--',...
-             timestamp, joint2_vel,'y', ...%time_start_end, [-pi,-pi], 'yo',time_start_end, [joint2_upper,joint2_upper], 'y--',...
-             timestamp, joint3_vel,'m', ...%time_start_end, [joint3_lower,joint3_lower], 'm--',time_start_end, [joint3_upper,joint3_upper], 'm--',...
+             timestamp, joint1_vel,'r',...
+             timestamp, joint2_vel,'y',...
+             timestamp, joint3_vel,'m',...
              timestamp, joint4_vel,'c',...
              timestamp, joint5_vel,'g',...
              timestamp, joint6_vel,...

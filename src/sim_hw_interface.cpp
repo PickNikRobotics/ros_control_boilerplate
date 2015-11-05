@@ -42,8 +42,7 @@
 
 namespace ros_control_boilerplate
 {
-SimHWInterface::SimHWInterface(ros::NodeHandle& nh, urdf::Model* urdf_model)
-  : GenericHWInterface(nh, urdf_model)
+SimHWInterface::SimHWInterface(ros::NodeHandle &nh, urdf::Model *urdf_model) : GenericHWInterface(nh, urdf_model)
 {
   ROS_INFO_NAMED("generic_hw_interface", "Loaded sim_hw_interface.");
 
@@ -51,22 +50,15 @@ SimHWInterface::SimHWInterface(ros::NodeHandle& nh, urdf::Model* urdf_model)
   joint_position_prev_.resize(num_joints_, 0.0);
 }
 
-void SimHWInterface::read(ros::Duration elapsed_time)
+void SimHWInterface::read(ros::Duration &elapsed_time)
 {
-  // Read the joint states from your hardware here
-  // e.g.
-  // for (std::size_t i = 0; i < num_joints_; ++i)
-  // {
-  //   joint_position_[i] = robot_api_.getJointPosition(i);
-  //   joint_velocity_[i] = robot_api_.getJointVelocity(i);
-  //   joint_effort_[i] = robot_api_.getJointEffort(i);
-  // }
+  // No need to read since our write() command populates our state for us
 }
 
-void SimHWInterface::write(ros::Duration elapsed_time)
+void SimHWInterface::write(ros::Duration &elapsed_time)
 {
   // Safety
-  //enforceLimits(elapsed_time);
+  // enforceLimits(elapsed_time);
 
   // Send commands in different modes
   int joint_mode = 0;  // TODO
@@ -77,44 +69,23 @@ void SimHWInterface::write(ros::Duration elapsed_time)
   // ros_control controllers take
   // care of PID loops for you. This P-controller is only intended to mimic the delay in real
   // hardware, somewhat like a simualator
-  for (std::size_t i = 0; i < num_joints_; ++i)
+  for (std::size_t joint_id = 0; joint_id < num_joints_; ++joint_id)
   {
     switch (joint_mode)
     {
       case 0:  // hardware_interface::MODE_POSITION:
-        /*
-        // Position - Move all the states to the commanded set points slowly
-        p_error_ = joint_position_command_[i] - joint_position_[i];
-        // scale the rate it takes to achieve position by a factor that is invariant to the feedback
-        // loop
-        joint_position_[i] += p_error_ * POSITION_STEP_FACTOR;
-        */
-
-        // Direct move
-        joint_position_[i] = joint_position_command_[i];
-
-        // Calculate velocity based on change in radians, using an exponential smoothing filter.
-        // Alpha is between 0 and 1. Values closer to 0 weight the last smoothed value more heavily
-        static const double ALPHA = 0.5;
-        if (elapsed_time.toSec() > 0)
-          joint_velocity_[i] = filters::exponentialSmoothing(
-                                                             (joint_position_[i] - joint_position_prev_[i]) / elapsed_time.toSec(), joint_velocity_[i],
-                                                             ALPHA);
-        else
-          joint_velocity_[i] = 0;
-
-        joint_position_prev_[i] = joint_position_[i];
+        positionControlSimulation(elapsed_time, joint_id);
         break;
 
       case 1:  // hardware_interface::MODE_VELOCITY:
         // Position - Move all the states to the commanded set points slowly
-        joint_position_[i] += joint_velocity_[i] * elapsed_time.toSec();
+        joint_position_[joint_id] += joint_velocity_[joint_id] * elapsed_time.toSec();
 
         // Velocity - Move all the states to the commanded set points slowly
-        v_error_ = joint_velocity_command_[i] - joint_velocity_[i];
+        v_error_ = joint_velocity_command_[joint_id] - joint_velocity_[joint_id];
         // scale the rate it takes to achieve velocity by a factor that is invariant to the feedback
         // loop
-        joint_velocity_[i] += v_error_ * VELOCITY_STEP_FACTOR;
+        joint_velocity_[joint_id] += v_error_ * VELOCITY_STEP_FACTOR;
         break;
 
       case 2:  // hardware_interface::MODE_EFFORT:
@@ -122,6 +93,32 @@ void SimHWInterface::write(ros::Duration elapsed_time)
         break;
     }
   }
+}
+
+void SimHWInterface::positionControlSimulation(ros::Duration &elapsed_time, const std::size_t joint_id)
+{
+  const double max_delta_pos = joint_velocity_limits_[joint_id] * elapsed_time.toSec();
+
+  // Move all the states to the commanded set points at max velocity
+  p_error_ = joint_position_command_[joint_id] - joint_position_[joint_id];
+  const double delta_pos = std::min(p_error_, max_delta_pos);
+  joint_position_[joint_id] += delta_pos;
+
+  //std::cout << "max_delta_pos: " << max_delta_pos << " delta_pos: " << delta_pos << std::endl;
+
+  // Calculate velocity based on change in positions, using an exponential smoothing filter.
+  // Alpha is between 0 and 1. Values closer to 0 weight the last smoothed value more heavily
+  static const double ALPHA = 0.5;
+  if (elapsed_time.toSec() > 0)
+  {
+    const double value = (joint_position_[joint_id] - joint_position_prev_[joint_id]) / elapsed_time.toSec();
+    joint_velocity_[joint_id] = filters::exponentialSmoothing(value, joint_velocity_[joint_id], ALPHA);
+  }
+  else
+    joint_velocity_[joint_id] = 0;
+
+  // Save last position
+  joint_position_prev_[joint_id] = joint_position_[joint_id];
 }
 
 }  // namespace
