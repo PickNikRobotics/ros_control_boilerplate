@@ -33,35 +33,38 @@
  *********************************************************************/
 
 /* Author: Dave Coleman
-   Desc:   Records TWO ros_control ControllerState datas to CSV for Matlab/etc analysis
+   Desc:   Records ros_control ControllerState data to CSV for Matlab/etc analysis
 */
 
 #include <ros_control_boilerplate/tools/controller_to_csv.h>
 
+// Command line arguments
+#include <gflags/gflags.h>
+
+DEFINE_string(csv_path, "/tmp/recorded_trajectory_1.csv", "File location to save recoded data to");
+DEFINE_string(topic, "/iiwa_7_r800/position_trajectory_controller/state", "ROS topic to subscribe to");
+DEFINE_int32(duration, 10, "Number of seconds to record the topic to file");
+
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "controller_to_csv", ros::init_options::AnonymousName);
-  ROS_INFO_STREAM_NAMED("main", "Starting ControllerStateToCSV...");
+  static const std::string NODE_NAME = "controller_to_csv";
+  google::SetVersionString("0.0.1");
+  google::SetUsageMessage("Utility to record controller topic to a CSV");
+  google::ParseCommandLineFlags(&argc, &argv, true);
+
+  ros::init(argc, argv, NODE_NAME, ros::init_options::AnonymousName);
+  ROS_INFO_STREAM_NAMED("main", "Starting ControllerToCSV...");
 
   // Allow the action server to recieve and send ros messages
   ros::AsyncSpinner spinner(2);
   spinner.start();
 
-  std::string path = "/home/dave/ros/recorded_trajectory_1.csv";
-  std::string topic = "/iiwa_7_r800/position_trajectory_controller/state";
+  const std::string topic = FLAGS_topic;
+  const std::string csv_path = FLAGS_csv_path;
+  ros_control_boilerplate::ControllerToCSV converter(topic);
+  converter.startRecording(csv_path);
 
-  if (argc < 1)
-  {
-    ROS_ERROR_STREAM_NAMED("controller_to_csv","Must pass in a time argument in seconds");
-    return 0;
-  }
-  double time = atoi(argv[1]);
-  bool verbose = false;
-
-  ros_control_boilerplate::ControllerStateToCSV converter(verbose, topic);
-  converter.startRecording(path);
-
-  ros::Duration(time).sleep(); // record for x seconds
+  ros::Duration(FLAGS_duration).sleep(); // record for x seconds
 
   converter.stopRecording();
 

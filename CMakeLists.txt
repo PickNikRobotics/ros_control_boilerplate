@@ -16,6 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   transmission_interface
   control_toolbox
   std_msgs
+  gflags
 )
 
 ## System dependencies are found with CMake's conventions

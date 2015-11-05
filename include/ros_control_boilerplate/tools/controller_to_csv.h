@@ -49,40 +49,40 @@ namespace ros_control_boilerplate
 {
 static const double RECORD_RATE_HZ = 100.0;  // times per second to record
 
-class ControllerStateToCSV
+class ControllerToCSV
 {
 public:
   /**
    * \brief Constructor
-   * \param verbose - run in debug mode
    * \param topic - ROS message to listen to from controller
    */
-  ControllerStateToCSV(bool verbose, const std::string& topic);
-
-  /** \brief Callback from ROS message */
-  void stateCB(const control_msgs::JointTrajectoryControllerState::ConstPtr& state);
+  ControllerToCSV(const std::string& topic);
 
   /** \brief Start the data collection */
   void startRecording(const std::string& file_name);
 
-  /** \brief Recieve data from controller via ROS message */
-  void update(const ros::TimerEvent& e);
-
   /** \brief End recording */
   void stopRecording();
+
+private:
 
   /** \brief Send all resulting data to file */
   bool writeToFile();
 
-private:
+  /** \brief Callback from ROS message */
+  void stateCB(const control_msgs::JointTrajectoryControllerState::ConstPtr& state);
+
+  /** \brief Recieve data from controller via ROS message */
+  void update(const ros::TimerEvent& e);
+
+  /** \brief Check if topic has been connected to successfully */
+  bool waitForSubscriber(const ros::Subscriber &sub, const double &wait_time = 10.0);
+
   // A shared node handle
   ros::NodeHandle nh_;
 
   // Listener to state of controller
   ros::Subscriber state_sub_;
-
-  // Show more visual and console output, with general slower run time.
-  bool verbose_;
 
   // Where to save the CSV
   std::string file_name_;
@@ -103,8 +103,8 @@ private:
 };  // end class
 
 // Create boost pointers for this class
-typedef boost::shared_ptr<ControllerStateToCSV> ControllerStateToCSVPtr;
-typedef boost::shared_ptr<const ControllerStateToCSV> ControllerStateToCSVConstPtr;
+typedef boost::shared_ptr<ControllerToCSV> ControllerToCSVPtr;
+typedef boost::shared_ptr<const ControllerToCSV> ControllerToCSVConstPtr;
 
 }  // end namespace
 
