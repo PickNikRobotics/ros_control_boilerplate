@@ -78,21 +78,17 @@ void GenericHWInterface::init()
   joint_position_.resize(num_joints_, 0.0);
   joint_velocity_.resize(num_joints_, 0.0);
   joint_effort_.resize(num_joints_, 0.0);
-  joint_stiffness_.resize(num_joints_, 0.0);
 
   // Command
   joint_position_command_.resize(num_joints_, 0.0);
   joint_velocity_command_.resize(num_joints_, 0.0);
   joint_effort_command_.resize(num_joints_, 0.0);
-  joint_stiffness_command_.resize(num_joints_, 0.0);
 
   // Limits
   joint_position_lower_limits_.resize(num_joints_, 0.0);
   joint_position_upper_limits_.resize(num_joints_, 0.0);
   joint_velocity_limits_.resize(num_joints_, 0.0);
   joint_effort_limits_.resize(num_joints_, 0.0);
-  joint_stiffness_lower_limits_.resize(num_joints_, 0.0);
-  joint_stiffness_upper_limits_.resize(num_joints_, 0.0);
 
   // Initialize interfaces for each joint
   for (std::size_t joint_id = 0; joint_id < num_joints_; ++joint_id)
@@ -121,20 +117,9 @@ void GenericHWInterface::init()
         joint_state_interface_.getHandle(joint_names_[joint_id]), &joint_effort_command_[joint_id]);
     effort_joint_interface_.registerHandle(joint_handle_effort);
 
-    // Stiffness is not a different joint, so the state handle is only used for handle
-    hardware_interface::JointHandle joint_handle_stiffness = hardware_interface::JointHandle(
-        hardware_interface::JointStateHandle(
-            joint_names_[joint_id] + std::string("_stiffness"), &joint_stiffness_[joint_id],
-            &joint_stiffness_[joint_id], &joint_stiffness_[joint_id]),
-        &joint_stiffness_command_[joint_id]);
-    position_joint_interface_.registerHandle(joint_handle_stiffness);
-
     // Load the joint limits
     registerJointLimits(joint_handle_position, joint_handle_velocity, joint_handle_effort,
                         joint_id);
-    // Load the joint stiffness limits
-    // registerJointStiffnessLimits(joint_handle_stiffness, joint_id);
-
   }  // end for each joint
 
   registerInterface(&joint_state_interface_);     // From RobotHW base class.
@@ -287,44 +272,6 @@ void GenericHWInterface::registerJointLimits(
   const joint_limits_interface::EffortJointSaturationHandle sat_handle_effort(joint_handle_effort,
                                                                               joint_limits);
   eff_jnt_sat_insterface_.registerHandle(sat_handle_effort);
-}
-
-void GenericHWInterface::registerJointStiffnessLimits(
-    const hardware_interface::JointHandle &joint_handle_stiffness, std::size_t joint_id)
-{
-  // Create references
-  double *const stiff_lower_limit = &joint_stiffness_lower_limits_[joint_id];
-  double *const stiff_upper_limit = &joint_stiffness_upper_limits_[joint_id];
-
-  // Default values
-  *stiff_lower_limit = -std::numeric_limits<double>::max();
-  *stiff_upper_limit = std::numeric_limits<double>::max();
-
-  // Limits datastructures
-  joint_limits_interface::JointLimits stiff_limits;  // Stiffness
-
-  // Get limits from URDF
-  const boost::shared_ptr<const urdf::Joint> urdf_joint_stiffness =
-      urdf_model_->getJoint(joint_names_[joint_id] + std::string("_stiffness"));
-
-  // Get stiffness joint limits
-  if (urdf_joint_stiffness == NULL ||
-      !joint_limits_interface::getJointLimits(urdf_joint_stiffness, stiff_limits) ||
-      !stiff_limits.has_position_limits)
-  {
-    ROS_WARN_STREAM_NAMED("generic_hw_interface", "URDF stiffness joint not found "
-                                                      << joint_names_[joint_id]);
-    return;
-  }
-
-  // Copy values
-  *stiff_lower_limit = stiff_limits.min_position;
-  *stiff_upper_limit = stiff_limits.max_position;
-
-  // Assign to interface
-  const joint_limits_interface::PositionJointSaturationHandle sat_handle_stiffness(
-      joint_handle_stiffness, stiff_limits);
-  stiff_jnt_sat_insterface_.registerHandle(sat_handle_stiffness);
 }
 
 void GenericHWInterface::enforceLimits(ros::Duration &period)
