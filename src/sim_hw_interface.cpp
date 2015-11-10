@@ -58,7 +58,7 @@ void SimHWInterface::read(ros::Duration &elapsed_time)
 void SimHWInterface::write(ros::Duration &elapsed_time)
 {
   // Safety
-  // enforceLimits(elapsed_time);
+  enforceLimits(elapsed_time);
 
   // Send commands in different modes
   int joint_mode = 0;  // TODO

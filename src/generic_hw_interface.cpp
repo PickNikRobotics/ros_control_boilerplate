@@ -44,7 +44,6 @@ namespace ros_control_boilerplate
 {
 GenericHWInterface::GenericHWInterface(ros::NodeHandle &nh, urdf::Model *urdf_model)
   : nh_(nh)
-  , debug_(false)
 {
   // Check if the URDF model needs to be loaded
   if (urdf_model == NULL)
@@ -369,6 +368,20 @@ std::string GenericHWInterface::printStateHelper()
     ss << "j" << i << ": " << std::fixed << joint_position_[i] << "\t ";
     ss << std::fixed << joint_velocity_[i] << "\t ";
     ss << std::fixed << joint_effort_[i] << std::endl;
+  }
+  return ss.str();
+}
+
+std::string GenericHWInterface::printCommandHelper()
+{
+  std::stringstream ss;
+  std::cout.precision(15);
+
+  for (std::size_t i = 0; i < num_joints_; ++i)
+  {
+    ss << "j" << i << ": " << std::fixed << joint_position_command_[i] << "\t ";
+    ss << std::fixed << joint_velocity_command_[i] << "\t ";
+    ss << std::fixed << joint_effort_command_[i] << std::endl;
   }
   return ss.str();
 }

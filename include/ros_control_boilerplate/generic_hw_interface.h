@@ -136,6 +136,9 @@ public:
   void printState();
   std::string printStateHelper();
 
+  /** \brief Helper for debugging a joint's command */
+  std::string printCommandHelper();
+
 protected:
 
   /** \brief Get the URDF XML from the parameter server */
@@ -190,9 +193,6 @@ protected:
   std::vector<double> joint_effort_limits_;
   std::vector<double> joint_stiffness_lower_limits_;
   std::vector<double> joint_stiffness_upper_limits_;
-
-  // Debug mode - WARNING - NOT REALTIME SAFE
-  bool debug_;
 
 };  // class
 
