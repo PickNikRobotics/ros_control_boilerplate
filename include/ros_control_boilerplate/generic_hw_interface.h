@@ -122,7 +122,7 @@ public:
   /// \breif Enforce limits for all values before writing
   void enforceLimits(ros::Duration &period);
 
-  /** \brief Helper for debugging a joint's state */  
+  /** \brief Helper for debugging a joint's state */
   void printState();
   std::string printStateHelper();
 
@@ -149,13 +149,9 @@ protected:
   joint_limits_interface::EffortJointSaturationInterface eff_jnt_sat_interface_;
 
   // Joint limits interfaces - Soft limits
-  // joint_limits_interface::PositionJointSoftLimitsInterface pos_jnt_soft_limits_;
-  // joint_limits_interface::VelocityJointSoftLimitsInterface vel_jnt_soft_limits_;
-  // joint_limits_interface::EffortJointSoftLimitsInterface eff_jnt_soft_limits_;
-
-  // Joint behavior interfaces
-  joint_limits_interface::PositionJointSaturationInterface stiff_jnt_sat_interface_;
-  //joint_limits_interface::PositionJointSoftLimitsInterface stiff_jnt_soft_limits_;
+  joint_limits_interface::PositionJointSoftLimitsInterface pos_jnt_soft_limits_;
+  joint_limits_interface::VelocityJointSoftLimitsInterface vel_jnt_soft_limits_;
+  joint_limits_interface::EffortJointSoftLimitsInterface eff_jnt_soft_limits_;
 
   // Configuration
   std::vector<std::string> joint_names_;
