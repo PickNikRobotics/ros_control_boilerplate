@@ -144,9 +144,9 @@ protected:
   hardware_interface::EffortJointInterface effort_joint_interface_;
 
   // Joint limits interfaces - Saturation
-  joint_limits_interface::PositionJointSaturationInterface pos_jnt_sat_insterface_;
-  joint_limits_interface::VelocityJointSaturationInterface vel_jnt_sat_insterface_;
-  joint_limits_interface::EffortJointSaturationInterface eff_jnt_sat_insterface_;
+  joint_limits_interface::PositionJointSaturationInterface pos_jnt_sat_interface_;
+  joint_limits_interface::VelocityJointSaturationInterface vel_jnt_sat_interface_;
+  joint_limits_interface::EffortJointSaturationInterface eff_jnt_sat_interface_;
 
   // Joint limits interfaces - Soft limits
   // joint_limits_interface::PositionJointSoftLimitsInterface pos_jnt_soft_limits_;
@@ -154,7 +154,7 @@ protected:
   // joint_limits_interface::EffortJointSoftLimitsInterface eff_jnt_soft_limits_;
 
   // Joint behavior interfaces
-  joint_limits_interface::PositionJointSaturationInterface stiff_jnt_sat_insterface_;
+  joint_limits_interface::PositionJointSaturationInterface stiff_jnt_sat_interface_;
   //joint_limits_interface::PositionJointSoftLimitsInterface stiff_jnt_soft_limits_;
 
   // Configuration

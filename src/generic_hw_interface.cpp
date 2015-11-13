@@ -186,18 +186,19 @@ void GenericHWInterface::registerJointLimits(
   }
 
   // Get limits from ROS param
-  if (joint_limits_interface::getJointLimits(joint_names_[joint_id], nh_, joint_limits))
-  {
-    has_joint_limits = true;
-    ROS_DEBUG_STREAM_NAMED("generic_hw_interface", "Joint " << joint_names_[joint_id]
-                                                            << " has rosparam position limits ["
-                                                            << joint_limits.min_position << ", "
-                                                            << joint_limits.max_position << "]");
-    if (joint_limits.has_velocity_limits)
+  if (false)
+    if (joint_limits_interface::getJointLimits(joint_names_[joint_id], nh_, joint_limits))
+    {
+      has_joint_limits = true;
       ROS_DEBUG_STREAM_NAMED("generic_hw_interface", "Joint " << joint_names_[joint_id]
-                                                              << " has rosparam velocity limit ["
-                                                              << joint_limits.max_velocity << "]");
-  }  // the else debug message provided internally by joint_limits_interface
+                             << " has rosparam position limits ["
+                             << joint_limits.min_position << ", "
+                             << joint_limits.max_position << "]");
+      if (joint_limits.has_velocity_limits)
+        ROS_DEBUG_STREAM_NAMED("generic_hw_interface", "Joint " << joint_names_[joint_id]
+                               << " has rosparam velocity limit ["
+                               << joint_limits.max_velocity << "]");
+    }  // the else debug message provided internally by joint_limits_interface
 
   /* TODO: future work
   // Get soft limits from URDF
@@ -263,15 +264,15 @@ void GenericHWInterface::registerJointLimits(
 
   const joint_limits_interface::PositionJointSaturationHandle sat_handle_position(
       joint_handle_position, joint_limits);
-  pos_jnt_sat_insterface_.registerHandle(sat_handle_position);
+  pos_jnt_sat_interface_.registerHandle(sat_handle_position);
 
   const joint_limits_interface::VelocityJointSaturationHandle sat_handle_velocity(
       joint_handle_velocity, joint_limits);
-  vel_jnt_sat_insterface_.registerHandle(sat_handle_velocity);
+  vel_jnt_sat_interface_.registerHandle(sat_handle_velocity);
 
   const joint_limits_interface::EffortJointSaturationHandle sat_handle_effort(joint_handle_effort,
                                                                               joint_limits);
-  eff_jnt_sat_insterface_.registerHandle(sat_handle_effort);
+  eff_jnt_sat_interface_.registerHandle(sat_handle_effort);
 }
 
 void GenericHWInterface::enforceLimits(ros::Duration &period)
@@ -282,19 +283,24 @@ void GenericHWInterface::enforceLimits(ros::Duration &period)
   // Saturation Limits
 
   // Enforces position and velocity
-  pos_jnt_sat_insterface_.enforceLimits(period);
+  pos_jnt_sat_interface_.enforceLimits(period);
   // Enforces velocity and acceleration limits
-  // vel_jnt_sat_insterface_.enforceLimits(period);
+  // vel_jnt_sat_interface_.enforceLimits(period);
   // Enforces position, velocity, and effort
-  // eff_jnt_sat_insterface_.enforceLimits(period);
-  // ?
-  // stiff_jnt_sat_insterface_.enforceLimits(period);
+  // eff_jnt_sat_interface_.enforceLimits(period);
+  // stiff_jnt_sat_interface_.enforceLimits(period);
 
   // // Soft limits
   // pos_jnt_soft_limits_.enforceLimits(period);
   // vel_jnt_soft_limits_.enforceLimits(period);
   // eff_jnt_soft_limits_.enforceLimits(period);
   // stiff_jnt_soft_limits_.enforceLimits(period);
+}
+
+void GenericHWInterface::reset()
+{
+  // Reset joint limits state, in case of mode switch or e-stop
+  pos_jnt_sat_interface_.reset();
 }
 
 void GenericHWInterface::printState()
