@@ -58,6 +58,9 @@ public:
    */
   ControllerToCSV(const std::string& topic);
 
+  /** \brief Destructor */
+  ~ControllerToCSV();
+
   /** \brief Start the data collection */
   void startRecording(const std::string& file_name);
 

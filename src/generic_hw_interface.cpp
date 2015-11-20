@@ -262,14 +262,14 @@ void GenericHWInterface::enforceLimits(ros::Duration &period)
   // Saturation Limits
 
   // Enforces position and velocity
-  //pos_jnt_sat_interface_.enforceLimits(period);
+  pos_jnt_sat_interface_.enforceLimits(period);
   // Enforces velocity and acceleration limits
   // vel_jnt_sat_interface_.enforceLimits(period);
   // Enforces position, velocity, and effort
   // eff_jnt_sat_interface_.enforceLimits(period);
 
   // Soft limits
-  pos_jnt_soft_limits_.enforceLimits(period);
+  //pos_jnt_soft_limits_.enforceLimits(period);
   // vel_jnt_soft_limits_.enforceLimits(period);
   // eff_jnt_soft_limits_.enforceLimits(period);
 }

@@ -44,7 +44,9 @@
 
 namespace ros_control_boilerplate
 {
+
 ControllerToCSV::ControllerToCSV(const std::string& topic)
+  : first_update_(true)
 {
   ROS_INFO_STREAM_NAMED("controller_to_csv", "Subscribing to " << topic);
   // State subscriber
@@ -55,6 +57,11 @@ ControllerToCSV::ControllerToCSV(const std::string& topic)
   waitForSubscriber(state_sub_);
 
   ROS_INFO_STREAM_NAMED("controller_to_csv", "ControllerToCSV Ready.");
+}
+
+ControllerToCSV::~ControllerToCSV()
+{
+  stopRecording();
 }
 
 void ControllerToCSV::stateCB(const control_msgs::JointTrajectoryControllerState::ConstPtr& state)
@@ -77,7 +84,7 @@ void ControllerToCSV::startRecording(const std::string& file_name)
   non_realtime_loop_ = nh_.createTimer(update_freq, &ControllerToCSV::update, this);
 }
 
-void ControllerToCSV::update(const ros::TimerEvent& e)
+void ControllerToCSV::update(const ros::TimerEvent& event)
 {
   if (first_update_)
   {
@@ -89,9 +96,9 @@ void ControllerToCSV::update(const ros::TimerEvent& e)
     }
     first_update_ = false;
   }
-  else
+  else // if (event.last_real > 0)
     ROS_INFO_STREAM_THROTTLE_NAMED(
-        2, "update", "Updating with period: " << ((e.current_real - e.last_real) * 100) << " hz");
+        2, "update", "Updating with period: " << ((event.current_real - event.last_real) * 100) << " hz");
 
   // Record state
   states_.push_back(current_state_);
@@ -108,6 +115,8 @@ void ControllerToCSV::stopRecording()
 
 bool ControllerToCSV::writeToFile()
 {
+  ROS_INFO_STREAM_NAMED("controller_to_csv","Writing data to file");
+
   if (!states_.size())
   {
     ROS_ERROR_STREAM_NAMED("controller_to_csv", "No controller states populated");
@@ -121,11 +130,11 @@ bool ControllerToCSV::writeToFile()
   output_file << "timestamp,";
   for (std::size_t j = 0; j < states_[0].joint_names.size(); ++j)
   {
-    output_file << states_[0].joint_names[j] << "_desired_pos," 
-                << states_[0].joint_names[j] << "_desired_vel," 
-                << states_[0].joint_names[j] << "_actual_pos,"                
+    output_file << states_[0].joint_names[j] << "_desired_pos,"
+                << states_[0].joint_names[j] << "_desired_vel,"
+                << states_[0].joint_names[j] << "_actual_pos,"
                 << states_[0].joint_names[j] << "_actual_vel,";
-      //<< states_[0].joint_names[j] << "_commanded_vel,";                
+      //<< states_[0].joint_names[j] << "_commanded_vel,";
   }
   output_file << std::endl;
 
@@ -147,9 +156,9 @@ bool ControllerToCSV::writeToFile()
       // output_file << states_[i].desired.positions[j] << "," << states_[i].desired.velocities[j]
       //             << "," << states_[i].actual.positions[j] << "," << states_[i].actual.velocities[j]
       //             << "," << states_[i].error.velocities[j] << ",";
-      output_file << states_[i].desired.positions[j] << "," 
-                  << states_[i].desired.velocities[j] << "," 
-                  << states_[i].actual.positions[j] << "," 
+      output_file << states_[i].desired.positions[j] << ","
+                  << states_[i].desired.velocities[j] << ","
+                  << states_[i].actual.positions[j] << ","
                   << states_[i].actual.velocities[j] << ",";
         //<< states_[i].error.velocities[j];
     }

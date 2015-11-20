@@ -64,9 +64,8 @@ int main(int argc, char** argv)
   ros_control_boilerplate::ControllerToCSV converter(topic);
   converter.startRecording(csv_path);
 
-  ros::Duration(FLAGS_duration).sleep(); // record for x seconds
-
-  converter.stopRecording();
+  ROS_INFO_STREAM_NAMED("main","Type Ctrl-C to end and save");
+  ros::spin();
 
   ROS_INFO_STREAM_NAMED("main", "Shutting down.");
   ros::shutdown();
