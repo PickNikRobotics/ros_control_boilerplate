@@ -101,10 +101,16 @@ void SimHWInterface::positionControlSimulation(ros::Duration &elapsed_time, cons
 
   // Move all the states to the commanded set points at max velocity
   p_error_ = joint_position_command_[joint_id] - joint_position_[joint_id];
-  const double delta_pos = std::min(p_error_, max_delta_pos);
+  const double delta_pos = std::max(std::min(p_error_, max_delta_pos), -max_delta_pos);
+
+  // if (joint_id == 0)
+  //   std::cout << "max: " << max_delta_pos << "\t vel lim: " << joint_velocity_limits_[joint_id] << "\t elapsed time: " << elapsed_time.toSec()
+  //             << "\t p_error: " << p_error_ << "\t delta_pos: " << delta_pos << std::endl;
+
   joint_position_[joint_id] += delta_pos;
 
-  //std::cout << "max_delta_pos: " << max_delta_pos << " delta_pos: " << delta_pos << std::endl;
+  // Bypass max velocity stuff:
+  //joint_position_[joint_id] = joint_position_command_[joint_id];
 
   // Calculate velocity based on change in positions, using an exponential smoothing filter.
   // Alpha is between 0 and 1. Values closer to 0 weight the last smoothed value more heavily

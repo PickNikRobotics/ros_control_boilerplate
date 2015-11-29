@@ -38,44 +38,6 @@
 
 #include <ros_control_boilerplate/generic_hw_control_loop.h>
 #include <ros_control_boilerplate/sim_hw_interface.h>
-#include <urdf/model.h>
-
-// Get the URDF XML from the parameter server
-void loadURDF(ros::NodeHandle& nh, std::string param_name, urdf::Model* &urdf_model)
-{
-  std::string urdf_string;
-  std::string robot_description = "/robot_description";
-  urdf_model = new urdf::Model();
-
-  // search and wait for robot_description on param server
-  while (urdf_string.empty())
-  {
-    std::string search_param_name;
-    if (nh.searchParam(param_name, search_param_name))
-    {
-      ROS_INFO_ONCE_NAMED("sim_hw_main", "sim_hw_main node is waiting for model"
-                                             " URDF in parameter [%s] on the ROS param server.",
-                          search_param_name.c_str());
-
-      nh.getParam(search_param_name, urdf_string);
-    }
-    else
-    {
-      ROS_INFO_ONCE_NAMED("sim_hw_main", "sim_hw_main node is waiting for model"
-                                             " URDF in parameter [%s] on the ROS param server.",
-                          robot_description.c_str());
-
-      nh.getParam(param_name, urdf_string);
-    }
-
-    usleep(100000);
-  }
-
-  if (!urdf_model->initString(urdf_string))
-    ROS_ERROR_STREAM_NAMED("sim_hw_main", "Unable to load URDF model");
-  else
-    ROS_DEBUG_STREAM_NAMED("sim_hw_main", "Received URDF from param server");
-}
 
 int main(int argc, char** argv)
 {
@@ -84,15 +46,12 @@ int main(int argc, char** argv)
 
   // NOTE: We run the ROS loop in a separate thread as external calls such
   // as service callbacks to load controllers can block the (main) control loop
-  ros::AsyncSpinner spinner(3);
+  ros::AsyncSpinner spinner(2);
   spinner.start();
-
-  urdf::Model* urdf_model;
-  loadURDF(nh, "/robot_description", urdf_model);
 
   // Create the hardware interface specific to your robot
   boost::shared_ptr<ros_control_boilerplate::SimHWInterface> sim_hw_interface;
-  sim_hw_interface.reset(new ros_control_boilerplate::SimHWInterface(nh, urdf_model));
+  sim_hw_interface.reset(new ros_control_boilerplate::SimHWInterface(nh));
 
   // Start the control loop
   ros_control_boilerplate::GenericHWControlLoop control_loop(nh, sim_hw_interface);
