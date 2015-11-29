@@ -172,7 +172,7 @@ void GenericHWInterface::registerJointLimits(const hardware_interface::JointHand
   }
 
   // Get limits from ROS param
-  if (false)
+  if (false) // TODO decide what to do about this
     if (joint_limits_interface::getJointLimits(joint_names_[joint_id], nh_, joint_limits))
     {
       has_joint_limits = true;
