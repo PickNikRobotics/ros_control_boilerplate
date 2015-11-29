@@ -48,7 +48,7 @@ namespace ros_control_boilerplate
 ControllerToCSV::ControllerToCSV(const std::string& topic)
   : first_update_(true)
 {
-  ROS_INFO_STREAM_NAMED("controller_to_csv", "Subscribing to " << topic);
+  ROS_INFO_STREAM_NAMED(name_, "Subscribing to " << topic);
   // State subscriber
   state_sub_ = nh_.subscribe<control_msgs::JointTrajectoryControllerState>(
       topic, 1, &ControllerToCSV::stateCB, this);
@@ -56,7 +56,7 @@ ControllerToCSV::ControllerToCSV(const std::string& topic)
   // Wait for states to populate
   waitForSubscriber(state_sub_);
 
-  ROS_INFO_STREAM_NAMED("controller_to_csv", "ControllerToCSV Ready.");
+  ROS_INFO_STREAM_NAMED(name_, "ControllerToCSV Ready.");
 }
 
 ControllerToCSV::~ControllerToCSV()
@@ -72,7 +72,7 @@ void ControllerToCSV::stateCB(const control_msgs::JointTrajectoryControllerState
 // Start the data collection
 void ControllerToCSV::startRecording(const std::string& file_name)
 {
-  ROS_INFO_STREAM_NAMED("controller_to_csv", "Saving to " << file_name);
+  ROS_INFO_STREAM_NAMED(name_, "Saving to " << file_name);
   file_name_ = file_name;
 
   // Reset data collections
@@ -91,15 +91,16 @@ void ControllerToCSV::update(const ros::TimerEvent& event)
     // Check if we've recieved any states yet
     if (current_state_.joint_names.empty())
     {
-      ROS_WARN_STREAM_THROTTLE_NAMED(2, "update", "No states recieved yet");
+      ROS_WARN_STREAM_THROTTLE_NAMED(2, name_, "No states recieved yet");
       return;
     }
     first_update_ = false;
   }
   else // if (event.last_real > 0)
-    ROS_INFO_STREAM_THROTTLE_NAMED(
-        2, "update", "Updating with period: " << ((event.current_real - event.last_real) * 100) << " hz");
-
+  {
+    const double freq = 1.0 / (event.current_real - event.last_real).toSec();
+    ROS_INFO_STREAM_THROTTLE_NAMED(2, name_, "Updating at " << freq << " hz, total: " << (ros::Time::now() - timestamps_.front()).toSec() << " seconds");
+  }
   // Record state
   states_.push_back(current_state_);
 
@@ -115,11 +116,11 @@ void ControllerToCSV::stopRecording()
 
 bool ControllerToCSV::writeToFile()
 {
-  ROS_INFO_STREAM_NAMED("controller_to_csv","Writing data to file");
+  std::cout << "Writing data to file " << std::endl;
 
   if (!states_.size())
   {
-    ROS_ERROR_STREAM_NAMED("controller_to_csv", "No controller states populated");
+    std::cout << "No controller states populated" << std::endl;
     return false;
   }
 
@@ -166,7 +167,7 @@ bool ControllerToCSV::writeToFile()
     output_file << std::endl;
   }
   output_file.close();
-  ROS_INFO_STREAM_NAMED("controller_to_csv", "Wrote to file " << file_name_);
+  std::cout << "Wrote to file: " << file_name_ << std::endl;
   return true;
 }
 
@@ -192,7 +193,7 @@ bool ControllerToCSV::waitForSubscriber(const ros::Subscriber& sub, const double
     // Check if timed out
     if (ros::Time::now() > max_time)
     {
-      ROS_WARN_STREAM_NAMED("visual_tools", "Topic '" << sub.getTopic() << "' unable to connect to any publishers within "
+      ROS_WARN_STREAM_NAMED(name_, "Topic '" << sub.getTopic() << "' unable to connect to any publishers within "
                                                       << wait_time << " seconds.");
       return false;
     }
@@ -209,7 +210,7 @@ bool ControllerToCSV::waitForSubscriber(const ros::Subscriber& sub, const double
   if (true)
   {
     double duration = (ros::Time::now() - start_time).toSec();
-    ROS_DEBUG_STREAM_NAMED("visual_tools", "Topic '" << sub.getTopic() << "' took " << duration
+    ROS_DEBUG_STREAM_NAMED(name_, "Topic '" << sub.getTopic() << "' took " << duration
                                                      << " seconds to connect to a subscriber. "
                                                         "Connected to " << num_existing_subscribers
                                                      << " total subsribers");

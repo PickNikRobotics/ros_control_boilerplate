@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(ros_control_boilerplate)
 
+# C++ 11
+set(CMAKE_CXX_FLAGS "-std=c++11 -Wall ${CMAKE_CXX_FLAGS}")
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
@@ -23,20 +26,20 @@ find_package(catkin REQUIRED COMPONENTS
 # find_package(Boost REQUIRED COMPONENTS system)
 
 catkin_package(
-  INCLUDE_DIRS 
+  INCLUDE_DIRS
     include
-  CATKIN_DEPENDS 
+  CATKIN_DEPENDS
     hardware_interface
     controller_manager
     roscpp
     control_msgs
-    trajectory_msgs 
+    trajectory_msgs
     urdf
     joint_limits_interface
     transmission_interface
     control_toolbox
     std_msgs
-  LIBRARIES 
+  LIBRARIES
     generic_hw_control_loop
     sim_hw_interface
 )
@@ -57,8 +60,8 @@ target_link_libraries(generic_hw_control_loop
 )
 
 # Simulation Hardware Interface
-add_library(sim_hw_interface 
-  src/generic_hw_interface.cpp 
+add_library(sim_hw_interface
+  src/generic_hw_interface.cpp
   src/sim_hw_interface.cpp
 )
 target_link_libraries(sim_hw_interface
@@ -107,4 +110,3 @@ add_executable(keyboard_teleop src/tools/keyboard_teleop.cpp)
 target_link_libraries(keyboard_teleop
   ${catkin_LIBRARIES}
 )
-

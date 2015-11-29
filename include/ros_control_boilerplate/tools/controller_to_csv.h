@@ -81,6 +81,9 @@ private:
   /** \brief Check if topic has been connected to successfully */
   bool waitForSubscriber(const ros::Subscriber &sub, const double &wait_time = 10.0);
 
+  // Class name
+  std::string name_ = "controller_to_csv";
+
   // A shared node handle
   ros::NodeHandle nh_;
 
