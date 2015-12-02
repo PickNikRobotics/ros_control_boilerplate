@@ -1,4 +1,4 @@
-# ros_control Boilerplate
+# ROS Control Boilerplate
 
 Provides a simple simulation interface and template for setting up a hardware interface for ros_control. The idea is you take this as a starting point for creating your hardware interfaces, and it is needed because [ros_control documentation](http://wiki.ros.org/ros_control) is sparse. This boilerplate demonstrates:
 
@@ -14,9 +14,9 @@ Provides a simple simulation interface and template for setting up a hardware in
 
 Developed by [Dave Coleman](http://dav.ee/) at the University of Colorado Boulder
 
- * [![Build Status](https://travis-ci.org/davetcoleman/ros_control_boilerplate.svg)](https://travis-ci.org/davetcoleman/rviz_visual_tools) Travis CI
- * [![Devel Job Status](http://jenkins.ros.org/buildStatus/icon?job=devel-indigo-ros-control-boilerplate)](http://jenkins.ros.org/job/devel-indigo-rviz_visual_tools) Devel Job Status
- * [![Build Status](http://jenkins.ros.org/buildStatus/icon?job=ros-indigo-ros-control-boilerplate_binarydeb_trusty_amd64)](http://jenkins.ros.org/job/ros-indigo-rviz-visual-tools_binarydeb_trusty_amd64/) AMD64 Debian Job Status
+ * [![Build Status](https://travis-ci.org/davetcoleman/ros_control_boilerplate.svg)](https://travis-ci.org/davetcoleman/ros_control_boilerplate) Travis CI
+ * [![Devel Job Status](http://jenkins.ros.org/buildStatus/icon?job=devel-indigo-ros-control-boilerplate)](http://jenkins.ros.org/job/devel-indigo-ros_control_boilerplate) Devel Job Status
+ * [![Build Status](http://jenkins.ros.org/buildStatus/icon?job=ros-indigo-ros-control-boilerplate_binarydeb_trusty_amd64)](http://jenkins.ros.org/job/ros-indigo-ros-control-boilerplate_binarydeb_trusty_amd64/) AMD64 Debian Job Status
 
 <img src="https://raw.githubusercontent.com/davetcoleman/ros_control_boilerplate/jade-devel/resources/screenshot.png"/>
 
