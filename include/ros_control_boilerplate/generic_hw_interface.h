@@ -84,7 +84,7 @@ public:
   virtual void write(ros::Duration &elapsed_time) = 0;
 
   /** \brief Set all members to default values */
-  void reset();
+  virtual void reset();
 
   /**
    * \brief Check (in non-realtime) if given controllers could be started and stopped from the
@@ -114,16 +114,16 @@ public:
    *
    * \return the joint's type, lower position limit, upper position limit, and effort limit.
    */
-  void registerJointLimits(const hardware_interface::JointHandle &joint_handle_position,
+  virtual void registerJointLimits(const hardware_interface::JointHandle &joint_handle_position,
                            const hardware_interface::JointHandle &joint_handle_velocity,
                            const hardware_interface::JointHandle &joint_handle_effort,
                            std::size_t joint_id);
 
   /// \breif Enforce limits for all values before writing
-  void enforceLimits(ros::Duration &period);
+  virtual void enforceLimits(ros::Duration &period);
 
   /** \brief Helper for debugging a joint's state */
-  void printState();
+  virtual void printState();
   std::string printStateHelper();
 
   /** \brief Helper for debugging a joint's command */
@@ -132,7 +132,7 @@ public:
 protected:
 
   /** \brief Get the URDF XML from the parameter server */
-  void loadURDF(ros::NodeHandle& nh, std::string param_name);
+  virtual void loadURDF(ros::NodeHandle& nh, std::string param_name);
 
   // Startup and shutdown of the internal node inside a roscpp program
   ros::NodeHandle nh_;
@@ -158,6 +158,9 @@ protected:
   std::size_t num_joints_;
   urdf::Model *urdf_model_;
 
+  // Modes
+  bool use_rosparam_joint_limits_ = false;
+
   // States
   std::vector<double> joint_position_;
   std::vector<double> joint_velocity_;
@@ -169,8 +172,6 @@ protected:
   std::vector<double> joint_effort_command_;
 
   // Copy of limits, in case we need them later in our control stack
-  // TODO: perhaps we do not even need to copy them, currently they have
-  // no application
   std::vector<double> joint_position_lower_limits_;
   std::vector<double> joint_position_upper_limits_;
   std::vector<double> joint_velocity_limits_;

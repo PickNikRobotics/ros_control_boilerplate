@@ -38,7 +38,6 @@
 */
 
 #include <ros_control_boilerplate/sim_hw_interface.h>
-#include <control_toolbox/filters.h>
 
 namespace ros_control_boilerplate
 {
@@ -61,7 +60,7 @@ void SimHWInterface::write(ros::Duration &elapsed_time)
   enforceLimits(elapsed_time);
 
   // Send commands in different modes
-  int joint_mode = 0;  // TODO
+  int joint_mode = 0;  // TODO implement mode switching
 
   // NOTE: the following is a "simuation" example so that this boilerplate can be run without being
   // connected to hardware
@@ -102,23 +101,15 @@ void SimHWInterface::positionControlSimulation(ros::Duration &elapsed_time, cons
   // Move all the states to the commanded set points at max velocity
   p_error_ = joint_position_command_[joint_id] - joint_position_[joint_id];
   const double delta_pos = std::max(std::min(p_error_, max_delta_pos), -max_delta_pos);
-
-  // if (joint_id == 0)
-  //   std::cout << "max: " << max_delta_pos << "\t vel lim: " << joint_velocity_limits_[joint_id] << "\t elapsed time: " << elapsed_time.toSec()
-  //             << "\t p_error: " << p_error_ << "\t delta_pos: " << delta_pos << std::endl;
-
   joint_position_[joint_id] += delta_pos;
 
-  // Bypass max velocity stuff:
+  // Bypass max velocity p controller:
   //joint_position_[joint_id] = joint_position_command_[joint_id];
 
-  // Calculate velocity based on change in positions, using an exponential smoothing filter.
-  // Alpha is between 0 and 1. Values closer to 0 weight the last smoothed value more heavily
-  static const double ALPHA = 0.5;
+  // Calculate velocity based on change in positions
   if (elapsed_time.toSec() > 0)
   {
-    const double value = (joint_position_[joint_id] - joint_position_prev_[joint_id]) / elapsed_time.toSec();
-    joint_velocity_[joint_id] = filters::exponentialSmoothing(value, joint_velocity_[joint_id], ALPHA);
+    joint_velocity_[joint_id] = (joint_position_[joint_id] - joint_position_prev_[joint_id]) / elapsed_time.toSec();
   }
   else
     joint_velocity_[joint_id] = 0;

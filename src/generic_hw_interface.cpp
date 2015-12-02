@@ -172,7 +172,8 @@ void GenericHWInterface::registerJointLimits(const hardware_interface::JointHand
   }
 
   // Get limits from ROS param
-  if (false) // TODO decide what to do about this
+  if (use_rosparam_joint_limits_)
+  {
     if (joint_limits_interface::getJointLimits(joint_names_[joint_id], nh_, joint_limits))
     {
       has_joint_limits = true;
@@ -184,6 +185,7 @@ void GenericHWInterface::registerJointLimits(const hardware_interface::JointHand
                                                                 << " has rosparam velocity limit ["
                                                                 << joint_limits.max_velocity << "]");
     }  // the else debug message provided internally by joint_limits_interface
+  }
 
   // Get soft limits from URDF
   if (joint_limits_interface::getSoftJointLimits(urdf_joint, soft_limits))

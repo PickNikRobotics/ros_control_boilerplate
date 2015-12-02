@@ -4,9 +4,6 @@ project(ros_control_boilerplate)
 # C++ 11
 set(CMAKE_CXX_FLAGS "-std=c++11 -Wall ${CMAKE_CXX_FLAGS}")
 
-## Find catkin macros and libraries
-## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
-## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   hardware_interface
   controller_manager
@@ -19,8 +16,10 @@ find_package(catkin REQUIRED COMPONENTS
   transmission_interface
   control_toolbox
   std_msgs
-  gflags
+  cmake_modules
 )
+
+find_package(Gflags REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -51,6 +50,7 @@ catkin_package(
 include_directories(
   include/
   ${catkin_INCLUDE_DIRS}
+  ${Gflags_INCLUDE_DIRS}
 )
 
 # Control loop
@@ -92,6 +92,7 @@ target_link_libraries(controller_to_csv
 add_executable(controller_to_csv_main src/tools/controller_to_csv_main.cpp)
 target_link_libraries(controller_to_csv_main
   controller_to_csv
+  ${Gflags_LIBRARIES}
   ${catkin_LIBRARIES}
 )
 
@@ -103,9 +104,11 @@ target_link_libraries(csv_to_controller
 add_executable(csv_to_controller_main src/tools/csv_to_controller_main.cpp)
 target_link_libraries(csv_to_controller_main
   csv_to_controller
+  ${Gflags_LIBRARIES}
   ${catkin_LIBRARIES}
 )
 
+# Tool for controlling a robot from keyboard
 add_executable(keyboard_teleop src/tools/keyboard_teleop.cpp)
 target_link_libraries(keyboard_teleop
   ${catkin_LIBRARIES}

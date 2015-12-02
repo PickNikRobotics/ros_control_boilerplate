@@ -53,11 +53,9 @@ class TestTrajectory
 public:
   /**
    * \brief Constructor
-   * \param verbose - run in debug mode
    */
-  TestTrajectory(bool verbose)
-    : verbose_(verbose)
-    , nh_private_("~")
+  TestTrajectory()
+    : nh_private_("~")
   {
     std::string action_topic;
     nh_private_.getParam("action_topic", action_topic);
@@ -160,9 +158,6 @@ private:
   // A shared node handle
   ros::NodeHandle nh_private_;
 
-  // Show more visual and console output, with general slower run time.
-  bool verbose_;
-
 };  // end class
 
 // Create boost pointers for this class
@@ -180,22 +175,7 @@ int main(int argc, char** argv)
   ros::AsyncSpinner spinner(2);
   spinner.start();
 
-  // Check for verbose flag
-  bool verbose = false;
-  if (argc > 1)
-  {
-    for (std::size_t i = 0; i < argc; ++i)
-    {
-      if (strcmp(argv[i], "--verbose") == 0)
-      {
-        ROS_INFO_STREAM_NAMED("test_trajectory", "Running in VERBOSE mode (slower)");
-        verbose = true;
-        continue;
-      }
-    }
-  }
-
-  ros_control_boilerplate::TestTrajectory server(verbose);
+  ros_control_boilerplate::TestTrajectory server;
 
   ROS_INFO_STREAM_NAMED("test_trajectory", "Shutting down.");
   ros::shutdown();

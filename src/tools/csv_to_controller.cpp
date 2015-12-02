@@ -50,17 +50,17 @@
 namespace ros_control_boilerplate
 {
 
-CSVToController::CSVToController(bool verbose)
-  : verbose_(verbose)
-  , joint_trajectory_action_("/iiwa_7_r800/position_trajectory_controller/follow_joint_trajectory")
+CSVToController::CSVToController(const std::string& joint_trajectory_action,
+                                 const std::string& controller_state_topic)
+  : joint_trajectory_action_(joint_trajectory_action)
+  , controller_state_topic_(controller_state_topic)
 {
   ROS_INFO_STREAM_NAMED("csv_to_controller", "Waiting for action server");
   joint_trajectory_action_.waitForServer();
 
   // State subscriber
-  std::string topic = "/iiwa_7_r800/position_trajectory_controller/state";  
   state_sub_ = nh_.subscribe<control_msgs::JointTrajectoryControllerState>(
-      topic, 1, &CSVToController::stateCB, this);
+      controller_state_topic_, 1, &CSVToController::stateCB, this);
 
   // Wait for states to populate
   ros::spinOnce();
@@ -94,7 +94,6 @@ void CSVToController::loadAndRunCSV(const std::string& file_name)
   // Settings
   std::string line;
   std::string cell;
-  double value;
 
   control_msgs::FollowJointTrajectoryGoal pre_goal; // moving to start state
   control_msgs::FollowJointTrajectoryGoal goal; // csv file
@@ -109,7 +108,7 @@ void CSVToController::loadAndRunCSV(const std::string& file_name)
   goal.trajectory.joint_names.push_back("joint_a7");
   pre_goal.trajectory.joint_names = goal.trajectory.joint_names;
   double num_joints = goal.trajectory.joint_names.size();
-  
+
   // Skip header
   std::getline(input_file, line);
 
@@ -174,7 +173,7 @@ void CSVToController::loadAndRunCSV(const std::string& file_name)
   printPoint(goal.trajectory.points.front());
   std::cout << "^^ Goal point " << std::endl;
   pre_goal.trajectory.points.push_back(last_point);
-  
+
   // Interpolate from first point
   bool done = false;
   double max_velocity = 0.1; // m/s  or radians/s
@@ -186,7 +185,7 @@ void CSVToController::loadAndRunCSV(const std::string& file_name)
   {
     done = true;
     trajectory_msgs::JointTrajectoryPoint new_point = last_point;
-    
+
     // Time change
     time_from_start += ros::Duration(t_delta);
     new_point.time_from_start = time_from_start;
@@ -223,13 +222,13 @@ void CSVToController::loadAndRunCSV(const std::string& file_name)
 
   for (std::size_t i = 0; i < goal.trajectory.points.size(); ++i)
   {
-    printPoint(goal.trajectory.points[i]);    
+    printPoint(goal.trajectory.points[i]);
   }
 
   ROS_INFO_STREAM_NAMED("csv_to_controller","Preparing to follow CSV path");
   ros::Duration(0.5).sleep();
   goal.trajectory.header.stamp = ros::Time::now() + ros::Duration(0.5);
   joint_trajectory_action_.sendGoal(goal);
-} 
+}
 
 } // end namespace

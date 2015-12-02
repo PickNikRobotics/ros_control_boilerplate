@@ -59,16 +59,16 @@ class CSVToController
 public:
   /**
    * \brief Constructor
-   * \param verbose - run in debug mode
    */
-  CSVToController(bool verbose);
+  CSVToController(const std::string& joint_trajectory_action,
+                  const std::string& controller_state_topic);
 
   /** \brief Callback from ROS message */
   void stateCB(const control_msgs::JointTrajectoryControllerState::ConstPtr& state);
 
-void printPoint(trajectory_msgs::JointTrajectoryPoint &point);
+  void printPoint(trajectory_msgs::JointTrajectoryPoint &point);
 
-// Start the data collection
+  // Start the data collection
   void loadAndRunCSV(const std::string& file_name);
 
 private:
@@ -81,11 +81,9 @@ private:
   // Action
   actionlib::SimpleActionClient<control_msgs::FollowJointTrajectoryAction> joint_trajectory_action_;
 
-  // Show more visual and console output, with general slower run time.
-  bool verbose_;
-
   // Where to save the CSV
   std::string file_name_;
+  std::string controller_state_topic_;
 
   // Cache of last recieved state
   control_msgs::JointTrajectoryControllerState current_state_;

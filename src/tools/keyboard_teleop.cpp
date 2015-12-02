@@ -90,6 +90,7 @@ public:
     : has_recieved_joints_(false)
   {
     std::cout << "init " << std::endl;
+    // TODO: make this robot agonistic
     joints_sub_ = nh_.subscribe<sensor_msgs::JointState>("/iiwa_7_r800/joint_states", 1,
                                                          &TeleopJointsKeyboard::stateCallback, this);
     joints_pub_ = nh_.advertise<std_msgs::Float64MultiArray>("/iiwa_7_r800/joints_position_controller/command", 1);
@@ -110,7 +111,7 @@ public:
     // Copy latest joint positions to our output message
     if (!has_recieved_joints_)
       cmd_.data = msg->position;
-    
+
     // Debug
     //std::copy(cmd_.data.begin(), cmd_.data.end(), std::ostream_iterator<double>(std::cout, " "));
     //std::cout << std::endl;
@@ -224,7 +225,7 @@ public:
         // Important safety feature
         if (!has_recieved_joints_)
         {
-          ROS_ERROR_STREAM_NAMED("joint_teleop","Unable to send joint commands because robot state is invalid");          
+          ROS_ERROR_STREAM_NAMED("joint_teleop","Unable to send joint commands because robot state is invalid");
         } else {
           std::cout << ".";
           joints_pub_.publish(cmd_);
