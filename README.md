@@ -14,7 +14,7 @@ Provides a simple simulation interface and template for setting up a hardware in
 
 Developed by [Dave Coleman](dav.ee) at the University of Colorado Boulder
 
-<img align="right" src="https://raw.githubusercontent.com/davetcoleman/ros_control_boilerplate/indgo-devel/resources/screenshot.png" />
+<img src="https://raw.githubusercontent.com/davetcoleman/ros_control_boilerplate/jade-devel/resources/screenshot.png"/>
 
 
 ## Video Demo
@@ -25,7 +25,7 @@ See [YouTube](https://www.youtube.com/watch?v=Tpj2tx9uZ-o) for a very modest vid
 
 This package depends on [gazebo_ros_demos](https://github.com/ros-simulation/gazebo_ros_demos) for its ``rrbot_description`` package, but you must add it to your catkin workspace by source:
 
-   git clone https://github.com/ros-simulation/gazebo_ros_demos.git
+    git clone https://github.com/ros-simulation/gazebo_ros_demos.git
 
 ## Run Simulation Demo
 
