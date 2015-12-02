@@ -31,6 +31,10 @@ This package depends on [gazebo_ros_demos](https://github.com/ros-simulation/gaz
 
     git clone https://github.com/ros-simulation/gazebo_ros_demos.git
 
+Then, either install this package from source so you can develop off of it, or install from debian:
+
+    sudo apt-get install ros-indigo-ros-control-boilerplate
+
 ## Run Simulation Demo
 
 This package is setup to run the "RRBot" two joint revolute-revolute robot demo. To run its ros_control non-physics-based simulated hardware interface, run:
