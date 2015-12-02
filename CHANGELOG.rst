@@ -2,6 +2,11 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Added dependency on gflags
+* Contributors: Dave Coleman
+
 0.1.1 (2015-12-02)
 ------------------
 * Added travis support
