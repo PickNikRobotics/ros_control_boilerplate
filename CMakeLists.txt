@@ -2,9 +2,10 @@ cmake_minimum_required(VERSION 2.8.3)
 project(ros_control_boilerplate)
 
 # C++ 11
-#set(CMAKE_CXX_FLAGS "-std=c++11 -Wall ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++11 -Wall ${CMAKE_CXX_FLAGS}")
 
 find_package(catkin REQUIRED COMPONENTS
+  cmake_modules
   hardware_interface
   controller_manager
   roscpp
@@ -16,9 +17,9 @@ find_package(catkin REQUIRED COMPONENTS
   transmission_interface
   control_toolbox
   std_msgs
-  cmake_modules
 )
 
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 find_package(Gflags REQUIRED)
 
 ## System dependencies are found with CMake's conventions
