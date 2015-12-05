@@ -2,6 +2,14 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix catkin lint errors
+* Added FindGflags directly to this repo
+* Minor fix
+* Updated README
+* Contributors: Dave Coleman
+
 0.1.2 (2015-12-02)
 ------------------
 * Added dependency on gflags
