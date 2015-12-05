@@ -2,8 +2,8 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.3 (2015-12-05)
+------------------
 * Fix catkin lint errors
 * Added FindGflags directly to this repo
 * Minor fix
