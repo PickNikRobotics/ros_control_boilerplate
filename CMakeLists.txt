@@ -5,6 +5,7 @@ project(ros_control_boilerplate)
 set(CMAKE_CXX_FLAGS "-std=c++11 -Wall ${CMAKE_CXX_FLAGS}")
 
 find_package(catkin REQUIRED COMPONENTS
+  cmake_modules
   hardware_interface
   controller_manager
   roscpp
@@ -16,9 +17,9 @@ find_package(catkin REQUIRED COMPONENTS
   transmission_interface
   control_toolbox
   std_msgs
-  cmake_modules
 )
 
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 find_package(Gflags REQUIRED)
 
 ## System dependencies are found with CMake's conventions
@@ -69,16 +70,16 @@ target_link_libraries(sim_hw_interface
 )
 
 # Main control executable
-add_executable(sim_hw_main src/sim_hw_main.cpp)
-target_link_libraries(sim_hw_main
+add_executable(${PROJECT_NAME}_sim_hw_main src/sim_hw_main.cpp)
+target_link_libraries(${PROJECT_NAME}_sim_hw_main
   sim_hw_interface
   generic_hw_control_loop
   ${catkin_LIBRARIES}
 )
 
 # Test trajectory generator node
-add_executable(test_trajectory src/tools/test_trajectory.cpp)
-target_link_libraries(test_trajectory
+add_executable(${PROJECT_NAME}_test_trajectory src/tools/test_trajectory.cpp)
+target_link_libraries(${PROJECT_NAME}_test_trajectory
   ${catkin_LIBRARIES}
 )
 
@@ -89,8 +90,8 @@ add_library(controller_to_csv src/tools/controller_to_csv.cpp)
 target_link_libraries(controller_to_csv
   ${catkin_LIBRARIES}
 )
-add_executable(controller_to_csv_main src/tools/controller_to_csv_main.cpp)
-target_link_libraries(controller_to_csv_main
+add_executable(${PROJECT_NAME}_controller_to_csv_main src/tools/controller_to_csv_main.cpp)
+target_link_libraries(${PROJECT_NAME}_controller_to_csv_main
   controller_to_csv
   ${Gflags_LIBRARIES}
   ${catkin_LIBRARIES}
@@ -101,15 +102,41 @@ add_library(csv_to_controller src/tools/csv_to_controller.cpp)
 target_link_libraries(csv_to_controller
   ${catkin_LIBRARIES}
 )
-add_executable(csv_to_controller_main src/tools/csv_to_controller_main.cpp)
-target_link_libraries(csv_to_controller_main
+add_executable(${PROJECT_NAME}_csv_to_controller_main src/tools/csv_to_controller_main.cpp)
+target_link_libraries(${PROJECT_NAME}_csv_to_controller_main
   csv_to_controller
   ${Gflags_LIBRARIES}
   ${catkin_LIBRARIES}
 )
 
 # Tool for controlling a robot from keyboard
-add_executable(keyboard_teleop src/tools/keyboard_teleop.cpp)
-target_link_libraries(keyboard_teleop
+add_executable(${PROJECT_NAME}_keyboard_teleop src/tools/keyboard_teleop.cpp)
+target_link_libraries(${PROJECT_NAME}_keyboard_teleop
   ${catkin_LIBRARIES}
 )
+
+## Install ------------------------------------------------------------
+
+# Install libraries
+install(TARGETS
+    generic_hw_control_loop
+    sim_hw_interface
+    controller_to_csv
+    csv_to_controller
+  LIBRARY DESTINATION
+    ${CATKIN_PACKAGE_LIB_DESTINATION}
+)
+
+# Install executables
+install(TARGETS
+    ${PROJECT_NAME}_sim_hw_main
+    ${PROJECT_NAME}_test_trajectory
+    ${PROJECT_NAME}_controller_to_csv_main
+    ${PROJECT_NAME}_csv_to_controller_main
+    ${PROJECT_NAME}_keyboard_teleop
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+# Install header files
+install(DIRECTORY include/${PROJECT_NAME}/   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})

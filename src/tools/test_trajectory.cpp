@@ -33,7 +33,7 @@
  *********************************************************************/
 
 /* Author: Dave Coleman <dave@dav.ee>
-n   Desc:   Generate a random trajectory to test the ros_control controller
+   Desc:   Generate a random trajectory to test the ros_control controller
 */
 
 // ROS
