@@ -29,6 +29,7 @@
   <build_depend>std_msgs</build_depend>
   <build_depend>cmake_modules</build_depend>
   <build_depend>libgflags-dev</build_depend>
+  <build_depend>sensor_msgs</build_depend>
 
   <run_depend>hardware_interface</run_depend>
   <run_depend>controller_manager</run_depend>
@@ -42,6 +43,7 @@
   <run_depend>transmission_interface</run_depend>
   <run_depend>control_toolbox</run_depend>
   <run_depend>std_msgs</run_depend>
+  <run_depend>sensor_msgs</run_depend>
 
   <export>
   </export>

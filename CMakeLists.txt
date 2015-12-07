@@ -17,6 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
   transmission_interface
   control_toolbox
   std_msgs
+  sensor_msgs
 )
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
@@ -39,6 +40,7 @@ catkin_package(
     transmission_interface
     control_toolbox
     std_msgs
+    sensor_msgs
   LIBRARIES
     generic_hw_control_loop
     sim_hw_interface
