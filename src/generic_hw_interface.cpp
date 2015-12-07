@@ -42,7 +42,9 @@
 
 namespace ros_control_boilerplate
 {
-GenericHWInterface::GenericHWInterface(ros::NodeHandle &nh, urdf::Model *urdf_model) : nh_(nh)
+GenericHWInterface::GenericHWInterface(ros::NodeHandle &nh, urdf::Model *urdf_model)
+  : nh_(nh)
+  , use_rosparam_joint_limits_(false)
 {
   // Check if the URDF model needs to be loaded
   if (urdf_model == NULL)
@@ -254,26 +256,6 @@ void GenericHWInterface::registerJointLimits(const hardware_interface::JointHand
     const joint_limits_interface::EffortJointSaturationHandle sat_handle_effort(joint_handle_effort, joint_limits);
     eff_jnt_sat_interface_.registerHandle(sat_handle_effort);
   }
-}
-
-void GenericHWInterface::enforceLimits(ros::Duration &period)
-{
-  // Note - you should only need to use one saturation interface,
-  // depending on your control method
-
-  // Saturation Limits
-
-  // Enforces position and velocity
-  pos_jnt_sat_interface_.enforceLimits(period);
-  // Enforces velocity and acceleration limits
-  // vel_jnt_sat_interface_.enforceLimits(period);
-  // Enforces position, velocity, and effort
-  // eff_jnt_sat_interface_.enforceLimits(period);
-
-  // Soft limits
-  //pos_jnt_soft_limits_.enforceLimits(period);
-  // vel_jnt_soft_limits_.enforceLimits(period);
-  // eff_jnt_soft_limits_.enforceLimits(period);
 }
 
 void GenericHWInterface::reset()

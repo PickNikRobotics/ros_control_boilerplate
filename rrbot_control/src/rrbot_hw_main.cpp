@@ -33,54 +33,31 @@
  *********************************************************************/
 
 /* Author: Dave Coleman
-   Desc:   Example ros_control hardware interface that performs a perfect control loop for
-   simulation
+   Desc:   Example ros_control main() entry point for controlling robots in ROS
 */
 
-#ifndef GENERIC_ROS_CONTROL__SIM_HW_INTERFACE_H
-#define GENERIC_ROS_CONTROL__SIM_HW_INTERFACE_H
+#include <ros_control_boilerplate/generic_hw_control_loop.h>
+#include <rrbot_control/rrbot_hw_interface.h>
 
-#include <ros_control_boilerplate/generic_hw_interface.h>
-
-namespace ros_control_boilerplate
+int main(int argc, char** argv)
 {
-// For simulation only - determines how fast a trajectory is followed
-static const double POSITION_STEP_FACTOR = 1;
-static const double VELOCITY_STEP_FACTOR = 1;
+  ros::init(argc, argv, "rrbot_hw_interface");
+  ros::NodeHandle nh;
 
-/// \brief Hardware interface for a robot
-class SimHWInterface : public GenericHWInterface
-{
-public:
-  /**
-   * \brief Constructor
-   * \param nh - Node handle for topics.
-   */
-  SimHWInterface(ros::NodeHandle& nh, urdf::Model* urdf_model = NULL);
+  // NOTE: We run the ROS loop in a separate thread as external calls such
+  // as service callbacks to load controllers can block the (main) control loop
+  ros::AsyncSpinner spinner(2);
+  spinner.start();
 
-  /** \brief Read the state from the robot hardware. */
-  virtual void read(ros::Duration &elapsed_time);
+  // Create the hardware interface specific to your robot
+  boost::shared_ptr<ros_control_boilerplate::RRBotHWInterface> rrbot_hw_interface;
+  rrbot_hw_interface.reset(new ros_control_boilerplate::RRBotHWInterface(nh));
 
-  /** \brief Write the command to the robot hardware. */
-  virtual void write(ros::Duration &elapsed_time);
+  // Start the control loop
+  ros_control_boilerplate::GenericHWControlLoop control_loop(nh, rrbot_hw_interface);
 
-  /** \breif Enforce limits for all values before writing */
-  virtual void enforceLimits(ros::Duration &period);
+  // Wait until shutdown signal recieved
+  ros::waitForShutdown();
 
-  /** \brief Basic model of system for position control */
-  virtual void positionControlSimulation(ros::Duration &elapsed_time, const std::size_t joint_id);
-
-protected:
-  // Simulated controller
-  double p_error_;
-  double v_error_;
-  double e_error_;
-
-  // For position controller to estimate velocity
-  std::vector<double> joint_position_prev_;
-
-};  // class
-
-}  // namespace
-
-#endif
+  return 0;
+}

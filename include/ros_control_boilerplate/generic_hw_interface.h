@@ -119,8 +119,8 @@ public:
                            const hardware_interface::JointHandle &joint_handle_effort,
                            std::size_t joint_id);
 
-  /// \breif Enforce limits for all values before writing
-  virtual void enforceLimits(ros::Duration &period);
+  /** \breif Enforce limits for all values before writing */
+  virtual void enforceLimits(ros::Duration &period) = 0;
 
   /** \brief Helper for debugging a joint's state */
   virtual void printState();
@@ -159,7 +159,7 @@ protected:
   urdf::Model *urdf_model_;
 
   // Modes
-  bool use_rosparam_joint_limits_ = false;
+  bool use_rosparam_joint_limits_;
 
   // States
   std::vector<double> joint_position_;

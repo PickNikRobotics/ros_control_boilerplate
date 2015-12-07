@@ -43,6 +43,7 @@ catkin_package(
     sensor_msgs
   LIBRARIES
     generic_hw_control_loop
+    generic_hw_interface
     sim_hw_interface
 )
 
@@ -62,17 +63,26 @@ target_link_libraries(generic_hw_control_loop
   ${catkin_LIBRARIES}
 )
 
+# Generic Hardware Interface
+add_library(generic_hw_interface
+  src/generic_hw_interface.cpp
+)
+target_link_libraries(generic_hw_interface
+  ${catkin_LIBRARIES}
+)
+
 # Simulation Hardware Interface
 add_library(sim_hw_interface
-  src/generic_hw_interface.cpp
   src/sim_hw_interface.cpp
 )
 target_link_libraries(sim_hw_interface
+  generic_hw_interface
   ${catkin_LIBRARIES}
 )
 
 # Main control executable
 add_executable(${PROJECT_NAME}_sim_hw_main src/sim_hw_main.cpp)
+set_target_properties(${PROJECT_NAME}_sim_hw_main PROPERTIES OUTPUT_NAME sim_hw_main PREFIX "")
 target_link_libraries(${PROJECT_NAME}_sim_hw_main
   sim_hw_interface
   generic_hw_control_loop
@@ -81,6 +91,7 @@ target_link_libraries(${PROJECT_NAME}_sim_hw_main
 
 # Test trajectory generator node
 add_executable(${PROJECT_NAME}_test_trajectory src/tools/test_trajectory.cpp)
+set_target_properties(${PROJECT_NAME}_test_trajectory PROPERTIES OUTPUT_NAME test_trajectory PREFIX "")
 target_link_libraries(${PROJECT_NAME}_test_trajectory
   ${catkin_LIBRARIES}
 )
@@ -93,6 +104,7 @@ target_link_libraries(controller_to_csv
   ${catkin_LIBRARIES}
 )
 add_executable(${PROJECT_NAME}_controller_to_csv_main src/tools/controller_to_csv_main.cpp)
+set_target_properties(${PROJECT_NAME}_controller_to_csv_main PROPERTIES OUTPUT_NAME controller_to_csv_main PREFIX "")
 target_link_libraries(${PROJECT_NAME}_controller_to_csv_main
   controller_to_csv
   ${Gflags_LIBRARIES}
@@ -105,6 +117,7 @@ target_link_libraries(csv_to_controller
   ${catkin_LIBRARIES}
 )
 add_executable(${PROJECT_NAME}_csv_to_controller_main src/tools/csv_to_controller_main.cpp)
+set_target_properties(${PROJECT_NAME}_csv_to_controller_main PROPERTIES OUTPUT_NAME csv_to_controller_main PREFIX "")
 target_link_libraries(${PROJECT_NAME}_csv_to_controller_main
   csv_to_controller
   ${Gflags_LIBRARIES}
@@ -113,15 +126,19 @@ target_link_libraries(${PROJECT_NAME}_csv_to_controller_main
 
 # Tool for controlling a robot from keyboard
 add_executable(${PROJECT_NAME}_keyboard_teleop src/tools/keyboard_teleop.cpp)
+set_target_properties(${PROJECT_NAME}_keyboard_teleop PROPERTIES OUTPUT_NAME keyboard_teleop PREFIX "")
 target_link_libraries(${PROJECT_NAME}_keyboard_teleop
   ${catkin_LIBRARIES}
 )
+
+add_subdirectory(rrbot_control)
 
 ## Install ------------------------------------------------------------
 
 # Install libraries
 install(TARGETS
     generic_hw_control_loop
+    generic_hw_interface
     sim_hw_interface
     controller_to_csv
     csv_to_controller

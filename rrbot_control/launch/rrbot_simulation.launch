@@ -15,7 +15,7 @@
           output="screen" launch-prefix="$(arg launch_prefix)"/>
 
     <!-- Load controller settings -->
-    <rosparam file="$(find ros_control_boilerplate)/config/rrbot_controllers.yaml" command="load"/>
+    <rosparam file="$(find ros_control_boilerplate)/rrbot_control/config/rrbot_controllers.yaml" command="load"/>
 
     <!-- Load controller manager -->
     <node name="ros_control_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false"
@@ -27,4 +27,3 @@
   </group>
 
 </launch>
-

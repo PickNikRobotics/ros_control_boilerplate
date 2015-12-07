@@ -37,7 +37,7 @@ Then, either install this package from source so you can develop off of it, or i
 
 ## Run Simulation Demo
 
-This package is setup to run the "RRBot" two joint revolute-revolute robot demo. To run its ros_control non-physics-based simulated hardware interface, run:
+This package is setup to run the "RRBot" two joint revolute-revolute robot demo. This "template package" is located in the ros_control_boilerplate as a subfolder that you can easily rename and reuse. To run its ros_control non-physics-based simulated hardware interface, run:
 
     roslaunch ros_control_boilerplate rrbot_simulaton.launch
 

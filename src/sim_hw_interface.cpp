@@ -94,6 +94,12 @@ void SimHWInterface::write(ros::Duration &elapsed_time)
   }
 }
 
+void SimHWInterface::enforceLimits(ros::Duration &period)
+{
+  // Enforces position and velocity
+  pos_jnt_sat_interface_.enforceLimits(period);
+}
+
 void SimHWInterface::positionControlSimulation(ros::Duration &elapsed_time, const std::size_t joint_id)
 {
   const double max_delta_pos = joint_velocity_limits_[joint_id] * elapsed_time.toSec();
