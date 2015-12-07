@@ -2,6 +2,11 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Added missing dependency on sensor_msgs
+* Contributors: Dave Coleman
+
 0.1.3 (2015-12-05)
 ------------------
 * Fix catkin lint errors
