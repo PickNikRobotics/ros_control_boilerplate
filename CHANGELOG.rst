@@ -2,8 +2,8 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.4 (2015-12-07)
+------------------
 * Added missing dependency on sensor_msgs
 * Contributors: Dave Coleman
 
