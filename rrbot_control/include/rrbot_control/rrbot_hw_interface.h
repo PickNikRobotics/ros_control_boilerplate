@@ -37,16 +37,16 @@
            For a more detailed simulation example, see sim_hw_interface.h
 */
 
-#ifndef GENERIC_ROS_CONTROL__RRBOT_HW_INTERFACE_H
-#define GENERIC_ROS_CONTROL__RRBOT_HW_INTERFACE_H
+#ifndef RRBOT_CONTROL__RRBOT_HW_INTERFACE_H
+#define RRBOT_CONTROL__RRBOT_HW_INTERFACE_H
 
 #include <ros_control_boilerplate/generic_hw_interface.h>
 
-namespace ros_control_boilerplate
+namespace rrbot_control
 {
 
 /// \brief Hardware interface for a robot
-class RRBotHWInterface : public GenericHWInterface
+class RRBotHWInterface : public ros_control_boilerplate::GenericHWInterface
 {
 public:
   /**

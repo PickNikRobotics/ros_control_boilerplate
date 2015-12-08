@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package>
+  <name>rrbot_control</name>
+  <version>0.0.1</version>
+  <description>Simple simulation interface and template for setting up a hardware interface for rrbot</description>
+
+  <maintainer email="someone@someone.com">Someone</maintainer>
+
+  <license>BSD</license>
+
+  <url type="website">https://github.com/davetcoleman/ros_control_boilerplate</url>
+  <url type="butracker">https://github.com/davetcoleman/ros_control_boilerplate/issues</url>
+  <url type="repository">https://github.com/davetcoleman/ros_control_boilerplate/</url>
+
+  <author email="davetcoleman@gmail.com">Dave Coleman</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>ros_control_boilerplate</build_depend>
+
+  <run_depend>ros_control_boilerplate</run_depend>
+
+  <export>
+  </export>
+</package>

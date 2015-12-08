@@ -51,13 +51,24 @@ To send a random, dummy trajectory to execute, run:
 
 ## Customize
 
-To test this as a simulation interface for your robot:
+To test this as a simulation interface for your robot, you can quickly rename the subfolder package into the name of your robot using the following commands:
 
- - Rename all files in ``/launch`` to use your robot name
- - Find-replace all strings in ``/launch`` from "rrbot" to your robot name
- - Customize ``/config/rrbot_controllers.yaml`` to have joints corresponding to your robot's URDF
+```
+function findreplace() {
+    grep -lr -e "$1" * | xargs sed -i "s/$1/$2/g" ;
+}
 
-To test this as a hardware interface for your robot, you'll also want to rename the files in ``/src`` and find-replace the string "generic" to your robot's name. Then add the necessary code to communicate with your robot via USB/serial/ethernet/etc. Feel free to PR this package with better step by step instructions for this.
+function findreplacefilename() {
+    find . -depth -name "*$1*" -exec bash -c 'for f; do base=${f##*/}; mv -- "$f" "${f%/*}/${base//'$1'/'$2'}"; done' _ {} +
+}
+
+findreplacefilename rrbot myrobot
+findreplace rrbot myrobot
+findreplace RRBot MyRobot
+findreplace RRBOT MYROBOT
+```
+
+Then add the necessary code to communicate with your robot via USB/serial/ethernet/etc in the file ``myrobot_hw_interface.cpp``.
 
 ## Setting an Initial Position, Using with MoveIt!
 

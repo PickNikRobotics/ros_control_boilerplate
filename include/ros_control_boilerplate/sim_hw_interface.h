@@ -44,11 +44,8 @@
 
 namespace ros_control_boilerplate
 {
-// For simulation only - determines how fast a trajectory is followed
-static const double POSITION_STEP_FACTOR = 1;
-static const double VELOCITY_STEP_FACTOR = 1;
 
-/// \brief Hardware interface for a robot
+/** \brief Hardware interface for a robot */
 class SimHWInterface : public GenericHWInterface
 {
 public:
@@ -67,14 +64,13 @@ public:
   /** \breif Enforce limits for all values before writing */
   virtual void enforceLimits(ros::Duration &period);
 
+protected:
+
   /** \brief Basic model of system for position control */
   virtual void positionControlSimulation(ros::Duration &elapsed_time, const std::size_t joint_id);
 
-protected:
   // Simulated controller
   double p_error_;
-  double v_error_;
-  double e_error_;
 
   // For position controller to estimate velocity
   std::vector<double> joint_position_prev_;
