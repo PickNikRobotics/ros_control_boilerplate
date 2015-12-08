@@ -169,8 +169,9 @@ void GenericHWInterface::registerJointLimits(const hardware_interface::JointHand
   }
   else
   {
-    ROS_WARN_STREAM_NAMED("generic_hw_interface", "Joint " << joint_names_[joint_id] << " does not have a URDF "
-                                                                                        "position limit");
+    if (urdf_joint->type != urdf::Joint::CONTINUOUS)
+      ROS_WARN_STREAM_NAMED("generic_hw_interface", "Joint " << joint_names_[joint_id] << " does not have a URDF "
+                            "position limit");
   }
 
   // Get limits from ROS param
