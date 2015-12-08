@@ -71,6 +71,7 @@ protected:
 
   // Simulated controller
   double p_error_;
+  double v_error_;
 
   // For position controller to estimate velocity
   std::vector<double> joint_position_prev_;

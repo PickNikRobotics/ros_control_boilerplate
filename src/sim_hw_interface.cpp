@@ -77,6 +77,11 @@ void SimHWInterface::write(ros::Duration &elapsed_time)
         break;
 
       case 1:  // hardware_interface::MODE_VELOCITY:
+        ROS_ERROR_STREAM_NAMED("generic_hw_interface", "Velocity not implemented yet");
+
+        /*
+        TODO: remove VELOCITY_STEP_FACTOR
+
         // Position - Move all the states to the commanded set points slowly
         joint_position_[joint_id] += joint_velocity_[joint_id] * elapsed_time.toSec();
 
@@ -85,6 +90,7 @@ void SimHWInterface::write(ros::Duration &elapsed_time)
         // scale the rate it takes to achieve velocity by a factor that is invariant to the feedback
         // loop
         joint_velocity_[joint_id] += v_error_ * VELOCITY_STEP_FACTOR;
+        */
         break;
 
       case 2:  // hardware_interface::MODE_EFFORT:
