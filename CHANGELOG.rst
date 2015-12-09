@@ -2,8 +2,8 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.2.0 (2015-12-09)
+------------------
 * Do not automatically call init()
 * Removed warning of joint limits for continous joints
 * Fix missing variable
