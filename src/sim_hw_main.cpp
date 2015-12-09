@@ -50,8 +50,9 @@ int main(int argc, char** argv)
   spinner.start();
 
   // Create the hardware interface specific to your robot
-  boost::shared_ptr<ros_control_boilerplate::SimHWInterface> sim_hw_interface;
-  sim_hw_interface.reset(new ros_control_boilerplate::SimHWInterface(nh));
+  boost::shared_ptr<ros_control_boilerplate::SimHWInterface> sim_hw_interface
+    (new ros_control_boilerplate::SimHWInterface(nh));
+  sim_hw_interface->init();
 
   // Start the control loop
   ros_control_boilerplate::GenericHWControlLoop control_loop(nh, sim_hw_interface);

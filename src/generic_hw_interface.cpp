@@ -52,7 +52,8 @@ GenericHWInterface::GenericHWInterface(ros::NodeHandle &nh, urdf::Model *urdf_mo
     urdf_model_ = urdf_model;
 
   // Initialize shared memory and interfaces here
-  init();  // this implementation loads from rosparam
+  // NEW: call this function separately
+  //init();  // this implementation loads from rosparam
 
   ROS_INFO_NAMED("generic_hw_interface", "Loaded generic_hw_interface.");
 }
