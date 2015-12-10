@@ -2,6 +2,13 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'indigo-devel' of github.com:davetcoleman/ros_control_boilerplate into indigo-devel
+* Fix install path
+* Improve user output message
+* Contributors: Dave Coleman
+
 0.2.0 (2015-12-09)
 ------------------
 * Do not automatically call init()
