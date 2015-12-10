@@ -15,7 +15,7 @@ Simple simulation interface and template for setting up a hardware interface for
 Developed by [Dave Coleman](http://dav.ee/) at the University of Colorado Boulder
 
  * [![Build Status](https://travis-ci.org/davetcoleman/ros_control_boilerplate.svg)](https://travis-ci.org/davetcoleman/ros_control_boilerplate) Travis CI
- * [![Devel Job Status](http://jenkins.ros.org/buildStatus/icon?job=devel-indigo-ros-control-boilerplate)](http://jenkins.ros.org/job/devel-indigo-ros_control_boilerplate) Devel Job Status
+ * [![Devel Job Status](http://jenkins.ros.org/buildStatus/icon?job=devel-indigo-ros_control_boilerplate)](http://jenkins.ros.org/job/devel-indigo-ros_control_boilerplate) Devel Job Status
  * [![Build Status](http://jenkins.ros.org/buildStatus/icon?job=ros-indigo-ros-control-boilerplate_binarydeb_trusty_amd64)](http://jenkins.ros.org/job/ros-indigo-ros-control-boilerplate_binarydeb_trusty_amd64/) AMD64 Debian Job Status
 
 <img src="https://raw.githubusercontent.com/davetcoleman/ros_control_boilerplate/jade-devel/resources/screenshot.png"/>
