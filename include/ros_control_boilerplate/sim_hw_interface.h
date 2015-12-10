@@ -55,6 +55,9 @@ public:
    */
   SimHWInterface(ros::NodeHandle& nh, urdf::Model* urdf_model = NULL);
 
+  /** \brief Initialize the robot hardware interface */
+  virtual void init();
+
   /** \brief Read the state from the robot hardware. */
   virtual void read(ros::Duration &elapsed_time);
 
@@ -68,6 +71,9 @@ protected:
 
   /** \brief Basic model of system for position control */
   virtual void positionControlSimulation(ros::Duration &elapsed_time, const std::size_t joint_id);
+
+  // Name of this class
+  std::string name_;
 
   // Simulated controller
   double p_error_;
