@@ -2,8 +2,8 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.2.1 (2015-12-09)
+------------------
 * Merge branch 'indigo-devel' of github.com:davetcoleman/ros_control_boilerplate into indigo-devel
 * Fix install path
 * Improve user output message
