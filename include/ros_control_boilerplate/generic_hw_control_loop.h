@@ -75,6 +75,13 @@ protected:
   // Startup and shutdown of the internal node inside a roscpp program
   ros::NodeHandle nh_;
 
+  // Name of this class
+  std::string name_ = "generic_hw_control_loop";
+
+  // Settings
+  ros::Duration desired_update_freq_;
+  double cycle_time_error_threshold_;
+
   // Timing
   ros::Timer non_realtime_loop_;
   ros::Duration elapsed_time_;

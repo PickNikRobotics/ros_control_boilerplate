@@ -39,39 +39,52 @@
 
 #include <ros_control_boilerplate/generic_hw_control_loop.h>
 
+// ROS parameter loading
+#include <rosparam_shortcuts/rosparam_shortcuts.h>
+
 namespace ros_control_boilerplate
 {
 GenericHWControlLoop::GenericHWControlLoop(
-    ros::NodeHandle& nh,
-    boost::shared_ptr<ros_control_boilerplate::GenericHWInterface> hardware_interface)
-  : nh_(nh)
-  , hardware_interface_(hardware_interface)
+    ros::NodeHandle& nh, boost::shared_ptr<ros_control_boilerplate::GenericHWInterface> hardware_interface)
+  : nh_(nh), hardware_interface_(hardware_interface)
 {
   // Create the controller manager
-  controller_manager_.reset(
-      new controller_manager::ControllerManager(hardware_interface_.get(), nh_));
+  controller_manager_.reset(new controller_manager::ControllerManager(hardware_interface_.get(), nh_));
 
-  // Get period - default to 100 hz
-  nh_.param("hardware_control_loop/loop_hz", loop_hz_, 100.0);
-  ROS_DEBUG_STREAM_NAMED("generic_hw_control_loop", "Using control freqency of " << loop_hz_ << " hz (for reading/writing)");
+  // Load rosparams
+  ros::NodeHandle rpsnh(nh, name_);
+  int error = 0;
+  error += !rosparam_shortcuts::getDoubleParam(name_, rpsnh, "loop_hz", loop_hz_);
+  error += !rosparam_shortcuts::getDoubleParam(name_, rpsnh, "cycle_time_error_threshold", cycle_time_error_threshold_);
+  rosparam_shortcuts::shutdownIfParamErrors(name_, error);
 
   // Get current time for use with first update
   clock_gettime(CLOCK_MONOTONIC, &last_time_);
 
   // Start timer
-  ros::Duration update_freq = ros::Duration(1 / loop_hz_);
-  non_realtime_loop_ = nh_.createTimer(update_freq, &GenericHWControlLoop::update, this);
+  ros::Duration desired_update_freq_ = ros::Duration(1 / loop_hz_);
+  non_realtime_loop_ = nh_.createTimer(desired_update_freq_, &GenericHWControlLoop::update, this);
 }
 
 void GenericHWControlLoop::update(const ros::TimerEvent& e)
 {
   // Get change in time
   clock_gettime(CLOCK_MONOTONIC, &current_time_);
-  elapsed_time_ = ros::Duration(current_time_.tv_sec - last_time_.tv_sec +
-                                (current_time_.tv_nsec - last_time_.tv_nsec) / BILLION);
+  elapsed_time_ =
+      ros::Duration(current_time_.tv_sec - last_time_.tv_sec + (current_time_.tv_nsec - last_time_.tv_nsec) / BILLION);
   last_time_ = current_time_;
   // ROS_DEBUG_STREAM_THROTTLE_NAMED(1, "generic_hw_main","Sampled update loop with elapsed
   // time " << elapsed_time_.toSec());
+
+  // Error check cycle time
+  const double cycle_time_error = (elapsed_time_ - desired_update_freq_).toSec();
+  // ROS_INFO_STREAM_THROTTLE_NAMED(1, name_, "Reflexxes control period error: " << cycle_time_error);
+  if (cycle_time_error > cycle_time_error_threshold_)
+  {
+    ROS_WARN_STREAM_NAMED(name_, "Cycle time exceeded error threshold by: "
+                                     << cycle_time_error << ", cycle time: " << elapsed_time_
+                                     << ", threshold: " << cycle_time_error_threshold_);
+  }
 
   // Input
   hardware_interface_->read(elapsed_time_);

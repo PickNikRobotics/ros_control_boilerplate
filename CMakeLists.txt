@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(ros_control_boilerplate)
 
 # C++ 11
-#set(CMAKE_CXX_FLAGS "-std=c++11 -Wall ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++11 -Wall ${CMAKE_CXX_FLAGS}")
 
 find_package(catkin REQUIRED COMPONENTS
   cmake_modules
@@ -18,6 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
   control_toolbox
   std_msgs
   sensor_msgs
+  rosparam_shortcuts
 )
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
@@ -41,6 +42,7 @@ catkin_package(
     control_toolbox
     std_msgs
     sensor_msgs
+    rosparam_shortcuts
   LIBRARIES
     generic_hw_control_loop
     generic_hw_interface
