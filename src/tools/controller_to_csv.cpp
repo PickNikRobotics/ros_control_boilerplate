@@ -134,8 +134,9 @@ bool ControllerToCSV::writeToFile()
     output_file << states_[0].joint_names[j] << "_desired_pos,"
                 << states_[0].joint_names[j] << "_desired_vel,"
                 << states_[0].joint_names[j] << "_actual_pos,"
-                << states_[0].joint_names[j] << "_actual_vel,";
-      //<< states_[0].joint_names[j] << "_commanded_vel,";
+                << states_[0].joint_names[j] << "_actual_vel,"
+                << states_[0].joint_names[j] << "_error_pos,"
+                << states_[0].joint_names[j] << "_error_vel,";
   }
   output_file << std::endl;
 
@@ -154,14 +155,12 @@ bool ControllerToCSV::writeToFile()
     for (std::size_t j = 0; j < states_[i].joint_names.size(); ++j)
     {
       // Output State
-      // output_file << states_[i].desired.positions[j] << "," << states_[i].desired.velocities[j]
-      //             << "," << states_[i].actual.positions[j] << "," << states_[i].actual.velocities[j]
-      //             << "," << states_[i].error.velocities[j] << ",";
       output_file << states_[i].desired.positions[j] << ","
                   << states_[i].desired.velocities[j] << ","
                   << states_[i].actual.positions[j] << ","
-                  << states_[i].actual.velocities[j] << ",";
-        //<< states_[i].error.velocities[j];
+                  << states_[i].actual.velocities[j] << ","
+                  << states_[i].error.positions[j] << ","
+                  << states_[i].error.velocities[j] << ",";
     }
 
     output_file << std::endl;

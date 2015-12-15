@@ -44,6 +44,7 @@ namespace ros_control_boilerplate
 GenericHWInterface::GenericHWInterface(ros::NodeHandle &nh, urdf::Model *urdf_model)
   : nh_(nh)
   , use_rosparam_joint_limits_(false)
+  , use_soft_limits_if_available_(false)
 {
   // Check if the URDF model needs to be loaded
   if (urdf_model == NULL)
@@ -187,15 +188,18 @@ void GenericHWInterface::registerJointLimits(const hardware_interface::JointHand
   }
 
   // Get soft limits from URDF
-  if (joint_limits_interface::getSoftJointLimits(urdf_joint, soft_limits))
+  if (use_soft_limits_if_available_)
   {
-    has_soft_limits = true;
-    ROS_DEBUG_STREAM_NAMED("generic_hw_interface", "Joint " << joint_names_[joint_id] << " has soft joint limits.");
-  }
-  else
-  {
-    ROS_DEBUG_STREAM_NAMED("generic_hw_interface", "Joint " << joint_names_[joint_id] << " does not have soft joint "
-                                                                                         "limits");
+    if (joint_limits_interface::getSoftJointLimits(urdf_joint, soft_limits))
+    {
+      has_soft_limits = true;
+      ROS_DEBUG_STREAM_NAMED("generic_hw_interface", "Joint " << joint_names_[joint_id] << " has soft joint limits.");
+    }
+    else
+    {
+      ROS_DEBUG_STREAM_NAMED("generic_hw_interface", "Joint " << joint_names_[joint_id] << " does not have soft joint "
+                             "limits");
+    }
   }
 
   // Quit we we haven't found any limits in URDF or rosparam server

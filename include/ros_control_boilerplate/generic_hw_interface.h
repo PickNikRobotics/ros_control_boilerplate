@@ -160,6 +160,7 @@ protected:
 
   // Modes
   bool use_rosparam_joint_limits_;
+  bool use_soft_limits_if_available_;
 
   // States
   std::vector<double> joint_position_;
