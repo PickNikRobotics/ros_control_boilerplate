@@ -288,7 +288,7 @@ std::string GenericHWInterface::printCommandHelper()
 {
   std::stringstream ss;
   std::cout.precision(15);
-
+  ss << "    position     velocity         effort  \n";
   for (std::size_t i = 0; i < num_joints_; ++i)
   {
     ss << "j" << i << ": " << std::fixed << joint_position_command_[i] << "\t ";
