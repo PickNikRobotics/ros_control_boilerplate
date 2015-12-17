@@ -78,7 +78,6 @@ void GenericHWControlLoop::update(const ros::TimerEvent& e)
 
   // Error check cycle time
   const double cycle_time_error = (elapsed_time_ - desired_update_freq_).toSec();
-  // ROS_INFO_STREAM_THROTTLE_NAMED(1, name_, "Reflexxes control period error: " << cycle_time_error);
   if (cycle_time_error > cycle_time_error_threshold_)
   {
     ROS_WARN_STREAM_NAMED(name_, "Cycle time exceeded error threshold by: "
