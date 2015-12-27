@@ -2,6 +2,17 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Removed bad reference name
+* Switched to using name\_
+* Record error data
+* Disable soft joint limits
+* header to debug output
+* Added error checking of control loops time
+* Fix init() bug
+* Contributors: Dave Coleman
+
 0.2.1 (2015-12-09)
 ------------------
 * Merge branch 'indigo-devel' of github.com:davetcoleman/ros_control_boilerplate into indigo-devel
