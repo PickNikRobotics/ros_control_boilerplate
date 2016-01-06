@@ -43,7 +43,6 @@
 
 DEFINE_string(csv_path, "/tmp/recorded_trajectory_1.csv", "File location to save recoded data to");
 DEFINE_string(topic, "/robot/position_trajectory_controller/state", "ROS topic to subscribe to");
-DEFINE_int32(duration, 10, "Number of seconds to record the topic to file");
 
 int main(int argc, char** argv)
 {

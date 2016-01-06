@@ -47,7 +47,6 @@
 
 namespace ros_control_boilerplate
 {
-static const double RECORD_RATE_HZ = 100.0;  // times per second to record
 
 class ControllerToCSV
 {
@@ -60,6 +59,9 @@ public:
 
   /** \brief Destructor */
   ~ControllerToCSV();
+
+  /** \brief Whether to record at a specific frequency, or record all incoming data */
+  bool recordAll();
 
   /** \brief Start the data collection */
   void startRecording(const std::string& file_name);
@@ -89,6 +91,8 @@ private:
 
   // Listener to state of controller
   ros::Subscriber state_sub_;
+  double record_hz_; // how often to record the latest incoming data. if zero, record all
+  bool recording_started_;
 
   // Where to save the CSV
   std::string file_name_;

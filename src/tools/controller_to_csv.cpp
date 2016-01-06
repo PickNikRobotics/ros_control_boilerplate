@@ -42,12 +42,23 @@
 #include <iostream>
 #include <fstream>
 
+// ROS parameter loading
+#include <rosparam_shortcuts/rosparam_shortcuts.h>
+
 namespace ros_control_boilerplate
 {
 
 ControllerToCSV::ControllerToCSV(const std::string& topic)
-  : first_update_(true)
+  : nh_("~")
+  , first_update_(true)
+  , recording_started_(true)
 {
+  // Load rosparams
+  ros::NodeHandle rpsnh(nh_, name_);
+  int error = 0;
+  error += !rosparam_shortcuts::getDoubleParam(name_, rpsnh, "record_hz", record_hz_);
+  rosparam_shortcuts::shutdownIfParamErrors(name_, error);
+
   ROS_INFO_STREAM_NAMED(name_, "Subscribing to " << topic);
   // State subscriber
   state_sub_ = nh_.subscribe<control_msgs::JointTrajectoryControllerState>(
@@ -55,6 +66,16 @@ ControllerToCSV::ControllerToCSV(const std::string& topic)
 
   // Wait for states to populate
   waitForSubscriber(state_sub_);
+
+  // Alert user to mode
+  if (recordAll())
+  {
+    ROS_INFO_STREAM_NAMED(name_, "Recording all incoming controller state messages");
+  }
+  else
+  {
+    ROS_INFO_STREAM_NAMED(name_, "Only recording every " << record_hz_ << " hz");
+  }
 
   ROS_INFO_STREAM_NAMED(name_, "ControllerToCSV Ready.");
 }
@@ -64,9 +85,26 @@ ControllerToCSV::~ControllerToCSV()
   stopRecording();
 }
 
+bool ControllerToCSV::recordAll()
+{
+  return record_hz_ == 0;
+}
+
 void ControllerToCSV::stateCB(const control_msgs::JointTrajectoryControllerState::ConstPtr& state)
 {
-  current_state_ = *state;
+  // Two modes - save all immediately, or only save at certain frequency
+  if (recordAll())
+  {
+    // Record state
+    states_.push_back(current_state_);
+
+    // Record current time
+    timestamps_.push_back(ros::Time::now());
+  }
+  else // only record at freq
+  {
+    current_state_ = *state;
+  }
 }
 
 // Start the data collection
@@ -79,9 +117,14 @@ void ControllerToCSV::startRecording(const std::string& file_name)
   states_.clear();
   timestamps_.clear();
 
+  recording_started_ = true;
+
   // Start sampling loop
-  ros::Duration update_freq = ros::Duration(1.0 / RECORD_RATE_HZ);
-  non_realtime_loop_ = nh_.createTimer(update_freq, &ControllerToCSV::update, this);
+  if (!recordAll()) // only record at the specified frequency
+  {
+    ros::Duration update_freq = ros::Duration(1.0 / record_hz_);
+    non_realtime_loop_ = nh_.createTimer(update_freq, &ControllerToCSV::update, this);
+  }
 }
 
 void ControllerToCSV::update(const ros::TimerEvent& event)
