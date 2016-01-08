@@ -56,7 +56,7 @@ GenericHWControlLoop::GenericHWControlLoop(
   int error = 0;
   error += !rosparam_shortcuts::getDoubleParam(name_, rpsnh, "loop_hz", loop_hz_);
   error += !rosparam_shortcuts::getDoubleParam(name_, rpsnh, "cycle_time_error_threshold", cycle_time_error_threshold_);
-  rosparam_shortcuts::shutdownIfParamErrors(name_, error);
+  rosparam_shortcuts::shutdownIfError(name_, error);
 
   // Get current time for use with first update
   clock_gettime(CLOCK_MONOTONIC, &last_time_);

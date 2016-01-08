@@ -39,6 +39,9 @@
 #include <ros_control_boilerplate/generic_hw_interface.h>
 #include <limits>
 
+// ROS parameter loading
+#include <rosparam_shortcuts/rosparam_shortcuts.h>
+
 namespace ros_control_boilerplate
 {
 GenericHWInterface::GenericHWInterface(ros::NodeHandle &nh, urdf::Model *urdf_model)
@@ -53,22 +56,15 @@ GenericHWInterface::GenericHWInterface(ros::NodeHandle &nh, urdf::Model *urdf_mo
   else
     urdf_model_ = urdf_model;
 
-  ROS_INFO_NAMED(name_, "GenericHWInterface Ready.");
+  // Load rosparams
+  ros::NodeHandle rpnh(nh_, "hardware_interface"); // TODO(davetcoleman): change the namespace to "generic_hw_interface" aka name_
+  std::size_t error = 0;
+  error += !rosparam_shortcuts::get(name_, rpnh, "joints", joint_names_);
+  rosparam_shortcuts::shutdownIfError(name_, error);
 }
 
 void GenericHWInterface::init()
 {
-  ROS_INFO_STREAM_NAMED(name_, "Reading rosparams from namespace: " << nh_.getNamespace());
-
-  // Get joint names
-  nh_.getParam("hardware_interface/joints", joint_names_);
-  if (joint_names_.size() == 0)
-  {
-    ROS_FATAL_STREAM_NAMED(name_,
-                           "No joints found on parameter server for controller, did you load the proper yaml file?"
-                               << " Namespace: " << nh_.getNamespace() << "/hardware_interface/joints");
-    exit(-1);
-  }
   num_joints_ = joint_names_.size();
 
   // Status
@@ -118,6 +114,8 @@ void GenericHWInterface::init()
   registerInterface(&position_joint_interface_);  // From RobotHW base class.
   registerInterface(&velocity_joint_interface_);  // From RobotHW base class.
   registerInterface(&effort_joint_interface_);    // From RobotHW base class.
+
+  ROS_INFO_STREAM_NAMED(name_, "GenericHWInterface Ready.");
 }
 
 void GenericHWInterface::registerJointLimits(const hardware_interface::JointHandle &joint_handle_position,
