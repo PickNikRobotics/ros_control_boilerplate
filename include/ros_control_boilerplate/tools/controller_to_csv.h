@@ -89,10 +89,13 @@ private:
   // A shared node handle
   ros::NodeHandle nh_;
 
+  // Show status info on first update
+  bool first_update_;
+  bool recording_started_;
+
   // Listener to state of controller
   ros::Subscriber state_sub_;
   double record_hz_; // how often to record the latest incoming data. if zero, record all
-  bool recording_started_;
 
   // Where to save the CSV
   std::string file_name_;
@@ -103,9 +106,6 @@ private:
 
   // Cache of last recieved state
   control_msgs::JointTrajectoryControllerState current_state_;
-
-  // Show status info on first update
-  bool first_update_;
 
   // How often to sample the state
   ros::Timer non_realtime_loop_;

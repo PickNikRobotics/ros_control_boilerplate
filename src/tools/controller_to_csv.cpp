@@ -56,8 +56,8 @@ ControllerToCSV::ControllerToCSV(const std::string& topic)
   // Load rosparams
   ros::NodeHandle rpsnh(nh_, name_);
   int error = 0;
-  error += !rosparam_shortcuts::getDoubleParam(name_, rpsnh, "record_hz", record_hz_);
-  rosparam_shortcuts::shutdownIfParamErrors(name_, error);
+  error += !rosparam_shortcuts::get(name_, rpsnh, "record_hz", record_hz_);
+  rosparam_shortcuts::shutdownIfError(name_, error);
 
   ROS_INFO_STREAM_NAMED(name_, "Subscribing to " << topic);
   // State subscriber
