@@ -1,0 +1,61 @@
+# ros_control_boilerplate Settings -----------------------
+# Settings for ros_control control loop
+generic_hw_control_loop:
+  loop_hz: 300
+  cycle_time_error_threshold: 0.01
+
+# Settings for ros_control hardware interface
+hardware_interface:
+   joints:
+      - joint1
+      - joint2
+
+# Publish all joint states ----------------------------------
+# Creates the /joint_states topic necessary in ROS
+joint_state_controller:
+   type:         joint_state_controller/JointStateController
+   publish_rate: 50
+
+# Joint Trajectory Controller -------------------------------
+# For detailed explanations of parameter see http://wiki.ros.org/joint_trajectory_controller
+position_trajectory_controller:
+   type: position_controllers/JointTrajectoryController
+   # These joints can likely just be copied from the hardware_interface list above
+   joints:
+      - joint1
+      - joint2
+   constraints:
+      goal_time: 5.0
+      #stopped_position_tolerance: 0.4 # Defaults to 0.01
+      joint1:
+          trajectory: 0.60
+          goal:       0.15
+      joint2:
+          trajectory: 0.60
+          goal:       0.15
+   # gains:
+   #     joint1: {p: 2.0,  i: 0.0, d: 0.01, i_clamp: 1}
+   #     joint2: {p: 2.0,  i: 0.0, d: 0.01, i_clamp: 1}
+
+    # state_publish_rate:  50 # Defaults to 50
+    # action_monitor_rate: 20 # Defaults to 20
+    #hold_trajectory_duration: 0 # Defaults to 0.5
+
+# Individual Position Controllers ---------------------------------------
+# Allows to send individual ROS msg of Float64 to each joint separately
+joint1_position_controller:
+   type: position_controllers/JointPositionController
+   joint: joint1
+   pid: {p: 100.0, i: 0.01, d: 10.0}
+joint2_position_controller:
+   type: position_controllers/JointPositionController
+   joint: joint2
+   pid: {p: 100.0, i: 0.01, d: 10.0}
+
+# Group Position Controllers ---------------------------------------
+# Allows to send single ROS msg of Float64MultiArray to all joints
+joint_position_controller:
+   type: position_controllers/JointGroupPositionController
+   joints:
+     - joint1
+     - joint2
