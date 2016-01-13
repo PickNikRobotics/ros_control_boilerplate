@@ -2,6 +2,13 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* API deprecation fix for rosparam_shortcuts
+* Switched to better use of rosparam_shortcuts
+* Ability to record all controller status data, not just at certain frequency
+* Contributors: Dave Coleman
+
 0.3.0 (2015-12-27)
 ------------------
 * Removed bad reference name
