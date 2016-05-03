@@ -73,8 +73,9 @@ void GenericHWControlLoop::update(const ros::TimerEvent& e)
   elapsed_time_ =
       ros::Duration(current_time_.tv_sec - last_time_.tv_sec + (current_time_.tv_nsec - last_time_.tv_nsec) / BILLION);
   last_time_ = current_time_;
-  // ROS_DEBUG_STREAM_THROTTLE_NAMED(1, "generic_hw_main","Sampled update loop with elapsed
-  // time " << elapsed_time_.toSec());
+
+  // Get current time
+  ros::Time ros_current_time = ros::Time::now();
 
   // Error check cycle time
   const double cycle_time_error = (elapsed_time_ - desired_update_freq_).toSec();
@@ -89,7 +90,7 @@ void GenericHWControlLoop::update(const ros::TimerEvent& e)
   hardware_interface_->read(elapsed_time_);
 
   // Control
-  controller_manager_->update(ros::Time::now(), elapsed_time_);
+  controller_manager_->update(ros_current_time, elapsed_time_);
 
   // Output
   hardware_interface_->write(elapsed_time_);
