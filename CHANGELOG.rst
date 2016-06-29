@@ -2,6 +2,13 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Depend on Eigen3
+* Remove dependency on meta package
+* Fixed var name
+* Contributors: Dave Coleman
+
 0.3.1 (2016-01-13)
 ------------------
 * API deprecation fix for rosparam_shortcuts
