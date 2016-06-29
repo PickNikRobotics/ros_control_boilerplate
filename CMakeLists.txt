@@ -23,6 +23,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 find_package(Gflags REQUIRED)
+find_package(Eigen3 REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -52,6 +53,8 @@ catkin_package(
 ###########
 ## Build ##
 ###########
+
+include_directories(SYSTEM ${EIGEN3_INCLUDE_DIRS})
 
 include_directories(
   include/
