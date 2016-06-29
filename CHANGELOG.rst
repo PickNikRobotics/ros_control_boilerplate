@@ -2,8 +2,8 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.0 (2016-06-29)
+------------------
 * Depend on Eigen3
 * Remove dependency on meta package
 * Fixed var name
