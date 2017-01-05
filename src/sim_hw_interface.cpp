@@ -39,12 +39,25 @@
 
 #include <ros_control_boilerplate/sim_hw_interface.h>
 
+// ROS parameter loading
+#include <rosparam_shortcuts/rosparam_shortcuts.h>
+
 namespace ros_control_boilerplate
 {
 SimHWInterface::SimHWInterface(ros::NodeHandle &nh, urdf::Model *urdf_model)
   : GenericHWInterface(nh, urdf_model)
   , name_("sim_hw_interface")
 {
+  // Load rosparams
+  ros::NodeHandle rpnh(nh_, "hardware_interface");
+  std::size_t error = 0;
+  error += !rosparam_shortcuts::get(name_, rpnh, "sim_control_mode", sim_control_mode_);
+  if (error)
+  {
+    ROS_WARN_STREAM_NAMED(name_, "SimHWInterface now requires the following config in the yaml:");
+    ROS_WARN_STREAM_NAMED(name_, "   sim_control_mode: 0 # 0: position, 1: velocity");
+  }
+  rosparam_shortcuts::shutdownIfError(name_, error);
 }
 
 void SimHWInterface::init()
@@ -68,9 +81,6 @@ void SimHWInterface::write(ros::Duration &elapsed_time)
   // Safety
   enforceLimits(elapsed_time);
 
-  // Send commands in different modes
-  int joint_mode = 0;  // TODO implement mode switching
-
   // NOTE: the following is a "simuation" example so that this boilerplate can be run without being
   // connected to hardware
   // When converting to your robot, remove the built-in PID loop and instead let the higher leverl
@@ -79,27 +89,26 @@ void SimHWInterface::write(ros::Duration &elapsed_time)
   // hardware, somewhat like a simualator
   for (std::size_t joint_id = 0; joint_id < num_joints_; ++joint_id)
   {
-    switch (joint_mode)
+    switch (sim_control_mode_)
     {
       case 0:  // hardware_interface::MODE_POSITION:
         positionControlSimulation(elapsed_time, joint_id);
         break;
 
       case 1:  // hardware_interface::MODE_VELOCITY:
-        ROS_ERROR_STREAM_NAMED(name_, "Velocity not implemented yet");
 
-        /*
-        TODO: remove VELOCITY_STEP_FACTOR
+        // // Move all the states to the commanded set points slowly
+        // joint_position_[joint_id] += joint_velocity_[joint_id] * elapsed_time.toSec();
 
-        // Position - Move all the states to the commanded set points slowly
-        joint_position_[joint_id] += joint_velocity_[joint_id] * elapsed_time.toSec();
+        // v_error_ = joint_velocity_command_[joint_id] - joint_velocity_[joint_id];
 
-        // Velocity - Move all the states to the commanded set points slowly
-        v_error_ = joint_velocity_command_[joint_id] - joint_velocity_[joint_id];
-        // scale the rate it takes to achieve velocity by a factor that is invariant to the feedback
-        // loop
-        joint_velocity_[joint_id] += v_error_ * VELOCITY_STEP_FACTOR;
-        */
+        // // scale the rate it takes to achieve velocity by a factor that is invariant to the feedback loop
+        // joint_velocity_[joint_id] += v_error_ * VELOCITY_STEP_FACTOR;
+
+        // Naive
+        joint_velocity_[joint_id] = joint_velocity_command_[joint_id];
+        joint_position_[joint_id] += joint_velocity_command_[joint_id] * elapsed_time.toSec();
+
         break;
 
       case 2:  // hardware_interface::MODE_EFFORT:
