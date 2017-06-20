@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>ros_control_boilerplate</name>
-  <version>0.4.0</version>
+  <version>0.4.1</version>
   <description>Simple simulation interface and template for setting up a hardware interface for ros_control</description>
 
   <maintainer email="davetcoleman@gmail.com">Dave Coleman</maintainer>

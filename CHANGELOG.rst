@@ -2,8 +2,8 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.1 (2017-06-20)
+------------------
 * Changed boost::shared_ptr to typedef for Lunar support
 * Implemented simulated velocity control
 * Contributors: Dave Coleman
