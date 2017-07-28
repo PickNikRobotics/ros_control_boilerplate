@@ -138,29 +138,40 @@ target_link_libraries(${PROJECT_NAME}_keyboard_teleop
 
 add_subdirectory(rrbot_control)
 
-## Install ------------------------------------------------------------
+#############
+## Install ##
+#############
 
-# Install libraries
+## Mark executables and/or libraries for installation
 install(TARGETS
     generic_hw_control_loop
     generic_hw_interface
     sim_hw_interface
     controller_to_csv
     csv_to_controller
-  LIBRARY DESTINATION
-    ${CATKIN_PACKAGE_LIB_DESTINATION}
-)
-
-# Install executables
-install(TARGETS
     ${PROJECT_NAME}_sim_hw_main
     ${PROJECT_NAME}_test_trajectory
     ${PROJECT_NAME}_controller_to_csv_main
     ${PROJECT_NAME}_csv_to_controller_main
     ${PROJECT_NAME}_keyboard_teleop
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-# Install header files
-install(DIRECTORY include/${PROJECT_NAME}/   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+# Mark cpp header files for installation
+install(DIRECTORY include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+)
+
+# Mark roslaunch files for installation
+install(DIRECTORY launch
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+
+# Mark config files for installation
+install(FILES
+    config
+  FILES_MATCHING PATTERN "*.yaml"
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
