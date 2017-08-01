@@ -14,6 +14,8 @@ Simple simulation interface and template for setting up a hardware interface for
 
 Developed by [Dave Coleman](http://dav.ee/) at the University of Colorado Boulder
 
+<a href='https://ko-fi.com/A7182AMW' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+
  * [![Build Status](https://travis-ci.org/davetcoleman/ros_control_boilerplate.svg)](https://travis-ci.org/davetcoleman/ros_control_boilerplate) Travis CI
  * [![Devel Job Status](http://jenkins.ros.org/buildStatus/icon?job=devel-indigo-ros_control_boilerplate)](http://jenkins.ros.org/job/devel-indigo-ros_control_boilerplate) Devel Job Status
  * [![Build Status](http://jenkins.ros.org/buildStatus/icon?job=ros-indigo-ros-control-boilerplate_binarydeb_trusty_amd64)](http://jenkins.ros.org/job/ros-indigo-ros-control-boilerplate_binarydeb_trusty_amd64/) AMD64 Debian Job Status
@@ -39,7 +41,7 @@ Then, either install this package from source so you can develop off of it, or i
 
 This package is setup to run the "RRBot" two joint revolute-revolute robot demo. This "template package" is located in the ros_control_boilerplate as a subfolder that you can easily rename and reuse. To run its ros_control non-physics-based simulated hardware interface, run:
 
-    roslaunch ros_control_boilerplate rrbot_simulaton.launch
+    roslaunch ros_control_boilerplate rrbot_simulation.launch
 
 To visualize its published ``/tf`` coordinate transforms in Rviz run:
 

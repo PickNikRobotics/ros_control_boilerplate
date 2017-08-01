@@ -82,6 +82,9 @@ protected:
   // For position controller to estimate velocity
   std::vector<double> joint_position_prev_;
 
+  // Send commands in different modes
+  int sim_control_mode_ = 0;
+
 };  // class
 
 }  // namespace

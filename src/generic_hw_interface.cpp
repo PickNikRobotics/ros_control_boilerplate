@@ -143,7 +143,7 @@ void GenericHWInterface::registerJointLimits(const hardware_interface::JointHand
   }
 
   // Get limits from URDF
-  const boost::shared_ptr<const urdf::Joint> urdf_joint = urdf_model_->getJoint(joint_names_[joint_id]);
+  urdf::JointConstSharedPtr urdf_joint = urdf_model_->getJoint(joint_names_[joint_id]);
 
   // Get main joint limits
   if (urdf_joint == NULL)
