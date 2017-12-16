@@ -56,9 +56,7 @@ int main(int argc, char** argv)
 
   // Start the control loop
   ros_control_boilerplate::GenericHWControlLoop control_loop(nh, rrbot_hw_interface);
-
-  // Wait until shutdown signal recieved
-  ros::waitForShutdown();
+  control_loop.run(); // Blocks until shutdown signal recieved
 
   return 0;
 }
