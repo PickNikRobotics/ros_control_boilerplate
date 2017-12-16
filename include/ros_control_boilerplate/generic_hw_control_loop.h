@@ -79,7 +79,7 @@ protected:
   std::string name_ = "generic_hw_control_loop";
 
   // Settings
-  ros::Duration desired_update_freq_;
+  ros::Duration desired_update_period_;
   double cycle_time_error_threshold_;
 
   // Timing
