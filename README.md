@@ -98,7 +98,7 @@ Joint-level teleop from a keyboard (TODO: remove had coded topic names)
 
 ## Limitations
 
- - Does not implement estops, transmissions, or other fancy new features of ros_contorl
+ - Does not implement estops, transmissions, or other fancy new features of ros_control
  - Does not have any hard realtime code, this depends largely on your platform, kernel, OS, etc
  - Only position control is fully implemented, though some code is in place for velocity control
 
