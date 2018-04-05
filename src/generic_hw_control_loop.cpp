@@ -61,12 +61,19 @@ GenericHWControlLoop::GenericHWControlLoop(
   // Get current time for use with first update
   clock_gettime(CLOCK_MONOTONIC, &last_time_);
 
-  // Start timer
-  ros::Duration desired_update_freq = ros::Duration(1 / loop_hz_);
-  non_realtime_loop_ = nh_.createTimer(desired_update_freq, &GenericHWControlLoop::update, this);
+  desired_update_period_ = ros::Duration(1 / loop_hz_);
 }
 
-void GenericHWControlLoop::update(const ros::TimerEvent& e)
+void GenericHWControlLoop::run()
+{
+  ros::Rate rate(loop_hz_);
+  while(ros::ok()) {
+    update();
+    rate.sleep();
+  }
+}
+
+void GenericHWControlLoop::update()
 {
   // Get change in time
   clock_gettime(CLOCK_MONOTONIC, &current_time_);
@@ -77,7 +84,7 @@ void GenericHWControlLoop::update(const ros::TimerEvent& e)
   // time " << elapsed_time_.toSec());
 
   // Error check cycle time
-  const double cycle_time_error = (elapsed_time_ - desired_update_freq_).toSec();
+  const double cycle_time_error = (elapsed_time_ - desired_update_period_).toSec();
   if (cycle_time_error > cycle_time_error_threshold_)
   {
     ROS_WARN_STREAM_NAMED(name_, "Cycle time exceeded error threshold by: "
