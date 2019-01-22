@@ -201,7 +201,7 @@ void GenericHWInterface::registerJointLimits(const hardware_interface::JointHand
     }
   }
 
-  // Quit we we haven't found any limits in URDF or rosparam server
+  // Quit if we haven't found any limits in the URDF or on the rosparam server
   if (!has_joint_limits)
   {
     return;
