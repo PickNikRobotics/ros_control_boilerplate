@@ -10,6 +10,8 @@ Changelog for package ros_control_boilerplate
   own subdirectory
 * Package `rrbot_control` name conflicts with `gazebo_ros_demos` repo
   package; rename to `rrbot_control_boilerplate`
+* Make `rrbot_control_boilerplate` independent package; install launch
+  and config files for reuse by other packages
 
 0.4.1 (2017-06-20)
 ------------------
