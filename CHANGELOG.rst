@@ -6,6 +6,8 @@ Changelog for package ros_control_boilerplate
 ------------------
 * Fix `catkin lint` warnings
 * Remove obsolete `FindGflags.cmake` script
+* Move `ros_control_boilerplate`, obscuring rrbot demo package, into
+  own subdirectory
 
 0.4.1 (2017-06-20)
 ------------------

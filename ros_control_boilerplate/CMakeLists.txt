@@ -21,6 +21,8 @@ find_package(catkin REQUIRED COMPONENTS
   urdf
 )
 
+find_package(Gflags REQUIRED)
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -129,8 +131,6 @@ set_target_properties(${PROJECT_NAME}_keyboard_teleop PROPERTIES OUTPUT_NAME key
 target_link_libraries(${PROJECT_NAME}_keyboard_teleop
   ${catkin_LIBRARIES}
 )
-
-add_subdirectory(rrbot_control)
 
 ## Install ------------------------------------------------------------
 
