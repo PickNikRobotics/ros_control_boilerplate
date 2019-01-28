@@ -2,6 +2,11 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.5.0 (2019-01-28)
+------------------
+* Fix `catkin lint` warnings
+* Remove obsolete `FindGflags.cmake` script
+
 0.4.1 (2017-06-20)
 ------------------
 * Changed boost::shared_ptr to typedef for Lunar support
