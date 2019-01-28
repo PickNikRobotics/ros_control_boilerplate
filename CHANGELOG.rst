@@ -8,6 +8,8 @@ Changelog for package ros_control_boilerplate
 * Remove obsolete `FindGflags.cmake` script
 * Move `ros_control_boilerplate`, obscuring rrbot demo package, into
   own subdirectory
+* Package `rrbot_control` name conflicts with `gazebo_ros_demos` repo
+  package; rename to `rrbot_control_boilerplate`
 
 0.4.1 (2017-06-20)
 ------------------

@@ -37,9 +37,9 @@
            For a more detailed simulation example, see sim_hw_interface.cpp
 */
 
-#include <rrbot_control/rrbot_hw_interface.h>
+#include <rrbot_control_boilerplate/rrbot_hw_interface.h>
 
-namespace rrbot_control
+namespace rrbot_control_boilerplate
 {
 
 RRBotHWInterface::RRBotHWInterface(ros::NodeHandle &nh, urdf::Model *urdf_model)

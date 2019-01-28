@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>rrbot_control</name>
+  <name>rrbot_control_boilerplate</name>
   <version>0.0.1</version>
   <description>Simple simulation interface and template for setting up a hardware interface for rrbot</description>
 

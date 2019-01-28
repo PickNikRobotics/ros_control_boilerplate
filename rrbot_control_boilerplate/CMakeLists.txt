@@ -36,4 +36,6 @@ install(TARGETS
 )
 
 # Install header files
-install(DIRECTORY include/rrbot_control/   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+install(
+  DIRECTORY include/rrbot_control_boilerplate/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})

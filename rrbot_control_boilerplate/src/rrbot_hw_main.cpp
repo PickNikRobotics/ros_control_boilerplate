@@ -37,7 +37,7 @@
 */
 
 #include <ros_control_boilerplate/generic_hw_control_loop.h>
-#include <rrbot_control/rrbot_hw_interface.h>
+#include <rrbot_control_boilerplate/rrbot_hw_interface.h>
 
 int main(int argc, char** argv)
 {
@@ -50,8 +50,8 @@ int main(int argc, char** argv)
   spinner.start();
 
   // Create the hardware interface specific to your robot
-  boost::shared_ptr<rrbot_control::RRBotHWInterface> rrbot_hw_interface
-    (new rrbot_control::RRBotHWInterface(nh));
+  boost::shared_ptr<rrbot_control_boilerplate::RRBotHWInterface> rrbot_hw_interface
+    (new rrbot_control_boilerplate::RRBotHWInterface(nh));
   rrbot_hw_interface->init();
 
   // Start the control loop
