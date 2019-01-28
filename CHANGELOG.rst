@@ -2,6 +2,18 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.5.0 (2019-01-28)
+------------------
+* Fix `catkin lint` warnings
+* Remove obsolete `FindGflags.cmake` script
+* Move `ros_control_boilerplate`, obscuring rrbot demo package, into
+  own subdirectory
+* Package `rrbot_control` name conflicts with `gazebo_ros_demos` repo
+  package; rename to `rrbot_control_boilerplate`
+* Make `rrbot_control_boilerplate` independent package; install launch
+  and config files for reuse by other packages
+* Update URLs in `package.xml` files
+
 0.4.1 (2017-06-20)
 ------------------
 * Changed boost::shared_ptr to typedef for Lunar support
