@@ -12,6 +12,7 @@ Changelog for package ros_control_boilerplate
   package; rename to `rrbot_control_boilerplate`
 * Make `rrbot_control_boilerplate` independent package; install launch
   and config files for reuse by other packages
+* Update URLs in `package.xml` files
 
 0.4.1 (2017-06-20)
 ------------------
