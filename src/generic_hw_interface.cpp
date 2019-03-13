@@ -44,7 +44,7 @@
 
 namespace ros_control_boilerplate
 {
-GenericHWInterface::GenericHWInterface(ros::NodeHandle &nh, urdf::Model *urdf_model)
+GenericHWInterface::GenericHWInterface(const ros::NodeHandle &nh, urdf::Model *urdf_model)
   : name_("generic_hw_interface")
   , nh_(nh)
   , use_rosparam_joint_limits_(false)
@@ -301,7 +301,7 @@ std::string GenericHWInterface::printCommandHelper()
   return ss.str();
 }
 
-void GenericHWInterface::loadURDF(ros::NodeHandle &nh, std::string param_name)
+void GenericHWInterface::loadURDF(const ros::NodeHandle &nh, std::string param_name)
 {
   std::string urdf_string;
   urdf_model_ = new urdf::Model();
