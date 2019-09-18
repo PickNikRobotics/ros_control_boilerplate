@@ -2,8 +2,8 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2019-09-18)
+------------------
 * Merge pull request `#20 <https://github.com/PickNikRobotics/ros_control_boilerplate/issues/20>`_ from ipa-mdl/fix-loop-deadlock
   refactor GenericHWControlLoop to a sleep-based loop
 * Merge pull request `#19 <https://github.com/PickNikRobotics/ros_control_boilerplate/issues/19>`_ from PaulBouchier/kinetic-devel
