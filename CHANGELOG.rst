@@ -2,6 +2,31 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge pull request `#20 <https://github.com/PickNikRobotics/ros_control_boilerplate/issues/20>`_ from ipa-mdl/fix-loop-deadlock
+  refactor GenericHWControlLoop to a sleep-based loop
+* Merge pull request `#19 <https://github.com/PickNikRobotics/ros_control_boilerplate/issues/19>`_ from PaulBouchier/kinetic-devel
+  change sim_control_mode to 0 (position) so demo works
+* Merge pull request `#21 <https://github.com/PickNikRobotics/ros_control_boilerplate/issues/21>`_ from MohmadAyman/fix_typo
+  fixed a typo in readme
+* fixed a typo in readme
+* refactor GenericHWControlLoop to a sleep-based loop
+  using ros:Timer might lead to deadlocks
+* initialize desired_update_period\_ (renamed from desired_update_freq\_)
+* Revert "Depend on Eigen3"
+  This reverts commit 608cc2fd64739ee56c3fbd5a0ae9d5d26b5684d0.
+* change sim_control_mode to 0 (position) so demo works
+* Merge pull request `#16 <https://github.com/PickNikRobotics/ros_control_boilerplate/issues/16>`_ from lucasw/xml-version
+  xml version tags for all launch files.
+* xml version tags for all launch files.
+* Merge pull request `#15 <https://github.com/PickNikRobotics/ros_control_boilerplate/issues/15>`_ from enricotoi/kinetic-devel
+  Fixed a typo in the README.md
+* Fixed a typo in the README.md
+  rrbot_simulaton.launch -> rrbot_simulation.launch
+* Update README.md
+* Contributors: Dave Coleman, Lucas Walter, Mathias Lüdtke, Paul Bouchier, enrico toivinen, mohmad ayman
+
 0.4.1 (2017-06-20)
 ------------------
 * Changed boost::shared_ptr to typedef for Lunar support
