@@ -9,9 +9,7 @@ cache: ccache
 
 env:
   matrix:
-    # - TEST="clang-format catkin_lint"
     - ROS_DISTRO=melodic
-    - ROS_DISTRO=kinetic
     
 before_script:
     - git clone -q --depth=1 https://github.com/ros-planning/moveit_ci.git .moveit_ci
