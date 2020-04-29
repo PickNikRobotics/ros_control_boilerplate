@@ -80,8 +80,22 @@ public:
   /** \brief Read the state from the robot hardware. */
   virtual void read(ros::Duration &elapsed_time) = 0;
 
+  /** \brief Delegate RobotHW::read() calls to read() */
+  virtual void read(const ros::Time& /*time*/, const ros::Duration& period)
+  {
+    ros::Duration elapsed_time = period;
+    read(elapsed_time);
+  }
+
   /** \brief Write the command to the robot hardware. */
   virtual void write(ros::Duration &elapsed_time) = 0;
+
+  /** \brief Delegate RobotHW::write() calls to write() */
+  virtual void write(const ros::Time& /*time*/, const ros::Duration& period)
+  {
+    ros::Duration elapsed_time = period;
+    write(elapsed_time);
+  }
 
   /** \brief Set all members to default values */
   virtual void reset();
