@@ -17,8 +17,8 @@ Developed by [Dave Coleman](http://dav.ee/) at the University of Colorado Boulde
 <a href='https://ko-fi.com/A7182AMW' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
  * [![Build Status](https://travis-ci.org/PickNikRobotics/ros_control_boilerplate.svg?branch=melodic-devel)](https://travis-ci.org/PickNikRobotics/ros_control_boilerplate) Travis CI
- * [![Build Status](http://build.ros.org/buildStatus/icon?subject=Devel%20Job%20Status&job=Mdev__ros_control_boilerplate__ubuntu_bionic_amd64)](http://build.ros.org/job/Mdev__ros_control_boilerplate__ubuntu_bionic_amd64/)
- * [![Build Status](http://build.ros.org/buildStatus/icon?subject=AMD64%20Job%20Status&job=Mbin_uB64__ros_control_boilerplate__ubuntu_bionic_amd64__binary)](http://build.ros.org/job/Mbin_uB64__ros_control_boilerplate__ubuntu_bionic_amd64__binary/)
+ * [![Devel Job Status](http://build.ros.org/buildStatus/icon?job=Mdev__ros_control_boilerplate__ubuntu_bionic_amd64)](http://build.ros.org/job/Mdev__ros_control_boilerplate__ubuntu_bionic_amd64/) Devel Job Status
+ * [![Build Status](http://build.ros.org/buildStatus/icon?job=Mbin_uB64__ros_control_boilerplate__ubuntu_bionic_amd64__binary)](http://build.ros.org/job/Mbin_uB64__ros_control_boilerplate__ubuntu_bionic_amd64__binary/) AMD64 Debian Job Status
 
 <img src="https://raw.githubusercontent.com/davetcoleman/ros_control_boilerplate/jade-devel/resources/screenshot.png"/>
 
