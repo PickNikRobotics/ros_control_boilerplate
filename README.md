@@ -12,9 +12,11 @@ Simple simulation interface and template for setting up a hardware interface for
  - Pass-through non-physics based robot simulator
  - Visualization in Rviz
 
-Developed by [Dave Coleman](http://dav.ee/) at the University of Colorado Boulder
+<img src="https://picknik.ai/assets/images/logo.jpg" width="120">
 
-<a href='https://ko-fi.com/A7182AMW' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+This open source project was developed at [PickNik Robotics](https://picknik.ai/). Need professional ROS development and consulting? Contact us at projects@picknik.ai for a free consultation.
+
+## Status:
 
  * [![Build Status](https://travis-ci.org/PickNikRobotics/ros_control_boilerplate.svg?branch=kinetic-devel)](https://travis-ci.org/PickNikRobotics/ros_control_boilerplate) Travis CI
  * [![Devel Job Status](http://build.ros.org/buildStatus/icon?job=Kdev__ros_control_boilerplate__ubuntu_xenial_amd64)](http://build.ros.org/job/Kdev__ros_control_boilerplate__ubuntu_xenial_amd64/) Devel Job Status
