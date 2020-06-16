@@ -2,6 +2,14 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Generalize GenericHWControlLoop to all types of RobotHW (`#38 <https://github.com/PickNikRobotics/ros_control_boilerplate/issues/38>`_)
+* Update README.md
+* Fix build badges in README (`#37 <https://github.com/PickNikRobotics/ros_control_boilerplate/issues/37>`_)
+* Update .travis.yml to use moveit_ci (`#36 <https://github.com/PickNikRobotics/ros_control_boilerplate/issues/36>`_)
+* Contributors: Jafar Abdi, RobertWilbrandt
+
 0.5.0 (2019-09-18)
 ------------------
 * Merge pull request `#20 <https://github.com/PickNikRobotics/ros_control_boilerplate/issues/20>`_ from ipa-mdl/fix-loop-deadlock
