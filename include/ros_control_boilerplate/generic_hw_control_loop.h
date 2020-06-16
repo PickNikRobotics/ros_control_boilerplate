@@ -38,7 +38,8 @@
 */
 
 #include <time.h>
-#include <ros_control_boilerplate/generic_hw_interface.h>
+#include <controller_manager/controller_manager.h>
+#include <hardware_interface/robot_hw.h>
 
 namespace ros_control_boilerplate
 {
@@ -62,7 +63,7 @@ public:
    */
   GenericHWControlLoop(
       ros::NodeHandle& nh,
-      boost::shared_ptr<ros_control_boilerplate::GenericHWInterface> hardware_interface);
+      boost::shared_ptr<hardware_interface::RobotHW> hardware_interface);
 
   // Run the control loop (blocking)
   void run();
@@ -97,7 +98,7 @@ protected:
   boost::shared_ptr<controller_manager::ControllerManager> controller_manager_;
 
   /** \brief Abstract Hardware Interface for your robot */
-  boost::shared_ptr<ros_control_boilerplate::GenericHWInterface> hardware_interface_;
+  boost::shared_ptr<hardware_interface::RobotHW> hardware_interface_;
 
 };  // end class
 
