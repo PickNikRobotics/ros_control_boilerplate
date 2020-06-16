@@ -2,8 +2,8 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.6.0 (2020-06-16)
+------------------
 * Generalize GenericHWControlLoop to all types of RobotHW (`#38 <https://github.com/PickNikRobotics/ros_control_boilerplate/issues/38>`_)
 * Update README.md
 * Fix build badges in README (`#37 <https://github.com/PickNikRobotics/ros_control_boilerplate/issues/37>`_)
