@@ -163,15 +163,3 @@ install(TARGETS
 install(DIRECTORY include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
-
-# Mark roslaunch files for installation
-install(DIRECTORY launch
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
-
-# Mark config files for installation
-install(FILES
-    config
-  FILES_MATCHING PATTERN "*.yaml"
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
