@@ -16,6 +16,14 @@ Simple simulation interface and template for setting up a hardware interface for
 
 This open source project was developed at [PickNik Robotics](https://picknik.ai/). Need professional ROS development and consulting? Contact us at projects@picknik.ai for a free consultation.
 
+## Maintainers
+
+Special thanks to the following maintainers of this repo:
+
+ - Dave Coleman (@davetcoleman)
+ - Andy Zelenak (@AndyZe)
+ - John Morris (@zultron)
+
 ## Status:
 
  * [![Build Status](https://travis-ci.org/PickNikRobotics/ros_control_boilerplate.svg?branch=melodic-devel)](https://travis-ci.org/PickNikRobotics/ros_control_boilerplate) Travis CI
