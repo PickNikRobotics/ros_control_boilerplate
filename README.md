@@ -23,6 +23,7 @@ Special thanks to the following maintainers of this repo:
  - Dave Coleman (@davetcoleman)
  - Andy Zelenak (@AndyZe)
  - John Morris (@zultron)
+ - Robert Wilbrandt (@RobertWilbrandt)
 
 ## Status:
 
