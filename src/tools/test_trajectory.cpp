@@ -160,8 +160,6 @@ private:
 
   // A string containing the 'trajectory_controller' parameter value
   std::string trajectory_controller;
-
-
 };  // end class
 
 // Create boost pointers for this class
