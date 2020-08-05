@@ -69,7 +69,7 @@ public:
    * \param nh - Node handle for topics.
    * \param urdf - optional pointer to a parsed robot model
    */
-  GenericHWInterface(ros::NodeHandle &nh, urdf::Model *urdf_model = NULL);
+  GenericHWInterface(const ros::NodeHandle &nh, urdf::Model *urdf_model = NULL);
 
   /** \brief Destructor */
   virtual ~GenericHWInterface() {}
@@ -158,7 +158,7 @@ public:
 protected:
 
   /** \brief Get the URDF XML from the parameter server */
-  virtual void loadURDF(ros::NodeHandle& nh, std::string param_name);
+  virtual void loadURDF(const ros::NodeHandle& nh, std::string param_name);
 
   // Short name of this class
   std::string name_;
