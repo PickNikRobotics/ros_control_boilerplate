@@ -68,6 +68,7 @@ target_link_libraries(generic_hw_control_loop
 # Generic Hardware Interface
 add_library(generic_hw_interface
   src/generic_hw_interface.cpp
+  src/combinable_generic_hw_interface.cpp
 )
 target_link_libraries(generic_hw_interface
   ${catkin_LIBRARIES}
