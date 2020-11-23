@@ -63,7 +63,7 @@ public:
    */
   GenericHWControlLoop(
       ros::NodeHandle& nh,
-      boost::shared_ptr<hardware_interface::RobotHW> hardware_interface);
+      std::shared_ptr<hardware_interface::RobotHW> hardware_interface);
 
   // Run the control loop (blocking)
   void run();
@@ -95,10 +95,10 @@ protected:
    * stopping ros_control-based controllers. It also serializes execution of all
    * running controllers in \ref update.
    */
-  boost::shared_ptr<controller_manager::ControllerManager> controller_manager_;
+  std::shared_ptr<controller_manager::ControllerManager> controller_manager_;
 
   /** \brief Abstract Hardware Interface for your robot */
-  boost::shared_ptr<hardware_interface::RobotHW> hardware_interface_;
+  std::shared_ptr<hardware_interface::RobotHW> hardware_interface_;
 
 };  // end class
 
