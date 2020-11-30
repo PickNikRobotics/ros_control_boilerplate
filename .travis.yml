@@ -9,8 +9,8 @@ cache: ccache
 
 env:
   matrix:
-    - ROS_DISTRO=melodic
-    
+    - ROS_DISTRO=noetic
+
 before_script:
     - git clone -q --depth=1 https://github.com/ros-planning/moveit_ci.git .moveit_ci
 
