@@ -56,7 +56,6 @@
 
 namespace ros_control_boilerplate
 {
-
 /// \brief Hardware interface for a robot
 class GenericHWInterface : public hardware_interface::RobotHW
 {
@@ -66,16 +65,18 @@ public:
    * \param nh - Node handle for topics.
    * \param urdf - optional pointer to a parsed robot model
    */
-  GenericHWInterface(const ros::NodeHandle &nh, urdf::Model *urdf_model = NULL);
+  GenericHWInterface(const ros::NodeHandle& nh, urdf::Model* urdf_model = NULL);
 
   /** \brief Destructor */
-  virtual ~GenericHWInterface() {}
+  virtual ~GenericHWInterface()
+  {
+  }
 
   /** \brief Initialize the hardware interface */
   virtual void init();
 
   /** \brief Read the state from the robot hardware. */
-  virtual void read(ros::Duration &elapsed_time) = 0;
+  virtual void read(ros::Duration& elapsed_time) = 0;
 
   /** \brief Read the state from the robot hardware
    *
@@ -91,7 +92,7 @@ public:
   }
 
   /** \brief Write the command to the robot hardware. */
-  virtual void write(ros::Duration &elapsed_time) = 0;
+  virtual void write(ros::Duration& elapsed_time) = 0;
 
   /** \brief Write the command to the robot hardware
    *
@@ -115,8 +116,8 @@ public:
    * with regard to necessary hardware interface switches. Start and stop list are disjoint.
    * This is just a check, the actual switch is done in doSwitch()
    */
-  virtual bool canSwitch(const std::list<hardware_interface::ControllerInfo> &start_list,
-                         const std::list<hardware_interface::ControllerInfo> &stop_list) const
+  virtual bool canSwitch(const std::list<hardware_interface::ControllerInfo>& start_list,
+                         const std::list<hardware_interface::ControllerInfo>& stop_list) const
   {
     return true;
   }
@@ -126,8 +127,8 @@ public:
    * and stop the given controllers.
    * Start and stop list are disjoint. The feasability was checked in canSwitch() beforehand.
    */
-  virtual void doSwitch(const std::list<hardware_interface::ControllerInfo> &start_list,
-                        const std::list<hardware_interface::ControllerInfo> &stop_list)
+  virtual void doSwitch(const std::list<hardware_interface::ControllerInfo>& start_list,
+                        const std::list<hardware_interface::ControllerInfo>& stop_list)
   {
   }
 
@@ -137,13 +138,12 @@ public:
    *
    * \return the joint's type, lower position limit, upper position limit, and effort limit.
    */
-  virtual void registerJointLimits(const hardware_interface::JointHandle &joint_handle_position,
-                           const hardware_interface::JointHandle &joint_handle_velocity,
-                           const hardware_interface::JointHandle &joint_handle_effort,
-                           std::size_t joint_id);
+  virtual void registerJointLimits(const hardware_interface::JointHandle& joint_handle_position,
+                                   const hardware_interface::JointHandle& joint_handle_velocity,
+                                   const hardware_interface::JointHandle& joint_handle_effort, std::size_t joint_id);
 
   /** \breif Enforce limits for all values before writing */
-  virtual void enforceLimits(ros::Duration &period) = 0;
+  virtual void enforceLimits(ros::Duration& period) = 0;
 
   /** \brief Helper for debugging a joint's state */
   virtual void printState();
@@ -153,7 +153,6 @@ public:
   std::string printCommandHelper();
 
 protected:
-
   /** \brief Get the URDF XML from the parameter server */
   virtual void loadURDF(const ros::NodeHandle& nh, std::string param_name);
 
@@ -182,7 +181,7 @@ protected:
   // Configuration
   std::vector<std::string> joint_names_;
   std::size_t num_joints_;
-  urdf::Model *urdf_model_;
+  urdf::Model* urdf_model_;
 
   // Modes
   bool use_rosparam_joint_limits_;
@@ -206,6 +205,6 @@ protected:
 
 };  // class
 
-}  // namespace
+}  // namespace ros_control_boilerplate
 
-#endif // GENERIC_ROS_CONTROL_GENERIC_HW_INTERFACE_H
+#endif  // GENERIC_ROS_CONTROL_GENERIC_HW_INTERFACE_H

@@ -60,13 +60,12 @@ public:
   /**
    * \brief Constructor
    */
-  CSVToController(const std::string& joint_trajectory_action,
-                  const std::string& controller_state_topic);
+  CSVToController(const std::string& joint_trajectory_action, const std::string& controller_state_topic);
 
   /** \brief Callback from ROS message */
   void stateCB(const control_msgs::JointTrajectoryControllerState::ConstPtr& state);
 
-  void printPoint(trajectory_msgs::JointTrajectoryPoint &point);
+  void printPoint(trajectory_msgs::JointTrajectoryPoint& point);
 
   // Start the data collection
   void loadAndRunCSV(const std::string& file_name);
@@ -90,6 +89,6 @@ private:
 
 };  // end class
 
-}  // end namespace
+}  // namespace ros_control_boilerplate
 
 #endif

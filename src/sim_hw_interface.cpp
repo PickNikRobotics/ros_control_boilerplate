@@ -44,9 +44,8 @@
 
 namespace ros_control_boilerplate
 {
-SimHWInterface::SimHWInterface(ros::NodeHandle &nh, urdf::Model *urdf_model)
-  : GenericHWInterface(nh, urdf_model)
-  , name_("sim_hw_interface")
+SimHWInterface::SimHWInterface(ros::NodeHandle& nh, urdf::Model* urdf_model)
+  : GenericHWInterface(nh, urdf_model), name_("sim_hw_interface")
 {
   // Load rosparams
   ros::NodeHandle rpnh(nh_, "hardware_interface");
@@ -71,12 +70,12 @@ void SimHWInterface::init()
   ROS_INFO_NAMED(name_, "SimHWInterface Ready.");
 }
 
-void SimHWInterface::read(ros::Duration &elapsed_time)
+void SimHWInterface::read(ros::Duration& elapsed_time)
 {
   // No need to read since our write() command populates our state for us
 }
 
-void SimHWInterface::write(ros::Duration &elapsed_time)
+void SimHWInterface::write(ros::Duration& elapsed_time)
 {
   // Safety
   enforceLimits(elapsed_time);
@@ -118,13 +117,13 @@ void SimHWInterface::write(ros::Duration &elapsed_time)
   }
 }
 
-void SimHWInterface::enforceLimits(ros::Duration &period)
+void SimHWInterface::enforceLimits(ros::Duration& period)
 {
   // Enforces position and velocity
   pos_jnt_sat_interface_.enforceLimits(period);
 }
 
-void SimHWInterface::positionControlSimulation(ros::Duration &elapsed_time, const std::size_t joint_id)
+void SimHWInterface::positionControlSimulation(ros::Duration& elapsed_time, const std::size_t joint_id)
 {
   const double max_delta_pos = joint_velocity_limits_[joint_id] * elapsed_time.toSec();
 
@@ -135,7 +134,7 @@ void SimHWInterface::positionControlSimulation(ros::Duration &elapsed_time, cons
   joint_position_[joint_id] += delta_pos;
 
   // Bypass max velocity p controller:
-  //joint_position_[joint_id] = joint_position_command_[joint_id];
+  // joint_position_[joint_id] = joint_position_command_[joint_id];
 
   // Calculate velocity based on change in positions
   if (elapsed_time.toSec() > 0)
@@ -149,4 +148,4 @@ void SimHWInterface::positionControlSimulation(ros::Duration &elapsed_time, cons
   joint_position_prev_[joint_id] = joint_position_[joint_id];
 }
 
-}  // namespace
+}  // namespace ros_control_boilerplate

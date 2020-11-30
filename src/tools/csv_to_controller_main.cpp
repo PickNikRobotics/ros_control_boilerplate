@@ -57,10 +57,10 @@ int main(int argc, char** argv)
   // Get file name
   if (FLAGS_csv_path.empty())
   {
-    ROS_ERROR_STREAM_NAMED("csv_to_controller","No file name passed in");
+    ROS_ERROR_STREAM_NAMED("csv_to_controller", "No file name passed in");
     return 0;
   }
-  ROS_INFO_STREAM_NAMED("csv_to_controller","Reading from file " << FLAGS_csv_path);
+  ROS_INFO_STREAM_NAMED("csv_to_controller", "Reading from file " << FLAGS_csv_path);
 
   // Allow the action server to recieve and send ros messages
   ros::AsyncSpinner spinner(2);
