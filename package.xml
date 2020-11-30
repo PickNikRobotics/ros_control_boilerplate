@@ -46,6 +46,12 @@
   <run_depend>sensor_msgs</run_depend>
   <run_depend>rosparam_shortcuts</run_depend>
 
+  <!-- These are needed if you want to run the rrbot simulation demo -->
+  <!--<run_depend>xacro</run_depend>-->
+  <!--<run_depend>robot_state_publisher</run_depend>-->
+  <!--<run_depend>rrbot_description</run_depend>-->
+  <!--<run_depend>rviz</run_depend>-->
+
   <export>
   </export>
 </package>
