@@ -50,13 +50,12 @@ int main(int argc, char** argv)
   spinner.start();
 
   // Create the hardware interface specific to your robot
-  boost::shared_ptr<rrbot_control::RRBotHWInterface> rrbot_hw_interface
-    (new rrbot_control::RRBotHWInterface(nh));
+  boost::shared_ptr<rrbot_control::RRBotHWInterface> rrbot_hw_interface(new rrbot_control::RRBotHWInterface(nh));
   rrbot_hw_interface->init();
 
   // Start the control loop
   ros_control_boilerplate::GenericHWControlLoop control_loop(nh, rrbot_hw_interface);
-  control_loop.run(); // Blocks until shutdown signal recieved
+  control_loop.run();  // Blocks until shutdown signal recieved
 
   return 0;
 }

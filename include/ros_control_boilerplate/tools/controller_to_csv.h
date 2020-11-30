@@ -47,7 +47,6 @@
 
 namespace ros_control_boilerplate
 {
-
 class ControllerToCSV
 {
 public:
@@ -70,7 +69,6 @@ public:
   void stopRecording();
 
 private:
-
   /** \brief Send all resulting data to file */
   bool writeToFile();
 
@@ -81,7 +79,7 @@ private:
   void update(const ros::TimerEvent& e);
 
   /** \brief Check if topic has been connected to successfully */
-  bool waitForSubscriber(const ros::Subscriber &sub, const double &wait_time = 10.0);
+  bool waitForSubscriber(const ros::Subscriber& sub, const double& wait_time = 10.0);
 
   // Class name
   std::string name_ = "controller_to_csv";
@@ -95,7 +93,7 @@ private:
 
   // Listener to state of controller
   ros::Subscriber state_sub_;
-  double record_hz_; // how often to record the latest incoming data. if zero, record all
+  double record_hz_;  // how often to record the latest incoming data. if zero, record all
 
   // Where to save the CSV
   std::string file_name_;
@@ -116,6 +114,6 @@ private:
 typedef boost::shared_ptr<ControllerToCSV> ControllerToCSVPtr;
 typedef boost::shared_ptr<const ControllerToCSV> ControllerToCSVConstPtr;
 
-}  // end namespace
+}  // namespace ros_control_boilerplate
 
 #endif

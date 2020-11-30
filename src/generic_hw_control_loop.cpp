@@ -33,8 +33,8 @@
  *********************************************************************/
 
 /* Author: Dave Coleman
-   Desc:   Example control loop for reading, updating, and writing commands to a hardware interface
-   using MONOTOIC system time
+   Desc:   Example control loop for reading, updating, and writing commands to a
+   hardware interface using MONOTOIC system time
 */
 
 #include <ros_control_boilerplate/generic_hw_control_loop.h>
@@ -44,8 +44,8 @@
 
 namespace ros_control_boilerplate
 {
-GenericHWControlLoop::GenericHWControlLoop(
-    ros::NodeHandle& nh, boost::shared_ptr<hardware_interface::RobotHW> hardware_interface)
+GenericHWControlLoop::GenericHWControlLoop(ros::NodeHandle& nh,
+                                           boost::shared_ptr<hardware_interface::RobotHW> hardware_interface)
   : nh_(nh), hardware_interface_(hardware_interface)
 {
   // Create the controller manager
@@ -67,7 +67,8 @@ GenericHWControlLoop::GenericHWControlLoop(
 void GenericHWControlLoop::run()
 {
   ros::Rate rate(loop_hz_);
-  while(ros::ok()) {
+  while (ros::ok())
+  {
     update();
     rate.sleep();
   }
@@ -81,8 +82,8 @@ void GenericHWControlLoop::update()
       ros::Duration(current_time_.tv_sec - last_time_.tv_sec + (current_time_.tv_nsec - last_time_.tv_nsec) / BILLION);
   last_time_ = current_time_;
   ros::Time now = ros::Time::now();
-  // ROS_DEBUG_STREAM_THROTTLE_NAMED(1, "generic_hw_main","Sampled update loop with elapsed
-  // time " << elapsed_time_.toSec());
+  // ROS_DEBUG_STREAM_THROTTLE_NAMED(1, "generic_hw_main","Sampled update loop
+  // with elapsed time " << elapsed_time_.toSec());
 
   // Error check cycle time
   const double cycle_time_error = (elapsed_time_ - desired_update_period_).toSec();
@@ -103,4 +104,4 @@ void GenericHWControlLoop::update()
   hardware_interface_->write(now, elapsed_time_);
 }
 
-}  // namespace
+}  // namespace ros_control_boilerplate

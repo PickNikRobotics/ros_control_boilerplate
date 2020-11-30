@@ -61,15 +61,12 @@ public:
    * \param NodeHandle
    * \param hardware_interface - the robot-specific hardware interface to be use with your robot
    */
-  GenericHWControlLoop(
-      ros::NodeHandle& nh,
-      boost::shared_ptr<hardware_interface::RobotHW> hardware_interface);
+  GenericHWControlLoop(ros::NodeHandle& nh, boost::shared_ptr<hardware_interface::RobotHW> hardware_interface);
 
   // Run the control loop (blocking)
   void run();
 
 protected:
-
   // Update funcion called with loop_hz_ rate
   void update();
 
@@ -102,4 +99,4 @@ protected:
 
 };  // end class
 
-}  // namespace
+}  // namespace ros_control_boilerplate

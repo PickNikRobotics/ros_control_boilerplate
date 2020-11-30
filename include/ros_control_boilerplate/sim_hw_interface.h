@@ -44,7 +44,6 @@
 
 namespace ros_control_boilerplate
 {
-
 /** \brief Hardware interface for a robot */
 class SimHWInterface : public GenericHWInterface
 {
@@ -59,18 +58,17 @@ public:
   virtual void init();
 
   /** \brief Read the state from the robot hardware. */
-  virtual void read(ros::Duration &elapsed_time);
+  virtual void read(ros::Duration& elapsed_time);
 
   /** \brief Write the command to the robot hardware. */
-  virtual void write(ros::Duration &elapsed_time);
+  virtual void write(ros::Duration& elapsed_time);
 
   /** \breif Enforce limits for all values before writing */
-  virtual void enforceLimits(ros::Duration &period);
+  virtual void enforceLimits(ros::Duration& period);
 
 protected:
-
   /** \brief Basic model of system for position control */
-  virtual void positionControlSimulation(ros::Duration &elapsed_time, const std::size_t joint_id);
+  virtual void positionControlSimulation(ros::Duration& elapsed_time, const std::size_t joint_id);
 
   // Name of this class
   std::string name_;
@@ -87,6 +85,6 @@ protected:
 
 };  // class
 
-}  // namespace
+}  // namespace ros_control_boilerplate
 
 #endif

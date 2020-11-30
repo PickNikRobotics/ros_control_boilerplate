@@ -59,17 +59,14 @@ public:
    * "/"
    */
   JoystickManualControl(const std::string& parent_name, const std::string& service_namespace)
-    : parent_name_(parent_name)
-    , using_trajectory_controller_(true)
+    : parent_name_(parent_name), using_trajectory_controller_(true)
   {
     switch_service_ = service_namespace + "/controller_manager/switch_controller";
     load_service_ = service_namespace + "/controller_manager/load_controller";
 
     // Switch modes of controllers
-    switch_controlers_client_ =
-        nh_.serviceClient<controller_manager_msgs::SwitchController>(switch_service_);
-    load_controlers_client_ =
-        nh_.serviceClient<controller_manager_msgs::LoadController>(load_service_);
+    switch_controlers_client_ = nh_.serviceClient<controller_manager_msgs::SwitchController>(switch_service_);
+    load_controlers_client_ = nh_.serviceClient<controller_manager_msgs::LoadController>(load_service_);
 
     // Subscribe to joystick control
     std::size_t queue_size = 1;
@@ -105,9 +102,8 @@ public:
       while (!load_controlers_client_.call(service) && ros::ok())
       {
         if (counter > 100)
-          ROS_WARN_STREAM_THROTTLE_NAMED(1.0, parent_name_, "Failed to load controller '"
-                                                                << manual_controllers_[i]
-                                                                << "', trying again");
+          ROS_WARN_STREAM_THROTTLE_NAMED(1.0, parent_name_,
+                                         "Failed to load controller '" << manual_controllers_[i] << "', trying again");
         ros::spinOnce();
         ros::Duration(0.1).sleep();
         counter++;
@@ -190,6 +186,6 @@ protected:
 
 };  // end class
 
-}  // end namespace
+}  // namespace ros_control_boilerplate
 
 #endif

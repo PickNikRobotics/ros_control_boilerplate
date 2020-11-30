@@ -47,11 +47,7 @@
 
 namespace ros_control_boilerplate
 {
-
-ControllerToCSV::ControllerToCSV(const std::string& topic)
-  : nh_("~")
-  , first_update_(true)
-  , recording_started_(true)
+ControllerToCSV::ControllerToCSV(const std::string& topic) : nh_("~"), first_update_(true), recording_started_(true)
 {
   // Load rosparams
   ros::NodeHandle rpsnh(nh_, name_);
@@ -61,8 +57,7 @@ ControllerToCSV::ControllerToCSV(const std::string& topic)
 
   ROS_INFO_STREAM_NAMED(name_, "Subscribing to " << topic);
   // State subscriber
-  state_sub_ = nh_.subscribe<control_msgs::JointTrajectoryControllerState>(
-      topic, 1, &ControllerToCSV::stateCB, this);
+  state_sub_ = nh_.subscribe<control_msgs::JointTrajectoryControllerState>(topic, 1, &ControllerToCSV::stateCB, this);
 
   // Wait for states to populate
   waitForSubscriber(state_sub_);
@@ -101,7 +96,7 @@ void ControllerToCSV::stateCB(const control_msgs::JointTrajectoryControllerState
     // Record current time
     timestamps_.push_back(ros::Time::now());
   }
-  else // only record at freq
+  else  // only record at freq
   {
     current_state_ = *state;
   }
@@ -120,7 +115,7 @@ void ControllerToCSV::startRecording(const std::string& file_name)
   recording_started_ = true;
 
   // Start sampling loop
-  if (!recordAll()) // only record at the specified frequency
+  if (!recordAll())  // only record at the specified frequency
   {
     ros::Duration update_freq = ros::Duration(1.0 / record_hz_);
     non_realtime_loop_ = nh_.createTimer(update_freq, &ControllerToCSV::update, this);
@@ -139,10 +134,12 @@ void ControllerToCSV::update(const ros::TimerEvent& event)
     }
     first_update_ = false;
   }
-  else // if (event.last_real > 0)
+  else  // if (event.last_real > 0)
   {
     const double freq = 1.0 / (event.current_real - event.last_real).toSec();
-    ROS_INFO_STREAM_THROTTLE_NAMED(2, name_, "Updating at " << freq << " hz, total: " << (ros::Time::now() - timestamps_.front()).toSec() << " seconds");
+    ROS_INFO_STREAM_THROTTLE_NAMED(2, name_,
+                                   "Updating at " << freq << " hz, total: "
+                                                  << (ros::Time::now() - timestamps_.front()).toSec() << " seconds");
   }
   // Record state
   states_.push_back(current_state_);
@@ -174,12 +171,9 @@ bool ControllerToCSV::writeToFile()
   output_file << "timestamp,";
   for (std::size_t j = 0; j < states_[0].joint_names.size(); ++j)
   {
-    output_file << states_[0].joint_names[j] << "_desired_pos,"
-                << states_[0].joint_names[j] << "_desired_vel,"
-                << states_[0].joint_names[j] << "_actual_pos,"
-                << states_[0].joint_names[j] << "_actual_vel,"
-                << states_[0].joint_names[j] << "_error_pos,"
-                << states_[0].joint_names[j] << "_error_vel,";
+    output_file << states_[0].joint_names[j] << "_desired_pos," << states_[0].joint_names[j] << "_desired_vel,"
+                << states_[0].joint_names[j] << "_actual_pos," << states_[0].joint_names[j] << "_actual_vel,"
+                << states_[0].joint_names[j] << "_error_pos," << states_[0].joint_names[j] << "_error_vel,";
   }
   output_file << std::endl;
 
@@ -198,12 +192,9 @@ bool ControllerToCSV::writeToFile()
     for (std::size_t j = 0; j < states_[i].joint_names.size(); ++j)
     {
       // Output State
-      output_file << states_[i].desired.positions[j] << ","
-                  << states_[i].desired.velocities[j] << ","
-                  << states_[i].actual.positions[j] << ","
-                  << states_[i].actual.velocities[j] << ","
-                  << states_[i].error.positions[j] << ","
-                  << states_[i].error.velocities[j] << ",";
+      output_file << states_[i].desired.positions[j] << "," << states_[i].desired.velocities[j] << ","
+                  << states_[i].actual.positions[j] << "," << states_[i].actual.velocities[j] << ","
+                  << states_[i].error.positions[j] << "," << states_[i].error.velocities[j] << ",";
     }
 
     output_file << std::endl;
@@ -236,7 +227,7 @@ bool ControllerToCSV::waitForSubscriber(const ros::Subscriber& sub, const double
     if (ros::Time::now() > max_time)
     {
       ROS_WARN_STREAM_NAMED(name_, "Topic '" << sub.getTopic() << "' unable to connect to any publishers within "
-                                                      << wait_time << " seconds.");
+                                             << wait_time << " seconds.");
       return false;
     }
     ros::spinOnce();
@@ -253,11 +244,11 @@ bool ControllerToCSV::waitForSubscriber(const ros::Subscriber& sub, const double
   {
     double duration = (ros::Time::now() - start_time).toSec();
     ROS_DEBUG_STREAM_NAMED(name_, "Topic '" << sub.getTopic() << "' took " << duration
-                                                     << " seconds to connect to a subscriber. "
-                                                        "Connected to " << num_existing_subscribers
-                                                     << " total subsribers");
+                                            << " seconds to connect to a subscriber. "
+                                               "Connected to "
+                                            << num_existing_subscribers << " total subsribers");
   }
   return true;
 }
 
-}  // end namespace
+}  // namespace ros_control_boilerplate
