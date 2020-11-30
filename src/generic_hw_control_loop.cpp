@@ -44,8 +44,8 @@
 
 namespace ros_control_boilerplate
 {
-GenericHWControlLoop::GenericHWControlLoop(
-    ros::NodeHandle& nh, std::shared_ptr<hardware_interface::RobotHW> hardware_interface)
+GenericHWControlLoop::GenericHWControlLoop(ros::NodeHandle& nh,
+                                           std::shared_ptr<hardware_interface::RobotHW> hardware_interface)
   : nh_(nh), hardware_interface_(hardware_interface)
 {
   // Create the controller manager
@@ -67,7 +67,8 @@ GenericHWControlLoop::GenericHWControlLoop(
 void GenericHWControlLoop::run()
 {
   ros::Rate rate(loop_hz_);
-  while(ros::ok()) {
+  while (ros::ok())
+  {
     update();
     rate.sleep();
   }
@@ -103,4 +104,4 @@ void GenericHWControlLoop::update()
   hardware_interface_->write(now, elapsed_time_);
 }
 
-}  // namespace
+}  // namespace ros_control_boilerplate

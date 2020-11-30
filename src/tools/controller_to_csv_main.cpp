@@ -62,7 +62,7 @@ int main(int argc, char** argv)
   ros_control_boilerplate::ControllerToCSV converter(topic);
   converter.startRecording(csv_path);
 
-  ROS_INFO_STREAM_NAMED("main","Type Ctrl-C to end and save");
+  ROS_INFO_STREAM_NAMED("main", "Type Ctrl-C to end and save");
   ros::spin();
 
   ROS_INFO_STREAM_NAMED("main", "Shutting down.");
