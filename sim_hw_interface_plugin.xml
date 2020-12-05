@@ -1,0 +1,9 @@
+<library path="lib/libsim_hw_interface">
+  <class name="ros_control_boilerplate/SimHWInterface"
+    type="ros_control_boilerplate::CombinableGenericHWAdapter<ros_control_boilerplate::SimHWInterface>"
+      base_class_type="hardware_interface::RobotHW">
+    <description>
+      Simple kinematic robot simulation
+    </description>
+  </class>
+</library>

@@ -61,8 +61,34 @@ public:
   /** \brief Read the state from the robot hardware. */
   virtual void read(ros::Duration &elapsed_time);
 
+  /**\brief Read the state from the robot hardware
+   *
+   * \note This delegates RobotHW::read() calls to \ref read()
+   *
+   * \param time The current time, currently unused
+   * \param period The time passed since the last call
+   */
+  virtual void read(const ros::Time& /*time*/, const ros::Duration& period) override
+  {
+    ros::Duration elapsed_time = period;
+    read(elapsed_time);
+  }
+
   /** \brief Write the command to the robot hardware. */
   virtual void write(ros::Duration &elapsed_time);
+
+  /** \brief Write the command to the robot hardware
+   *
+   * \note This delegates RobotHW::write() calls to \ref write()
+   *
+   * \param time The current time, currently unused
+   * \param period The time passed since the last call
+   */
+  virtual void write(const ros::Time& /*time*/, const ros::Duration& period) override
+  {
+    ros::Duration elapsed_time = period;
+    write(elapsed_time);
+  }
 
   /** \breif Enforce limits for all values before writing */
   virtual void enforceLimits(ros::Duration &period);
