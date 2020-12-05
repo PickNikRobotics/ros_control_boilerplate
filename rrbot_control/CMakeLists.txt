@@ -19,6 +19,13 @@ target_link_libraries(rrbot_hw_main
   ${catkin_LIBRARIES}
 )
 
+# Combined control executable
+add_executable(rrbot_combined_hw_main src/rrbot_combined_hw_main.cpp)
+target_link_libraries(rrbot_combined_hw_main
+  generic_hw_control_loop
+  ${catkin_LIBRARIES}
+)
+
 ## Install ------------------------------------------------------------
 
 # Install libraries
@@ -31,6 +38,7 @@ install(TARGETS
 # Install executables
 install(TARGETS
     rrbot_hw_main
+    rrbot_combined_hw_main
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
