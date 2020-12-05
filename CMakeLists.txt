@@ -19,6 +19,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   sensor_msgs
   rosparam_shortcuts
+  combined_robot_hw
+  pluginlib
 )
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
@@ -43,6 +45,8 @@ catkin_package(
     std_msgs
     sensor_msgs
     rosparam_shortcuts
+    combined_robot_hw
+    pluginlib
   LIBRARIES
     generic_hw_control_loop
     generic_hw_interface
