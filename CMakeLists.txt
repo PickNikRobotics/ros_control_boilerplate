@@ -11,11 +11,13 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(catkin REQUIRED COMPONENTS
   actionlib
   cmake_modules
+  combined_robot_hw
   control_msgs
   control_toolbox
   controller_manager
   hardware_interface
   joint_limits_interface
+  pluginlib
   roscpp
   rosparam_shortcuts
   sensor_msgs
@@ -33,11 +35,13 @@ catkin_package(
     include
   CATKIN_DEPENDS
     actionlib
+    combined_robot_hw
     control_msgs
     control_toolbox
     controller_manager
     hardware_interface
     joint_limits_interface
+    pluginlib
     roscpp
     rosparam_shortcuts
     sensor_msgs
