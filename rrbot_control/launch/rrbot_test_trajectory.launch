@@ -11,7 +11,7 @@
     <!-- Load hardware interface -->
     <node name="test_trajectory" pkg="ros_control_boilerplate" type="test_trajectory"
           output="screen" launch-prefix="$(arg launch_prefix)">
-      <param name="action_topic" value="/rrbot/position_trajectory_controller/follow_joint_trajectory/"/>
+      <param name="trajectory_controller" value="position_trajectory_controller"/>
       <rosparam file="$(find ros_control_boilerplate)/rrbot_control/config/rrbot_controllers.yaml" command="load"/>
     </node>
 

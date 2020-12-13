@@ -46,11 +46,11 @@ int main(int argc, char** argv)
 
   // NOTE: We run the ROS loop in a separate thread as external calls such
   // as service callbacks to load controllers can block the (main) control loop
-  ros::AsyncSpinner spinner(2);
+  ros::AsyncSpinner spinner(3);
   spinner.start();
 
   // Create the hardware interface specific to your robot
-  boost::shared_ptr<rrbot_control::RRBotHWInterface> rrbot_hw_interface
+  std::shared_ptr<rrbot_control::RRBotHWInterface> rrbot_hw_interface
     (new rrbot_control::RRBotHWInterface(nh));
   rrbot_hw_interface->init();
 
