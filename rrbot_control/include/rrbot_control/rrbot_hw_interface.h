@@ -44,7 +44,6 @@
 
 namespace rrbot_control
 {
-
 /// \brief Hardware interface for a robot
 class RRBotHWInterface : public ros_control_boilerplate::GenericHWInterface
 {
@@ -56,16 +55,16 @@ public:
   RRBotHWInterface(ros::NodeHandle& nh, urdf::Model* urdf_model = NULL);
 
   /** \brief Read the state from the robot hardware. */
-  virtual void read(ros::Duration &elapsed_time);
+  virtual void read(ros::Duration& elapsed_time);
 
   /** \brief Write the command to the robot hardware. */
-  virtual void write(ros::Duration &elapsed_time);
+  virtual void write(ros::Duration& elapsed_time);
 
   /** \breif Enforce limits for all values before writing */
-  virtual void enforceLimits(ros::Duration &period);
+  virtual void enforceLimits(ros::Duration& period);
 
 };  // class
 
-}  // namespace
+}  // namespace rrbot_control
 
 #endif

@@ -41,14 +41,13 @@
 
 namespace rrbot_control
 {
-
-RRBotHWInterface::RRBotHWInterface(ros::NodeHandle &nh, urdf::Model *urdf_model)
+RRBotHWInterface::RRBotHWInterface(ros::NodeHandle& nh, urdf::Model* urdf_model)
   : ros_control_boilerplate::GenericHWInterface(nh, urdf_model)
 {
   ROS_INFO_NAMED("rrbot_hw_interface", "RRBotHWInterface Ready.");
 }
 
-void RRBotHWInterface::read(ros::Duration &elapsed_time)
+void RRBotHWInterface::read(ros::Duration& elapsed_time)
 {
   // ----------------------------------------------------
   // ----------------------------------------------------
@@ -61,7 +60,7 @@ void RRBotHWInterface::read(ros::Duration &elapsed_time)
   // ----------------------------------------------------
 }
 
-void RRBotHWInterface::write(ros::Duration &elapsed_time)
+void RRBotHWInterface::write(ros::Duration& elapsed_time)
 {
   // Safety
   enforceLimits(elapsed_time);
@@ -86,7 +85,7 @@ void RRBotHWInterface::write(ros::Duration &elapsed_time)
   // ----------------------------------------------------
 }
 
-void RRBotHWInterface::enforceLimits(ros::Duration &period)
+void RRBotHWInterface::enforceLimits(ros::Duration& period)
 {
   // ----------------------------------------------------
   // ----------------------------------------------------
@@ -120,4 +119,4 @@ void RRBotHWInterface::enforceLimits(ros::Duration &period)
   // ----------------------------------------------------
 }
 
-}  // namespace
+}  // namespace rrbot_control

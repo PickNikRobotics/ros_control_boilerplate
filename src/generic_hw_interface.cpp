@@ -44,11 +44,8 @@
 
 namespace ros_control_boilerplate
 {
-GenericHWInterface::GenericHWInterface(const ros::NodeHandle &nh, urdf::Model *urdf_model)
-  : name_("generic_hw_interface")
-  , nh_(nh)
-  , use_rosparam_joint_limits_(false)
-  , use_soft_limits_if_available_(false)
+GenericHWInterface::GenericHWInterface(const ros::NodeHandle& nh, urdf::Model* urdf_model)
+  : name_("generic_hw_interface"), nh_(nh), use_rosparam_joint_limits_(false), use_soft_limits_if_available_(false)
 {
   // Check if the URDF model needs to be loaded
   if (urdf_model == NULL)
@@ -57,7 +54,8 @@ GenericHWInterface::GenericHWInterface(const ros::NodeHandle &nh, urdf::Model *u
     urdf_model_ = urdf_model;
 
   // Load rosparams
-  ros::NodeHandle rpnh(nh_, "hardware_interface"); // TODO(davetcoleman): change the namespace to "generic_hw_interface" aka name_
+  ros::NodeHandle rpnh(
+      nh_, "hardware_interface");  // TODO(davetcoleman): change the namespace to "generic_hw_interface" aka name_
   std::size_t error = 0;
   error += !rosparam_shortcuts::get(name_, rpnh, "joints", joint_names_);
   rosparam_shortcuts::shutdownIfError(name_, error);
@@ -118,9 +116,9 @@ void GenericHWInterface::init()
   ROS_INFO_STREAM_NAMED(name_, "GenericHWInterface Ready.");
 }
 
-void GenericHWInterface::registerJointLimits(const hardware_interface::JointHandle &joint_handle_position,
-                                             const hardware_interface::JointHandle &joint_handle_velocity,
-                                             const hardware_interface::JointHandle &joint_handle_effort,
+void GenericHWInterface::registerJointLimits(const hardware_interface::JointHandle& joint_handle_position,
+                                             const hardware_interface::JointHandle& joint_handle_velocity,
+                                             const hardware_interface::JointHandle& joint_handle_effort,
                                              std::size_t joint_id)
 {
   // Default values
@@ -157,17 +155,17 @@ void GenericHWInterface::registerJointLimits(const hardware_interface::JointHand
   {
     has_joint_limits = true;
     ROS_DEBUG_STREAM_NAMED(name_, "Joint " << joint_names_[joint_id] << " has URDF position limits ["
-                                                            << joint_limits.min_position << ", "
-                                                            << joint_limits.max_position << "]");
+                                           << joint_limits.min_position << ", " << joint_limits.max_position << "]");
     if (joint_limits.has_velocity_limits)
       ROS_DEBUG_STREAM_NAMED(name_, "Joint " << joint_names_[joint_id] << " has URDF velocity limit ["
-                                                              << joint_limits.max_velocity << "]");
+                                             << joint_limits.max_velocity << "]");
   }
   else
   {
     if (urdf_joint->type != urdf::Joint::CONTINUOUS)
-      ROS_WARN_STREAM_NAMED(name_, "Joint " << joint_names_[joint_id] << " does not have a URDF "
-                            "position limit");
+      ROS_WARN_STREAM_NAMED(name_, "Joint " << joint_names_[joint_id]
+                                            << " does not have a URDF "
+                                               "position limit");
   }
 
   // Get limits from ROS param
@@ -176,13 +174,11 @@ void GenericHWInterface::registerJointLimits(const hardware_interface::JointHand
     if (joint_limits_interface::getJointLimits(joint_names_[joint_id], nh_, joint_limits))
     {
       has_joint_limits = true;
-      ROS_DEBUG_STREAM_NAMED(name_,
-                             "Joint " << joint_names_[joint_id] << " has rosparam position limits ["
-                                      << joint_limits.min_position << ", " << joint_limits.max_position << "]");
+      ROS_DEBUG_STREAM_NAMED(name_, "Joint " << joint_names_[joint_id] << " has rosparam position limits ["
+                                             << joint_limits.min_position << ", " << joint_limits.max_position << "]");
       if (joint_limits.has_velocity_limits)
-        ROS_DEBUG_STREAM_NAMED(name_, "Joint " << joint_names_[joint_id]
-                                                                << " has rosparam velocity limit ["
-                                                                << joint_limits.max_velocity << "]");
+        ROS_DEBUG_STREAM_NAMED(name_, "Joint " << joint_names_[joint_id] << " has rosparam velocity limit ["
+                                               << joint_limits.max_velocity << "]");
     }  // the else debug message provided internally by joint_limits_interface
   }
 
@@ -196,8 +192,9 @@ void GenericHWInterface::registerJointLimits(const hardware_interface::JointHand
     }
     else
     {
-      ROS_DEBUG_STREAM_NAMED(name_, "Joint " << joint_names_[joint_id] << " does not have soft joint "
-                             "limits");
+      ROS_DEBUG_STREAM_NAMED(name_, "Joint " << joint_names_[joint_id]
+                                             << " does not have soft joint "
+                                                "limits");
     }
   }
 
@@ -234,13 +231,13 @@ void GenericHWInterface::registerJointLimits(const hardware_interface::JointHand
   {
     ROS_DEBUG_STREAM_NAMED(name_, "Using soft saturation limits");
     const joint_limits_interface::PositionJointSoftLimitsHandle soft_handle_position(joint_handle_position,
-                                                                                       joint_limits, soft_limits);
+                                                                                     joint_limits, soft_limits);
     pos_jnt_soft_limits_.registerHandle(soft_handle_position);
     const joint_limits_interface::VelocityJointSoftLimitsHandle soft_handle_velocity(joint_handle_velocity,
-                                                                                       joint_limits, soft_limits);
+                                                                                     joint_limits, soft_limits);
     vel_jnt_soft_limits_.registerHandle(soft_handle_velocity);
     const joint_limits_interface::EffortJointSoftLimitsHandle soft_handle_effort(joint_handle_effort, joint_limits,
-                                                                                   soft_limits);
+                                                                                 soft_limits);
     eff_jnt_soft_limits_.registerHandle(soft_handle_effort);
   }
   else  // Use saturation limits
@@ -269,8 +266,7 @@ void GenericHWInterface::printState()
 {
   // WARNING: THIS IS NOT REALTIME SAFE
   // FOR DEBUGGING ONLY, USE AT YOUR OWN ROBOT's RISK!
-  ROS_INFO_STREAM_THROTTLE(1, std::endl
-                                  << printStateHelper());
+  ROS_INFO_STREAM_THROTTLE(1, std::endl << printStateHelper());
 }
 
 std::string GenericHWInterface::printStateHelper()
@@ -301,7 +297,7 @@ std::string GenericHWInterface::printCommandHelper()
   return ss.str();
 }
 
-void GenericHWInterface::loadURDF(const ros::NodeHandle &nh, std::string param_name)
+void GenericHWInterface::loadURDF(const ros::NodeHandle& nh, std::string param_name)
 {
   std::string urdf_string;
   urdf_model_ = new urdf::Model();
@@ -312,14 +308,14 @@ void GenericHWInterface::loadURDF(const ros::NodeHandle &nh, std::string param_n
     std::string search_param_name;
     if (nh.searchParam(param_name, search_param_name))
     {
-      ROS_INFO_STREAM_NAMED(name_, "Waiting for model URDF on the ROS param server at location: " <<
-                            nh.getNamespace() << search_param_name);
+      ROS_INFO_STREAM_NAMED(name_, "Waiting for model URDF on the ROS param server at location: " << nh.getNamespace()
+                                                                                                  << search_param_name);
       nh.getParam(search_param_name, urdf_string);
     }
     else
     {
-      ROS_INFO_STREAM_NAMED(name_, "Waiting for model URDF on the ROS param server at location: " <<
-                            nh.getNamespace() << param_name);
+      ROS_INFO_STREAM_NAMED(name_, "Waiting for model URDF on the ROS param server at location: " << nh.getNamespace()
+                                                                                                  << param_name);
       nh.getParam(param_name, urdf_string);
     }
 
@@ -332,4 +328,4 @@ void GenericHWInterface::loadURDF(const ros::NodeHandle &nh, std::string param_n
     ROS_DEBUG_STREAM_NAMED(name_, "Received URDF from param server");
 }
 
-}  // namespace
+}  // namespace ros_control_boilerplate

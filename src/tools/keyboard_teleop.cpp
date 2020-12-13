@@ -71,7 +71,7 @@
 #define KEYCODE_x 0x78
 #define KEYCODE_y 0x79
 #define KEYCODE_z 0x7a
-#define KEYCODE_ESCAPE  0x1B
+#define KEYCODE_ESCAPE 0x1B
 
 int kfd = 0;
 struct termios cooked, raw;
@@ -85,9 +85,7 @@ void quit(int sig)
 class TeleopJointsKeyboard
 {
 public:
-
-  TeleopJointsKeyboard()
-    : has_recieved_joints_(false)
+  TeleopJointsKeyboard() : has_recieved_joints_(false)
   {
     std::cout << "init " << std::endl;
     // TODO: make this robot agonistic
@@ -98,11 +96,12 @@ public:
   }
 
   ~TeleopJointsKeyboard()
-  { }
+  {
+  }
 
   void stateCallback(const sensor_msgs::JointStateConstPtr& msg)
   {
-    if(msg->position.size() != 7)
+    if (msg->position.size() != 7)
     {
       ROS_ERROR_STREAM("Not enough joints!");
       exit(-1);
@@ -113,8 +112,8 @@ public:
       cmd_.data = msg->position;
 
     // Debug
-    //std::copy(cmd_.data.begin(), cmd_.data.end(), std::ostream_iterator<double>(std::cout, " "));
-    //std::cout << std::endl;
+    // std::copy(cmd_.data.begin(), cmd_.data.end(), std::ostream_iterator<double>(std::cout, " "));
+    // std::cout << std::endl;
 
     // Important safety feature
     has_recieved_joints_ = true;
@@ -123,12 +122,12 @@ public:
   void keyboardLoop()
   {
     char c;
-    bool dirty=false;
+    bool dirty = false;
 
     // get the console in raw mode
     tcgetattr(kfd, &cooked);
     memcpy(&raw, &cooked, sizeof(struct termios));
-    raw.c_lflag &=~ (ICANON | ECHO);
+    raw.c_lflag &= ~(ICANON | ECHO);
     // Setting a new line, then end of file
     raw.c_cc[VEOL] = 1;
     raw.c_cc[VEOF] = 2;
@@ -147,75 +146,75 @@ public:
 
     double delta_dist = 0.005;
 
-    for(;;)
+    for (;;)
     {
       // get the next event from the keyboard
-      if(read(kfd, &c, 1) < 0)
+      if (read(kfd, &c, 1) < 0)
       {
         perror("read():");
         exit(-1);
       }
 
       dirty = true;
-      switch(c)
+      switch (c)
       {
         case KEYCODE_q:
-          cmd_.data[0] = cmd_.data[0] + delta_dist; // radians
+          cmd_.data[0] = cmd_.data[0] + delta_dist;  // radians
           break;
         case KEYCODE_a:
-          cmd_.data[0] = cmd_.data[0] - delta_dist; // radians
+          cmd_.data[0] = cmd_.data[0] - delta_dist;  // radians
           break;
 
         case KEYCODE_w:
-          cmd_.data[1] = cmd_.data[1] + delta_dist; // radians
+          cmd_.data[1] = cmd_.data[1] + delta_dist;  // radians
           break;
         case KEYCODE_s:
-          cmd_.data[1] = cmd_.data[1] - delta_dist; // radians
+          cmd_.data[1] = cmd_.data[1] - delta_dist;  // radians
           break;
 
         case KEYCODE_e:
-          cmd_.data[2] = cmd_.data[2] + delta_dist; // radians
+          cmd_.data[2] = cmd_.data[2] + delta_dist;  // radians
           break;
         case KEYCODE_d:
-          cmd_.data[2] = cmd_.data[2] - delta_dist; // radians
+          cmd_.data[2] = cmd_.data[2] - delta_dist;  // radians
           break;
 
         case KEYCODE_r:
-          cmd_.data[3] = cmd_.data[3] + delta_dist; // radians
+          cmd_.data[3] = cmd_.data[3] + delta_dist;  // radians
           break;
         case KEYCODE_f:
-          cmd_.data[3] = cmd_.data[3] - delta_dist; // radians
+          cmd_.data[3] = cmd_.data[3] - delta_dist;  // radians
           break;
 
         case KEYCODE_t:
-          cmd_.data[4] = cmd_.data[4] + delta_dist; // radians
+          cmd_.data[4] = cmd_.data[4] + delta_dist;  // radians
           break;
         case KEYCODE_g:
-          cmd_.data[4] = cmd_.data[4] - delta_dist; // radians
+          cmd_.data[4] = cmd_.data[4] - delta_dist;  // radians
           break;
 
         case KEYCODE_y:
-          cmd_.data[5] = cmd_.data[5] + delta_dist; // radians
+          cmd_.data[5] = cmd_.data[5] + delta_dist;  // radians
           break;
         case KEYCODE_h:
-          cmd_.data[5] = cmd_.data[5] - delta_dist; // radians
+          cmd_.data[5] = cmd_.data[5] - delta_dist;  // radians
           break;
 
         case KEYCODE_u:
-          cmd_.data[6] = cmd_.data[6] + delta_dist; // radians
+          cmd_.data[6] = cmd_.data[6] + delta_dist;  // radians
           break;
         case KEYCODE_j:
-          cmd_.data[6] = cmd_.data[6] - delta_dist; // radians
+          cmd_.data[6] = cmd_.data[6] - delta_dist;  // radians
           break;
 
-        case  KEYCODE_ESCAPE:
+        case KEYCODE_ESCAPE:
           std::cout << std::endl;
           std::cout << "Exiting " << std::endl;
           quit(0);
           break;
 
         default:
-          std::cout << "CODE: "  << c << std::endl;
+          std::cout << "CODE: " << c << std::endl;
           dirty = false;
       }
 
@@ -225,8 +224,10 @@ public:
         // Important safety feature
         if (!has_recieved_joints_)
         {
-          ROS_ERROR_STREAM_NAMED("joint_teleop","Unable to send joint commands because robot state is invalid");
-        } else {
+          ROS_ERROR_STREAM_NAMED("joint_teleop", "Unable to send joint commands because robot state is invalid");
+        }
+        else
+        {
           std::cout << ".";
           joints_pub_.publish(cmd_);
         }
@@ -235,19 +236,17 @@ public:
   }
 
 private:
-
   ros::NodeHandle nh_;
   ros::Publisher joints_pub_;
   ros::Subscriber joints_sub_;
   std_msgs::Float64MultiArray cmd_;
   bool has_recieved_joints_;
-
 };
 
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "joints_teleop_keyboard");
-  signal(SIGINT,quit);
+  signal(SIGINT, quit);
 
   // NOTE: We run the ROS loop in a separate thread as external calls such
   // as service callbacks to load controllers can block the (main) control loop
@@ -257,5 +256,5 @@ int main(int argc, char** argv)
   TeleopJointsKeyboard teleop;
   teleop.keyboardLoop();
 
-  return(0);
+  return (0);
 }
