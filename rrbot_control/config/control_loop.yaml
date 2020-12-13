@@ -1,0 +1,4 @@
+# Settings for the ros_control control loop -----------------------------------
+generic_hw_control_loop:
+  loop_hz: 300                      # Frequency of control loop
+  cycle_time_error_threshold: 0.01  # Maximum allowed timing deviation in [s]

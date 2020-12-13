@@ -1,0 +1,39 @@
+# combined_robot_hw Settings --------------------------------------------------
+
+# These are the names of the individual hardware interfaces that will be
+# loaded. They are also the namespaces in which each individual hardware
+# interface will run.
+#
+# In this example, we will use two SimHWInterfaces, with each one controlling
+# one joint.
+robot_hardware:
+  - joint_1_hw
+  - joint_2_hw
+
+joint_1_hw:
+  # combined_robot_hw Settings --------------------------------------
+
+  # This has to match the name specified in the plugin description
+  type: ros_control_boilerplate/SimHWInterface
+  joints:
+    - joint1
+
+  # ros_control_boilerplate Settings --------------------------------
+  hardware_interface:
+    joints:                  # Simulate only one joint
+      - joint1
+    sim_control_mode: 0      # 0: position, 1: velocity
+
+joint_2_hw:
+  # combined_robot_hw Settings --------------------------------------
+
+  # This has to match the name specified in the plugin description
+  type: ros_control_boilerplate/SimHWInterface
+  joints:
+    - joint2
+
+  # ros_control_boilerplate Settings --------------------------------
+  hardware_interface:
+    joints:
+      - joint2
+    sim_control_mode: 0
