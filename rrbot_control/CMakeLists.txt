@@ -37,8 +37,8 @@ install(TARGETS
 
 # Install executables
 install(TARGETS
-    rrbot_hw_main
     rrbot_combined_hw_main
+    rrbot_hw_main
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

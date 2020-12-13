@@ -169,3 +169,5 @@ install(TARGETS
 
 # Install header files
 install(DIRECTORY include/${PROJECT_NAME}/   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+# Install plugin description
+install(FILES sim_hw_interface_plugin.xml    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
