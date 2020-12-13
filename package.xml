@@ -57,5 +57,6 @@
   <!--<run_depend>rviz</run_depend>-->
 
   <export>
+    <hardware_interface plugin="${prefix}/sim_hw_interface_plugin.xml" />
   </export>
 </package>

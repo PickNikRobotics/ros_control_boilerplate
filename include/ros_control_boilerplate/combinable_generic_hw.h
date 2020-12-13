@@ -65,6 +65,8 @@ namespace ros_control_boilerplate
  *     )
  *    \endcode
  *
+ *  An example of this procedure is implemented for SimHWInterface.
+ *
  * \tparam ConcreteGenericHW Concrete GenericHWInterface to adapt
  */
 template <typename ConcreteGenericHW>
