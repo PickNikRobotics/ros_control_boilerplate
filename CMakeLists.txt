@@ -2,47 +2,49 @@ cmake_minimum_required(VERSION 2.8.3)
 project(ros_control_boilerplate)
 
 # C++ 11
-set(CMAKE_CXX_FLAGS "-std=c++11 -Wall ${CMAKE_CXX_FLAGS}")
+if(NOT "${CMAKE_CXX_STANDARD}")
+  set(CMAKE_CXX_STANDARD 11)
+endif()
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(catkin REQUIRED COMPONENTS
-  cmake_modules
-  hardware_interface
-  controller_manager
-  roscpp
-  control_msgs
-  trajectory_msgs
   actionlib
-  urdf
-  joint_limits_interface
-  transmission_interface
+  cmake_modules
+  control_msgs
   control_toolbox
-  std_msgs
-  sensor_msgs
+  controller_manager
+  hardware_interface
+  joint_limits_interface
+  roscpp
   rosparam_shortcuts
+  sensor_msgs
+  std_msgs
+  trajectory_msgs
+  transmission_interface
+  urdf
 )
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 find_package(Gflags REQUIRED)
 
-## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
-
 catkin_package(
   INCLUDE_DIRS
     include
   CATKIN_DEPENDS
-    hardware_interface
-    controller_manager
-    roscpp
+    actionlib
     control_msgs
-    trajectory_msgs
-    urdf
-    joint_limits_interface
-    transmission_interface
     control_toolbox
-    std_msgs
-    sensor_msgs
+    controller_manager
+    hardware_interface
+    joint_limits_interface
+    roscpp
     rosparam_shortcuts
+    sensor_msgs
+    std_msgs
+    trajectory_msgs
+    transmission_interface
+    urdf
   LIBRARIES
     generic_hw_control_loop
     generic_hw_interface
@@ -60,7 +62,9 @@ include_directories(
 )
 
 # Control loop
-add_library(generic_hw_control_loop src/generic_hw_control_loop.cpp)
+add_library(generic_hw_control_loop
+  src/generic_hw_control_loop.cpp
+)
 target_link_libraries(generic_hw_control_loop
   ${catkin_LIBRARIES}
 )
@@ -139,22 +143,22 @@ add_subdirectory(rrbot_control)
 
 # Install libraries
 install(TARGETS
+    controller_to_csv
+    csv_to_controller
     generic_hw_control_loop
     generic_hw_interface
     sim_hw_interface
-    controller_to_csv
-    csv_to_controller
   LIBRARY DESTINATION
     ${CATKIN_PACKAGE_LIB_DESTINATION}
 )
 
 # Install executables
 install(TARGETS
-    ${PROJECT_NAME}_sim_hw_main
-    ${PROJECT_NAME}_test_trajectory
     ${PROJECT_NAME}_controller_to_csv_main
     ${PROJECT_NAME}_csv_to_controller_main
     ${PROJECT_NAME}_keyboard_teleop
+    ${PROJECT_NAME}_sim_hw_main
+    ${PROJECT_NAME}_test_trajectory
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

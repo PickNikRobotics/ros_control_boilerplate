@@ -10,7 +10,9 @@ cache: ccache
 env:
   matrix:
     - ROS_DISTRO=kinetic
-    
+    # Don't run clang-format: Kinetic default version cannot handle moveit config
+    - ROS_DISTRO=kinetic TEST="catkin_lint"
+
 before_script:
     - git clone -q --depth=1 https://github.com/ros-planning/moveit_ci.git .moveit_ci
 
