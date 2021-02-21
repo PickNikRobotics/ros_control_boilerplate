@@ -162,9 +162,9 @@ private:
   std::string trajectory_controller;
 };  // end class
 
-// Create std pointers for this class
-typedef std::shared_ptr<TestTrajectory> TestTrajectoryPtr;
-typedef std::shared_ptr<const TestTrajectory> TestTrajectoryConstPtr;
+// Create boost pointers for this class
+typedef boost::shared_ptr<TestTrajectory> TestTrajectoryPtr;
+typedef boost::shared_ptr<const TestTrajectory> TestTrajectoryConstPtr;
 
 }  // end namespace
 

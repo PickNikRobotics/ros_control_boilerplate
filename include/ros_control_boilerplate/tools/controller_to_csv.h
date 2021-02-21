@@ -112,9 +112,9 @@ private:
 
 };  // end class
 
-// Create std pointers for this class
-typedef std::shared_ptr<ControllerToCSV> ControllerToCSVPtr;
-typedef std::shared_ptr<const ControllerToCSV> ControllerToCSVConstPtr;
+// Create boost pointers for this class
+typedef boost::shared_ptr<ControllerToCSV> ControllerToCSVPtr;
+typedef boost::shared_ptr<const ControllerToCSV> ControllerToCSVConstPtr;
 
 }  // end namespace
 
