@@ -2,8 +2,8 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.2 (2021-02-23)
+------------------
 * Revert "Replaced boost with std shared_ptr"
   This reverts commit d3030f4d383895895931a9ca400497cfb72acdd9. This
   change broke the api, backporting it was an oversight.
