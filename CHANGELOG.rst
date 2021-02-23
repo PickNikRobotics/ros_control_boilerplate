@@ -2,6 +2,15 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Increase required cmake version to fix CMake CMP0048 warning
+* Replaced boost with std shared_ptr
+* Make NodeHandle a const reference
+* test_trajectory:  Read joints list from trajectory controller params
+* Increase num AsyncSpinners where control loops are instantiated
+* Contributors: AndyZe, Dave Coleman, John Morris, Ramon Wijnands, Robert Wilbrandt, Tim Übelhör
+
 0.6.0 (2020-06-16)
 ------------------
 * Generalize GenericHWControlLoop to all types of RobotHW (`#38 <https://github.com/PickNikRobotics/ros_control_boilerplate/issues/38>`_)
