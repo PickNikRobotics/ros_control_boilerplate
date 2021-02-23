@@ -2,8 +2,8 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.6.1 (2021-02-23)
+------------------
 * Increase required cmake version to fix CMake CMP0048 warning
 * Replaced boost with std shared_ptr
 * Make NodeHandle a const reference
