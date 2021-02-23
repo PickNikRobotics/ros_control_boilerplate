@@ -2,8 +2,8 @@
 Changelog for package ros_control_boilerplate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.1 (2021-02-23)
+------------------
 * Replaced boost with std shared_ptr
 * Make NodeHandle a const reference
 * test_trajectory:  Read joints list from trajectory controller params
