@@ -40,6 +40,9 @@
 #ifndef GENERIC_ROS_CONTROL_GENERIC_HW_INTERFACE_H
 #define GENERIC_ROS_CONTROL_GENERIC_HW_INTERFACE_H
 
+// C++
+#include <boost/scoped_ptr.hpp>
+
 // ROS
 #include <ros/ros.h>
 #include <urdf/model.h>

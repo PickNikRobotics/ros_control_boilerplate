@@ -61,7 +61,9 @@ public:
    * \param NodeHandle
    * \param hardware_interface - the robot-specific hardware interface to be use with your robot
    */
-  GenericHWControlLoop(ros::NodeHandle& nh, std::shared_ptr<hardware_interface::RobotHW> hardware_interface);
+  GenericHWControlLoop(
+      ros::NodeHandle& nh,
+      boost::shared_ptr<hardware_interface::RobotHW> hardware_interface);
 
   // Run the control loop (blocking)
   void run();
@@ -92,10 +94,10 @@ protected:
    * stopping ros_control-based controllers. It also serializes execution of all
    * running controllers in \ref update.
    */
-  std::shared_ptr<controller_manager::ControllerManager> controller_manager_;
+  boost::shared_ptr<controller_manager::ControllerManager> controller_manager_;
 
   /** \brief Abstract Hardware Interface for your robot */
-  std::shared_ptr<hardware_interface::RobotHW> hardware_interface_;
+  boost::shared_ptr<hardware_interface::RobotHW> hardware_interface_;
 
 };  // end class
 

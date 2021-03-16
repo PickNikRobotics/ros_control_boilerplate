@@ -44,8 +44,8 @@
 
 namespace ros_control_boilerplate
 {
-GenericHWControlLoop::GenericHWControlLoop(ros::NodeHandle& nh,
-                                           std::shared_ptr<hardware_interface::RobotHW> hardware_interface)
+GenericHWControlLoop::GenericHWControlLoop(
+    ros::NodeHandle& nh, boost::shared_ptr<hardware_interface::RobotHW> hardware_interface)
   : nh_(nh), hardware_interface_(hardware_interface)
 {
   // Create the controller manager

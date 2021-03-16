@@ -50,7 +50,8 @@ int main(int argc, char** argv)
   spinner.start();
 
   // Create the hardware interface specific to your robot
-  std::shared_ptr<rrbot_control::RRBotHWInterface> rrbot_hw_interface(new rrbot_control::RRBotHWInterface(nh));
+  boost::shared_ptr<rrbot_control::RRBotHWInterface> rrbot_hw_interface
+    (new rrbot_control::RRBotHWInterface(nh));
   rrbot_hw_interface->init();
 
   // Start the control loop
