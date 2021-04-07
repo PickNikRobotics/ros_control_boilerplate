@@ -121,7 +121,18 @@ void SimHWInterface::write(ros::Duration &elapsed_time)
 void SimHWInterface::enforceLimits(ros::Duration &period)
 {
   // Enforces position and velocity
-  pos_jnt_sat_interface_.enforceLimits(period);
+  switch (sim_control_mode_)
+  {
+    case 0:   // hardware_interface::MODE_POSITION:
+      pos_jnt_sat_interface_.enforceLimits(period);
+      break;
+    case 1:  // hardware_interface::MODE_VELOCITY:
+      vel_jnt_sat_interface_.enforceLimits(period);
+      break;
+    case 2:  // hardware_interface::MODE_EFFORT:
+      ROS_ERROR_STREAM_NAMED(name_, "Effort not implemented yet");
+      break;
+  }
 }
 
 void SimHWInterface::positionControlSimulation(ros::Duration &elapsed_time, const std::size_t joint_id)

@@ -216,6 +216,11 @@ void GenericHWInterface::registerJointLimits(const hardware_interface::JointHand
 
     joint_position_lower_limits_[joint_id] = joint_limits.min_position;
     joint_position_upper_limits_[joint_id] = joint_limits.max_position;
+
+    // Enforce limits to not start simulation in invalid state
+    joint_position_[joint_id] =
+      joint_limits_interface::internal::saturate(joint_position_[joint_id],
+          joint_limits.min_position, joint_limits.max_position);
   }
 
   // Copy velocity limits if available
