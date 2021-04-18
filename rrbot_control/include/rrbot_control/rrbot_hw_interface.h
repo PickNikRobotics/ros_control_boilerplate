@@ -60,7 +60,7 @@ public:
   /** \brief Write the command to the robot hardware. */
   virtual void write(ros::Duration& elapsed_time);
 
-  /** \breif Enforce limits for all values before writing */
+  /** \brief Enforce limits for all values before writing */
   virtual void enforceLimits(ros::Duration& period);
 
 };  // class
