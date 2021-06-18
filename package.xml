@@ -9,7 +9,7 @@
   <license>BSD</license>
 
   <url type="website">https://github.com/davetcoleman/ros_control_boilerplate</url>
-  <url type="butracker">https://github.com/davetcoleman/ros_control_boilerplate/issues</url>
+  <url type="bugtracker">https://github.com/davetcoleman/ros_control_boilerplate/issues</url>
   <url type="repository">https://github.com/davetcoleman/ros_control_boilerplate/</url>
 
   <author email="davetcoleman@gmail.com">Dave Coleman</author>
