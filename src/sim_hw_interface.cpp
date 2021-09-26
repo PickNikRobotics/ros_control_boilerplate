@@ -42,6 +42,10 @@
 // ROS parameter loading
 #include <rosparam_shortcuts/rosparam_shortcuts.h>
 
+// Pluginlib export for combined_robot_hw
+#include <ros_control_boilerplate/combinable_generic_hw.h>
+#include <pluginlib/class_list_macros.hpp>
+
 namespace ros_control_boilerplate
 {
 SimHWInterface::SimHWInterface(ros::NodeHandle& nh, urdf::Model* urdf_model)
@@ -149,3 +153,6 @@ void SimHWInterface::positionControlSimulation(ros::Duration& elapsed_time, cons
 }
 
 }  // namespace ros_control_boilerplate
+
+PLUGINLIB_EXPORT_CLASS(ros_control_boilerplate::CombinableGenericHW<ros_control_boilerplate::SimHWInterface>,
+                       hardware_interface::RobotHW)

@@ -1,0 +1,8 @@
+# ros_control_boilerplate Settings ---------------------------------------------
+
+# Settings for ros_control hardware interface
+hardware_interface:
+   joints:              # Simulate both joints
+      - joint1
+      - joint2
+   sim_control_mode: 0  # 0: position, 1: velocity

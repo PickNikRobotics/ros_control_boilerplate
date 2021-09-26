@@ -1,16 +1,3 @@
-# ros_control_boilerplate Settings -----------------------
-# Settings for ros_control control loop
-generic_hw_control_loop:
-  loop_hz: 300
-  cycle_time_error_threshold: 0.01
-
-# Settings for ros_control hardware interface
-hardware_interface:
-   joints:
-      - joint1
-      - joint2
-   sim_control_mode: 0 # 0: position, 1: velocity
-
 # Publish all joint states ----------------------------------
 # Creates the /joint_states topic necessary in ROS
 joint_state_controller:

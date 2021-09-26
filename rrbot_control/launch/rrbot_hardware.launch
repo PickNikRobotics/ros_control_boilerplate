@@ -15,6 +15,12 @@
     <node name="rrbot_hardware_interface" pkg="ros_control_boilerplate" type="rrbot_hw_main"
           output="screen" launch-prefix="$(arg launch_prefix)"/>
 
+    <!-- Load hardware settings -->
+    <rosparam file="$(find ros_control_boilerplate)/rrbot_control/config/rrbot_robot_hardware.yaml" command="load"/>
+
+    <!-- Load control loop settings -->
+    <rosparam file="$(find ros_control_boilerplate)/rrbot_control/config/control_loop.yaml" command="load"/>
+
     <!-- Load controller settings -->
     <rosparam file="$(find ros_control_boilerplate)/rrbot_control/config/rrbot_controllers.yaml" command="load"/>
 

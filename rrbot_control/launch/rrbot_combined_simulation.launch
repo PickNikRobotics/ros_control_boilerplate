@@ -10,15 +10,15 @@
   <param name="robot_description" command="$(find xacro)/xacro '$(find rrbot_description)/urdf/rrbot.xacro'" />
 
   <group ns="rrbot">
-
     <!-- Load hardware interface -->
-    <node name="rrbot_hardware_interface" pkg="ros_control_boilerplate" type="sim_hw_main"
-          output="screen" launch-prefix="$(arg launch_prefix)"/>
+    <node name="rrbot_combined_hardware_interface" pkg="ros_control_boilerplate" type="rrbot_combined_hw_main"
+      output="screen" launch-prefix="$(arg launch_prefix)">
 
-    <!-- Load hardware settings -->
-    <rosparam file="$(find ros_control_boilerplate)/rrbot_control/config/rrbot_robot_hardware.yaml" command="load"/>
+      <!-- Hardware settings -->
+      <rosparam file="$(find ros_control_boilerplate)/rrbot_control/config/rrbot_combined_robot_hardware.yaml" />
+    </node>
 
-    <!-- Load control loop settings -->
+    <!-- Control loop settings -->
     <rosparam file="$(find ros_control_boilerplate)/rrbot_control/config/control_loop.yaml" command="load"/>
 
     <!-- Load controller settings -->
@@ -32,5 +32,6 @@
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 
   </group>
+
 
 </launch>
