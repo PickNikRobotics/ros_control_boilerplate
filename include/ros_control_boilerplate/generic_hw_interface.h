@@ -180,6 +180,7 @@ protected:
 
   // Configuration
   std::vector<std::string> joint_names_;
+  std::vector<double> initial_state_;
   std::size_t num_joints_;
   urdf::Model* urdf_model_;
 
