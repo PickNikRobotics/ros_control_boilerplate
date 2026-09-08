@@ -6,7 +6,7 @@
 
   <maintainer email="davetcoleman@gmail.com">Dave Coleman</maintainer>
 
-  <license>BSD</license>
+  <license>BSD-3-Clause</license>
 
   <url type="website">https://github.com/davetcoleman/ros_control_boilerplate</url>
   <url type="bugtracker">https://github.com/davetcoleman/ros_control_boilerplate/issues</url>
