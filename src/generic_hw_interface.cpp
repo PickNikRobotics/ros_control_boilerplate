@@ -58,6 +58,15 @@ GenericHWInterface::GenericHWInterface(const ros::NodeHandle& nh, urdf::Model* u
       nh_, "hardware_interface");  // TODO(davetcoleman): change the namespace to "generic_hw_interface" aka name_
   std::size_t error = 0;
   error += !rosparam_shortcuts::get(name_, rpnh, "joints", joint_names_);
+
+  if (rpnh.hasParam("initial_state"))
+  {
+    error += !rosparam_shortcuts::get(name_, rpnh, "initial_state", initial_state_);
+
+    if (initial_state_.size() != joint_names_.size())
+      ROS_WARN("skipping initial_state, does not match joints size");
+  }
+
   rosparam_shortcuts::shutdownIfError(name_, error);
 }
 
@@ -80,6 +89,16 @@ void GenericHWInterface::init()
   joint_position_upper_limits_.resize(num_joints_, 0.0);
   joint_velocity_limits_.resize(num_joints_, 0.0);
   joint_effort_limits_.resize(num_joints_, 0.0);
+
+  // Initialize robot state
+  if (initial_state_.size() != num_joints_)
+  {
+    initial_state_.clear();
+    initial_state_.resize(joint_names_.size(), 0.0);
+  }
+
+  for (std::size_t i = 0; i < num_joints_; ++i)
+    joint_position_[i] = initial_state_[i];
 
   // Initialize interfaces for each joint
   for (std::size_t joint_id = 0; joint_id < num_joints_; ++joint_id)
